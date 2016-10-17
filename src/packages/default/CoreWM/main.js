@@ -242,37 +242,21 @@
 
     this.applySettings(this._settings.get());
 
-    this._on('vfs', function(msg, obj) {
+    VFS.watch(VFS.file(this.getSetting('desktopPath'), 'dir'), function(msg, obj) {
       if ( !obj || msg.match(/^vfs:(un)?mount/) ) {
         return;
       }
 
-      var wasTouched = false;
-      var desktopPath = self.getSetting('desktopPath');
-
-      function _check(f) {
-        return f.path.substr(0, desktopPath.length) === desktopPath;
-      }
-
-      if ( obj.destination ) {
-        wasTouched = _check(obj.destination);
-        if ( !wasTouched ) {
-          wasTouched = _check(obj.source);
-        }
-      } else {
-        wasTouched = _check(obj);
-      }
-
-      if ( wasTouched && self.iconView ) {
+      if ( self.iconView ) {
         self.iconView._refresh();
       }
     });
 
-    self.initSwitcher();
-    self.initDesktop();
-    self.initPanels();
-    self.initWidgets();
-    self.initIconView();
+    this.initSwitcher();
+    this.initDesktop();
+    this.initPanels();
+    this.initWidgets();
+    this.initIconView();
 
     initNotifications();
 

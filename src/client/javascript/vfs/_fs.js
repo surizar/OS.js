@@ -38,6 +38,8 @@
    * @param {Mixed} result Result from response (if any)
    */
 
+  var watches = [];
+
   /////////////////////////////////////////////////////////////////////////////
   // HELPERS
   /////////////////////////////////////////////////////////////////////////////
@@ -238,7 +240,11 @@
    * Wrapper for broadcasting VFS messages
    */
   function broadcastMessage(msg, item, appRef) {
-    API.message(msg, item, {source: appRef ? appRef.__pid : null});
+    function _message(i) {
+      API.message(msg, i, {source: appRef ? appRef.__pid : null});
+
+      checkWatches(msg, item);
+    }
 
     // Makes sure aliased paths are called for
     var aliased = (function() {
@@ -267,6 +273,8 @@
       return null;
     })();
 
+    _message(item);
+
     var tuple = aliased.source || aliased.destination;
     if ( aliased && (aliased instanceof VFS.File || tuple) ) {
       if ( tuple ) {
@@ -274,7 +282,7 @@
         aliased.destination = aliased.destination || item.destination;
       }
 
-      API.message(msg, aliased, {source: appRef ? appRef.__pid : null});
+      _message(aliased);
     }
   }
 
@@ -306,6 +314,36 @@
     }
 
     return false;
+  }
+
+  /**
+   * Checks if an action mathes given path
+   */
+  function checkWatches(msg, obj) {
+    watches.forEach(function(w) {
+      var checkPath = w.path;
+
+      function _check(f) {
+        if ( w.type === 'dir' ) {
+          return f.path.substr(0, checkPath.length) === checkPath;
+        }
+        return f.path === checkPath;
+      }
+
+      var wasTouched = false;
+      if ( obj.destination ) {
+        wasTouched = _check(obj.destination);
+        if ( !wasTouched ) {
+          wasTouched = _check(obj.source);
+        }
+      } else {
+        wasTouched = _check(obj);
+      }
+
+      if ( wasTouched ) {
+        w.cb(msg, obj);
+      }
+    });
   }
 
   /////////////////////////////////////////////////////////////////////////////
@@ -1197,6 +1235,51 @@
     var m = Core.getMountManager().getModuleFromPath(item.path, false, true);
 
     requestWrapper([item.path, 'freeSpace', [m.root]], 'ERR_VFSMODULE_FREESPACE_FMT', callback);
+  };
+
+  /**
+   * Watches a file or directory for changes. Please note that this currently only works for
+   * client-side APIs.
+   * @summary Watches a file or directory for changes.
+   *
+   * @TODO Add support for server-side watches
+   *
+   * @function watch
+   * @memberof OSjs.VFS
+   * @throws {Error} On invalid arguments
+   *
+   * @param   {OSjs.VFS.File}   item      File Metadata (you can also provide a string)
+   * @param   {CallbackVFS}     callback  Callback function
+   *
+   * @return  {Number}                    The index of your watch (you can unwatch with this)
+   */
+  VFS.watch = function(item, callback) {
+    if ( arguments.length < 2 ) {
+      throw new Error(API._('ERR_VFS_NUM_ARGS'));
+    }
+
+    item = checkMetadataArgument(item);
+
+    return watches.push({
+      path: item.path,
+      type: item.type,
+      cb: callback
+    }) - 1;
+  };
+
+  /**
+   * Remove a watch
+   *
+   * @function unwatch
+   * @memberof OSjs.VFS
+   * @throws {Error} On invalid arguments
+   *
+   * @param {Number}      idx     Watch index (from watch() method)
+   */
+  VFS.unwatch = function(idx) {
+    if ( typeof watches[idx] !== 'undefined' ) {
+      delete watches[idx];
+    }
   };
 
 })(OSjs.Utils, OSjs.API, OSjs.VFS, OSjs.Core);
