@@ -141,6 +141,7 @@
     name: 'Panel',
     label: 'LBL_PANELS',
     icon: 'apps/gnome-panel.png',
+    watch: ['CoreWM'],
 
     init: function() {
     },
