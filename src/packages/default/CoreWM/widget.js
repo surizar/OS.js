@@ -214,7 +214,7 @@
     this._requestId = null;
     this._saveTimeout = null;
     this._settingsWindow = null;
-    this._locked = options.locked === true;
+    this._locked = settings.get('locked', false);
 
     this._$element = null;
     this._$resize = null;
@@ -404,6 +404,7 @@
       title: this._locked ? _('LBL_UNLOCK') : _('LBL_LOCK'),
       onClick: function() {
         self._setLock();
+        self._saveOptions();
       }
     }];
 
