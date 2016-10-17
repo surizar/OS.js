@@ -42,6 +42,12 @@
           "LOGIN": "service-login",
           "ERROR": "dialog-warning"
         },
+        "widgets": [
+          {
+            "name": "Clock",
+            "settings": {}
+          }
+        ],
         "panels": [
           {
             "options": {

@@ -60,6 +60,7 @@
     WindowManager.apply(this, ['CoreWM', this, args, metadata, defaultSettings(importSettings)]);
 
     this.panels           = [];
+    this.widgets          = [];
     this.switcher         = null;
     this.iconView         = null;
     this.$themeLink       = null;
@@ -270,6 +271,7 @@
     self.initSwitcher();
     self.initDesktop();
     self.initPanels();
+    self.initWidgets();
     self.initIconView();
 
     initNotifications();
@@ -295,6 +297,8 @@
 
     // Reset
     this.destroyPanels();
+    this.destroyWidgets();
+
     var settings = this.importedSettings;
     try {
       settings.background = 'color';
@@ -318,6 +322,13 @@
       p.destroy();
     });
     this.panels = [];
+  };
+
+  CoreWM.prototype.destroyWidgets = function() {
+    this.widgets.forEach(function(w) {
+      w.destroy();
+    });
+    this.widgets = [];
   };
 
   // Copy from Application
@@ -463,6 +474,32 @@
     setTimeout(function() {
       self.setStyles(self._settings.get());
     }, 1000);
+  };
+
+  CoreWM.prototype.initWidgets = function(applySettings) {
+    var self = this;
+
+    this.destroyWidgets();
+
+    var widgets = this.getSetting('widgets');
+
+    (widgets || []).forEach(function(item) {
+      if ( !item.settings ) {
+        item.settings = {};
+      }
+
+      var settings = new OSjs.Helpers.SettingsFragment(item.settings, 'CoreWM');
+
+      try {
+        var w = new OSjs.Applications.CoreWM.Widgets[item.name](settings);
+        w.init(document.body);
+        self.widgets.push(w);
+
+        w._inited();
+      } catch ( e ) {
+        console.warn('CoreWM::initWidgets()', e, e.stack);
+      }
+    });
   };
 
   CoreWM.prototype.initIconView = function() {
@@ -703,6 +740,9 @@
     if ( ev === 'focus' ) {
       if ( this.iconView ) {
         this.iconView.blur();
+        this.widgets.forEach(function(w) {
+          w.blur();
+        });
       }
     }
   };
@@ -938,6 +978,8 @@
 
     if ( save ) {
       this.initPanels(true);
+      this.initWidgets(true);
+
       if ( settings ) {
         if ( settings.language ) {
           OSjs.Core.getSettingsManager().set('Core', 'Locale', settings.language, triggerWatch);
@@ -1269,6 +1311,7 @@
   OSjs.Applications.CoreWM                   = OSjs.Applications.CoreWM || {};
   OSjs.Applications.CoreWM.Class             = Object.seal(CoreWM);
   OSjs.Applications.CoreWM.PanelItems        = OSjs.Applications.CoreWM.PanelItems || {};
+  OSjs.Applications.CoreWM.Widgets           = OSjs.Applications.CoreWM.Widgets || {};
   OSjs.Applications.CoreWM.CurrentTheme      = OSjs.Applications.CoreWM.CurrentTheme || null;
 
 })(OSjs.Core.WindowManager, OSjs.GUI, OSjs.Utils, OSjs.API, OSjs.VFS);
