@@ -731,23 +731,46 @@
   /**
    * Scans given directory
    *
-   * @param  {ServerObject}    server                   Server object
-   * @param  {Object}          args                     API Call Arguments
-   * @param  {String}          args.src                 Request path
-   * @param  {Object}          [args.options]           Request options
-   * @param  {Function}        callback                 Callback function => fn(error, result)
+   * @param  {ServerObject}    server                           Server object
+   * @param  {Object}          args                             API Call Arguments
+   * @param  {String}          args.src                         Request path
+   * @param  {Object}          [args.options]                   Request options
+   * @param  {Boolean}         [args.options.shortcuts=true]    Read shortcuts via metadata file
+   * @param  {Function}        callback                         Callback function => fn(error, result)
    *
    * @function scandir
    * @memberof VFS
    */
   module.exports.scandir = function(server, args, callback) {
+    var opts = typeof args.options === 'undefined' ? {} : (args.options || {});
     var realPath = getRealPath(server, args.path);
 
     _fs.readdir(realPath.root, function(error, files) {
       if ( error ) {
         callback('Error reading directory: ' + error);
       } else {
-        callback(false, getFileIters(files, realPath, server.request, server.config));
+        var files = getFileIters(files, realPath, server.request, server.config);
+
+        if ( opts.shortcuts !== false ) {
+          var filename = typeof opts.shortcuts === 'string' ? opts.shortcuts.replace(/\/+g/, '') : '.shortcuts.json';
+          var realMeta = getRealPath(server, args.path.replace(/\/?$/, '/' + filename));
+
+          _fs.readFile(realMeta.root, function(err, contents) {
+            var additions = [];
+            if ( !err && contents ) {
+              try {
+                additions = JSON.parse(contents);
+                if ( !(additions instanceof Array) ) {
+                  additions = [];
+                }
+              } catch ( e ) {}
+            }
+
+            callback(false, files.concat(additions));
+          });
+        } else {
+          callback(false, files);
+        }
       }
     });
   };
