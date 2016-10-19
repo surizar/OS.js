@@ -204,61 +204,48 @@
     var desktopPath = OSjs.Core.getWindowManager().getSetting('desktopPath');
     var shortcutPath = Utils.pathJoin(desktopPath, '.shortcuts.json');
 
-    VFS.read(shortcutPath, function(e, r) {
-      var entries = [];
+    this.shortcutCache = [];
+    VFS.scandir(desktopPath, function(error, result) {
+      if ( self.$iconview && !error ) {
 
-      if ( r && r instanceof Array ) {
-        self.shortcutCache = r;
-
-        entries = r.map(function(i) {
-          var iter = new VFS.File(i);
-          var type = 'shortcut';
-          var icon;
+        var entries = result.map(function(iter) {
 
           if ( iter.type === 'application' ) {
             var appname = Utils.filename(iter.path);
             var meta = pm.getPackage(appname);
+            var icon;
             if ( meta ) {
               icon = API.getIcon(meta.icon, '32x32', appname);
             }
-            type = 'application';
+
+            self.shortcutCache.push(iter);
+
+            return {
+              _type: 'application',
+              icon: icon || API.getFileIcon(iter, '32x32'),
+              label: iter.filename,
+              value: iter,
+              args: iter.args || {}
+            };
           }
 
           return {
-            _type: type,
-            icon: icon || API.getFileIcon(iter, '32x32'),
+            _type: 'vfs',
+            icon: API.getFileIcon(iter, '32x32'),
             label: iter.filename,
-            value: iter,
-            args: iter.args || {}
+            value: iter
           };
+
+        }).filter(function(iter) {
+          if ( iter.value.path === shortcutPath ) {
+            return false;
+          }
+          return true;
         });
+
+        self.$iconview.clear().add(entries);
       }
-
-      VFS.scandir(desktopPath, function(error, result) {
-        if ( self.$iconview && !error ) {
-
-          entries = entries.concat(result.map(function(iter) {
-            return {
-              _type: 'vfs',
-              icon: API.getFileIcon(iter, '32x32'),
-              label: iter.filename,
-              value: iter
-            };
-          }).filter(function(iter) {
-            if ( iter.value.path === shortcutPath ) {
-              return false;
-            }
-            return true;
-          }));
-
-          entries.sort(function(a, b) {
-            return (a.filename > b.filename) ? 1 : ((b.filename > a.filename) ? -1 : 0);
-          });
-
-          self.$iconview.clear().add(entries);
-        }
-      });
-    }, {type: 'json'});
+    });
   };
 
   DesktopIconView.prototype._save = function(refresh) {
