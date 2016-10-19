@@ -154,6 +154,14 @@
      */
     this.id       = null;
 
+    /**
+     * Internal boolean for a shortcut type file
+     * @name shortcut
+     * @memberof OSjs.VFS.File#
+     * @type {Boolean}
+     */
+    this.shortcut = false;
+
     if ( typeof arg === 'object' ) {
       this.setData(arg);
     } else if ( typeof arg === 'string' ) {
