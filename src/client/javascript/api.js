@@ -998,6 +998,14 @@
       icon = 'places/folder.png';
     } else if ( file.type === 'trash' ) {
       icon = 'places/user-trash.png';
+    } else if ( file.type === 'application' ) {
+      var pm = OSjs.Core.getPackageManager();
+      var appname = Utils.filename(file.path);
+      var meta = pm.getPackage(appname);
+
+      if ( meta ) {
+        return API.getIcon(meta.icon, size, appname);
+      }
     } else {
       var mime = file.mime || 'application/octet-stream';
 
