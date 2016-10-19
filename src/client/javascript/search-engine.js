@@ -90,7 +90,7 @@
           value: {
             title: p.name,
             description: p.description,
-            icon: API.getIcon(p.icon, '16x16', p),
+            icon: API.getFileIcon(new VFS.File('applications:///' + p.className, 'application'), '16x16'),
             launch: {application: pn, args: {}}
           },
           fields: [
