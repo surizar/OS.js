@@ -184,7 +184,15 @@
    */
   var Transport = {
     scandir: function(item, callback, options) {
-      internalRequest('scandir', {path: item.path}, function(error, result) {
+      options = options || {};
+      var args = {
+        path: item.path,
+        options: {
+          shortcuts: options.shortcuts
+        }
+      };
+
+      internalRequest('scandir', args, function(error, result) {
         var list = [];
         if ( result ) {
           result = VFS.Helpers.filterScandir(result, options);
