@@ -199,7 +199,6 @@
 
   DesktopIconView.prototype._refresh = function(wm) {
     var self = this;
-    var pm = OSjs.Core.getPackageManager();
 
     var desktopPath = OSjs.Core.getWindowManager().getSetting('desktopPath');
     var shortcutPath = Utils.pathJoin(desktopPath, '.shortcuts.json');
@@ -207,22 +206,13 @@
     this.shortcutCache = [];
     VFS.scandir(desktopPath, function(error, result) {
       if ( self.$iconview && !error ) {
-
         var entries = result.map(function(iter) {
-
           if ( iter.type === 'application' ) {
-            var appname = Utils.filename(iter.path);
-            var meta = pm.getPackage(appname);
-            var icon;
-            if ( meta ) {
-              icon = API.getIcon(meta.icon, '32x32', appname);
-            }
-
             self.shortcutCache.push(iter);
 
             return {
               _type: 'application',
-              icon: icon || API.getFileIcon(iter, '32x32'),
+              icon: API.getFileIcon(iter, '32x32'),
               label: iter.filename,
               value: iter,
               args: iter.args || {}
