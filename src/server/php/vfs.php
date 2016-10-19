@@ -102,7 +102,7 @@ class FS
     return $iter;
   }
 
-  public static function scandir($scandir, Array $opts = Array()) {
+  protected function _scandir($scandir, $throw = false) {
     list($dirname, $root, $protocol) = getRealPath($scandir);
 
     $result = Array();
@@ -114,7 +114,36 @@ class FS
         }
       }
     } else {
-      throw new Exception("Directory does not exist");
+      if ( $throw ) {
+        throw new Exception("Directory does not exist");
+      }
+    }
+    return $result;
+  }
+
+  protected function _scanshortcuts($scandir, $opt) {
+    list($dirname, $root, $protocol) = getRealPath($scandir);
+
+    $filename = is_string($opt) ? str_replace('/', '', $opt) : '.shortcuts.json';
+    $path = preg_replace('/\/?$/', '/' . $filename, $root);
+
+    $result = Array();
+    if ( file_exists($path) ) {
+      try {
+        $json = json_decode(file_get_contents($path), true);
+        if ( is_array($json) ) {
+          $result = $json;
+        }
+      } catch ( Exception $e ) {}
+    }
+    return $result;
+  }
+
+  public static function scandir($scandir, Array $opts = Array()) {
+    $result = self::_scandir($scandir, true);
+
+    if ( empty($opts['shortcuts']) || is_string($opts['shortcuts']) || $opts['shortcuts'] === true ) {
+      $result = array_merge($result, self::_scanshortcuts($scandir, $opts['shortcuts']));
     }
 
     return $result;
