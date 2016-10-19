@@ -615,18 +615,24 @@
     };
 
     var _openMenu = function(data) {
-      var pos = {x: ev.clientX, y: ev.clientY};
       OSjs.API.createMenu([{
+        title: OSjs.Applications.CoreWM._('LBL_COPY'),
+        onClick: function() {
+          var dst = Utils.pathJoin(OSjs.Core.getWindowManager().getSetting('desktopPath'), data.filename);
+          VFS.copy(data, dst, function() {});
+        }
+      /*}, {
         title: OSjs.Applications.CoreWM._('Create shortcut'),
         onClick: function() {
           _createShortcut.call(self, data);
         }
+        */
       }, {
         title: OSjs.Applications.CoreWM._('Set as wallpaper'),
         onClick: function() {
           _applyWallpaper.call(self, data);
         }
-      }], pos);
+      }], ev);
     };
 
     if ( item ) {
