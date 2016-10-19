@@ -54,10 +54,6 @@
         if ( iter.type !== 'extension' ) {
           files.push(new OSjs.VFS.File({
             filename: iter.name,
-            icon: {
-              filename: iter.icon,
-              application: m
-            },
             type: 'application',
             path: 'applications:///' + m,
             mime: 'osjs/application'
