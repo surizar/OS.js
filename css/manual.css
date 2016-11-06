@@ -7,7 +7,7 @@ body {
   height: auto;
 }
 .container,
-aside,
+aside#sidebar,
 content,
 footer {
   padding: 40px;
@@ -38,8 +38,8 @@ header > nav > a:before,
   z-index: 1;
 }
 .list,
-aside > nav > ol,
-aside > nav > ol ul {
+aside#sidebar > nav > ol,
+aside#sidebar > nav > ol ul {
   padding: 0;
   margin: 0;
   padding-left: 1.3rem;
@@ -63,7 +63,7 @@ body {
 }
 header,
 nav,
-aside,
+aside#sidebar,
 main,
 footer,
 content {
@@ -192,26 +192,26 @@ main {
 /**
  * Sidebar
  */
-aside {
+aside#sidebar {
   flex: 0 0 300px;
   width: 300px;
   background-color: #fafafa;
   border-right: 1px solid #e8e8e8;
 }
-aside > nav a {
+aside#sidebar > nav a {
   text-decoration: none;
   display: inline-block;
 }
-aside > nav > ol {
+aside#sidebar > nav > ol {
   padding-left: 1em;
 }
-aside > nav > ol > li {
+aside#sidebar > nav > ol > li {
   padding-bottom: .4em;
 }
-aside > nav > ol ul > li {
+aside#sidebar > nav > ol ul > li {
   padding-bottom: .4em;
 }
-aside > nav > ol ul {
+aside#sidebar > nav > ol ul {
   padding-top: .4em;
 }
 /**
