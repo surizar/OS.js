@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>VFS</title>
+    <meta name="description" content="OS.js" />
+    <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,600" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.5.1/themes/prism-tomorrow.min.css">
+    <link href="/css/manual.css" rel="stylesheet" />
+  </head>
+  <body>
+    <header>
+      <div id="Logo"></div>
+      <nav>
+        <a href="/">Home</a>
+        <a href="/manual" class="active">Manual</a>
+        <a href="/doc">Documentation</a>
+      </nav>
+    </header>
+
+    <main>
+      <aside>
+        <nav>
+          <ol>
+            <li>
+              <a href="/manual">Overview</a>
+            </li>
+
+            <li>
+              <a href="/manual/installation">Installation</a>
+              <ul>
+                <li><a href="/manual/installation/nix">NIX</a></li>
+                <li><a href="/manual/installation/windows">Windows</a></li>
+                <li><a href="/manual/installation/other">Other</a></li>
+              </ul>
+            </li>
+
+            <li>
+              <a href="/manual/build">Build System</a>
+              <ul>
+                <li><a href="/manual/build/cli">Commands</a></li>
+                <li><a href="/manual/build/grunt">Grunt</a></li>
+              </ul>
+            </li>
+
+            <li>
+              <a href="/manual/configuration">Configuration</a>
+              <ul>
+                <li><a href="/manual/configuration/#environment">Environment</a></li>
+                <li><a href="/manual/configuration/#settings">Settings</a></li>
+                <li><a href="/manual/configuration/#assets">Assets</a></li>
+                <li><a href="/manual/configuration/#packages">Packages</a></li>
+                <li><a href="/manual/configuration/#proxies">Proxies</a></li>
+              </ul>
+            </li>
+
+            <li>
+              <a href="/manual/client">Client</a>
+              <ul>
+                <li><a href="/manual/client/features">Features</a></li>
+                <li><a href="/manual/client/broadway">Broadway</a></li>
+              </ul>
+            </li>
+
+            <li>
+              <a href="/manual/server">Server</a>
+              <ul>
+                <li><a href="/manual/server/node">Node</a></li>
+                <li><a href="/manual/server/php">PHP</a></li>
+              </ul>
+            </li>
+
+            <li>
+              <a href="/manual/auth">Authentication</a>
+              <ul>
+                <li><a href="/manual/auth/modules">Modules</a></li>
+                <li><a href="/manual/auth/permission">Groups and permissions</a></li>
+              </ul>
+            </li>
+
+            <li>
+              <a href="/manual/storage">Storage</a>
+              <ul>
+                <li><a href="/manual/auth/storage/modules">Modules</a></li>
+              </ul>
+            </li>
+
+            <li>
+              <a href="/manual/connection">Connection</a>
+              <ul>
+                <li><a href="/manual/connection/websocket">WebSocket</a></li>
+                <li><a href="/manual/connection/http">HTTP/HTTP2/HTTPS</a></li>
+              </ul>
+            </li>
+
+            <li>
+              <a href="/manual/api">API</a>
+              <ul>
+                <li><a href="/manual/api/client">Client</a></li>
+                <li><a href="/manual/api/server">Server</a></li>
+              </ul>
+            </li>
+
+            <li>
+              <a href="/manual/vfs">VFS</a>
+              <ul>
+                <li><a href="/manual/vfs/#mount">Mountpoints</a></li>
+                <li>
+                  <a href="/manual/vfs/transport">Transports</a>
+                  <ul>
+                    <li><a href="/manual/vfs/transport/#googledrive">Google Drive</a></li>
+                    <li><a href="/manual/vfs/transport/#onedrive">Microsoft OneDrive</a></li>
+                    <li><a href="/manual/vfs/transport/#dropbox">Dropbox</a></li>
+                    <li><a href="/manual/vfs/transport/#webdav">WebDAV</a></li>
+                    <li><a href="/manual/vfs/transport/#other">Other</a></li>
+                  </ul>
+                </li>
+              </ul>
+            </li>
+
+            <li>
+              <a href="/manual/package">Package</a>
+              <ul>
+                <li><a href="/manual/package/#metadata">Metadata</a></li>
+                <li><a href="/manual/package/#spawner">Scripts</a></li>
+                <li><a href="/manual/package/#script">Spawner</a></li>
+                <li><a href="/manual/package/#less">LESS Support</a></li>
+                <li>
+                  <span>Types</span>
+                  <ul>
+                    <li>
+                      <a href="/manual/package/application">Application</a>
+                      <ul>
+                        <li><a href="/manual/package/application/#window">Windows</a></li>
+                        <li><a href="/manual/package/application/#event">Events</a></li>
+                        <li><a href="/manual/package/application/#gui">GUI</a></li>
+                        <li><a href="/manual/package/application/#responsive">Responsiveness</a></li>
+                      </ul>
+                    </li>
+                    <li><a href="/manual/package/iframe">Iframe</a></li>
+                    <li><a href="/manual/package/service">Service</a></li>
+                    <li><a href="/manual/package/extension">Extension</a></li>
+                  </ul>
+                </li>
+              </ul>
+            </li>
+
+            <li>
+              <a href="/manual/gui">Scheme and GUI</a>
+              <ul>
+                <li><a href="/manual/gui/scheme">Scheme files</a></li>
+                <li><a href="/manual/gui/element">GUI Elements</a></li>
+              </ul>
+            </li>
+
+            <li>
+              <a href="/manual/corewm">CoreWM</a>
+              <ul>
+                <li><a href="/manual/corewm/theme">Themes</a></li>
+                <li><a href="/manual/corewm/panel">Panel</a></li>
+                <li><a href="/manual/corewm/widget">Widget</a></li>
+              </ul>
+            </li>
+
+            <li>
+              <a href="/manual/development">Development</a>
+              <ul>
+                <li><a href="/manual/development/#intro">Introduction</a></li>
+                <li><a href="/manual/development/#style">Style guide</a></li>
+                <li><a href="/manual/development/#setup">Set up environment</a></li>
+                <li><a href="/manual/development/#tips">Tips and tricks</a></li>
+                <li><a href="/manual/development/#test">Testing</a></li>
+                <li><a href="/manual/development/#contribute">Contributing</a></li>
+              </ul>
+            </li>
+
+            <li><a href="/manual/community">Community</a></li>
+          </ol>
+
+        </nav>
+      </aside>
+
+      <content>
+        <h1 id="vfs">VFS</h1>
+<p>The <em>Virtual File System</em> is an abstraction layer that allows you to connect to any source (or endpoint) and present it as it was a file or directory to OS.js.</p>
+<p>Modules known as <em>Transports</em> handles the incoming requests and responses. These are linked to a <em>Mountpoint</em> that is shown in OS.js.</p>
+
+
+        <footer>
+          <p>Generated with  &mdash; <a href=""></a></p>
+        </footer>
+      </content>
+    </main>
+
+  </body>
+</html>

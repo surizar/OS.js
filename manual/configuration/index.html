@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Configuration</title>
+    <meta name="description" content="OS.js" />
+    <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,600" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.5.1/themes/prism-tomorrow.min.css">
+    <link href="/css/manual.css" rel="stylesheet" />
+  </head>
+  <body>
+    <header>
+      <div id="Logo"></div>
+      <nav>
+        <a href="/">Home</a>
+        <a href="/manual" class="active">Manual</a>
+        <a href="/doc">Documentation</a>
+      </nav>
+    </header>
+
+    <main>
+      <aside>
+        <nav>
+          <ol>
+            <li>
+              <a href="/manual">Overview</a>
+            </li>
+
+            <li>
+              <a href="/manual/installation">Installation</a>
+              <ul>
+                <li><a href="/manual/installation/nix">NIX</a></li>
+                <li><a href="/manual/installation/windows">Windows</a></li>
+                <li><a href="/manual/installation/other">Other</a></li>
+              </ul>
+            </li>
+
+            <li>
+              <a href="/manual/build">Build System</a>
+              <ul>
+                <li><a href="/manual/build/cli">Commands</a></li>
+                <li><a href="/manual/build/grunt">Grunt</a></li>
+              </ul>
+            </li>
+
+            <li>
+              <a href="/manual/configuration">Configuration</a>
+              <ul>
+                <li><a href="/manual/configuration/#environment">Environment</a></li>
+                <li><a href="/manual/configuration/#settings">Settings</a></li>
+                <li><a href="/manual/configuration/#assets">Assets</a></li>
+                <li><a href="/manual/configuration/#packages">Packages</a></li>
+                <li><a href="/manual/configuration/#proxies">Proxies</a></li>
+              </ul>
+            </li>
+
+            <li>
+              <a href="/manual/client">Client</a>
+              <ul>
+                <li><a href="/manual/client/features">Features</a></li>
+                <li><a href="/manual/client/broadway">Broadway</a></li>
+              </ul>
+            </li>
+
+            <li>
+              <a href="/manual/server">Server</a>
+              <ul>
+                <li><a href="/manual/server/node">Node</a></li>
+                <li><a href="/manual/server/php">PHP</a></li>
+              </ul>
+            </li>
+
+            <li>
+              <a href="/manual/auth">Authentication</a>
+              <ul>
+                <li><a href="/manual/auth/modules">Modules</a></li>
+                <li><a href="/manual/auth/permission">Groups and permissions</a></li>
+              </ul>
+            </li>
+
+            <li>
+              <a href="/manual/storage">Storage</a>
+              <ul>
+                <li><a href="/manual/auth/storage/modules">Modules</a></li>
+              </ul>
+            </li>
+
+            <li>
+              <a href="/manual/connection">Connection</a>
+              <ul>
+                <li><a href="/manual/connection/websocket">WebSocket</a></li>
+                <li><a href="/manual/connection/http">HTTP/HTTP2/HTTPS</a></li>
+              </ul>
+            </li>
+
+            <li>
+              <a href="/manual/api">API</a>
+              <ul>
+                <li><a href="/manual/api/client">Client</a></li>
+                <li><a href="/manual/api/server">Server</a></li>
+              </ul>
+            </li>
+
+            <li>
+              <a href="/manual/vfs">VFS</a>
+              <ul>
+                <li><a href="/manual/vfs/#mount">Mountpoints</a></li>
+                <li>
+                  <a href="/manual/vfs/transport">Transports</a>
+                  <ul>
+                    <li><a href="/manual/vfs/transport/#googledrive">Google Drive</a></li>
+                    <li><a href="/manual/vfs/transport/#onedrive">Microsoft OneDrive</a></li>
+                    <li><a href="/manual/vfs/transport/#dropbox">Dropbox</a></li>
+                    <li><a href="/manual/vfs/transport/#webdav">WebDAV</a></li>
+                    <li><a href="/manual/vfs/transport/#other">Other</a></li>
+                  </ul>
+                </li>
+              </ul>
+            </li>
+
+            <li>
+              <a href="/manual/package">Package</a>
+              <ul>
+                <li><a href="/manual/package/#metadata">Metadata</a></li>
+                <li><a href="/manual/package/#spawner">Scripts</a></li>
+                <li><a href="/manual/package/#script">Spawner</a></li>
+                <li><a href="/manual/package/#less">LESS Support</a></li>
+                <li>
+                  <span>Types</span>
+                  <ul>
+                    <li>
+                      <a href="/manual/package/application">Application</a>
+                      <ul>
+                        <li><a href="/manual/package/application/#window">Windows</a></li>
+                        <li><a href="/manual/package/application/#event">Events</a></li>
+                        <li><a href="/manual/package/application/#gui">GUI</a></li>
+                        <li><a href="/manual/package/application/#responsive">Responsiveness</a></li>
+                      </ul>
+                    </li>
+                    <li><a href="/manual/package/iframe">Iframe</a></li>
+                    <li><a href="/manual/package/service">Service</a></li>
+                    <li><a href="/manual/package/extension">Extension</a></li>
+                  </ul>
+                </li>
+              </ul>
+            </li>
+
+            <li>
+              <a href="/manual/gui">Scheme and GUI</a>
+              <ul>
+                <li><a href="/manual/gui/scheme">Scheme files</a></li>
+                <li><a href="/manual/gui/element">GUI Elements</a></li>
+              </ul>
+            </li>
+
+            <li>
+              <a href="/manual/corewm">CoreWM</a>
+              <ul>
+                <li><a href="/manual/corewm/theme">Themes</a></li>
+                <li><a href="/manual/corewm/panel">Panel</a></li>
+                <li><a href="/manual/corewm/widget">Widget</a></li>
+              </ul>
+            </li>
+
+            <li>
+              <a href="/manual/development">Development</a>
+              <ul>
+                <li><a href="/manual/development/#intro">Introduction</a></li>
+                <li><a href="/manual/development/#style">Style guide</a></li>
+                <li><a href="/manual/development/#setup">Set up environment</a></li>
+                <li><a href="/manual/development/#tips">Tips and tricks</a></li>
+                <li><a href="/manual/development/#test">Testing</a></li>
+                <li><a href="/manual/development/#contribute">Contributing</a></li>
+              </ul>
+            </li>
+
+            <li><a href="/manual/community">Community</a></li>
+          </ol>
+
+        </nav>
+      </aside>
+
+      <content>
+        <h1 id="configuration">Configuration</h1>
+<p><em>Configuration</em> is done with JSON files that are loaded in order and merged together to form a final tree from which all settings are read.</p>
+<p>The files are divided into sections and prefixed with a number so that they load in correct order.</p>
+<h2 id="environment">Environment</h2>
+<p>See the <a href="/manual/build/cli">Build Commands</a> page for more information about environments.</p>
+<hr>
+<h2 id="settings">Settings</h2>
+<p>See the <a href="/manual/build/cli">Build Commands</a> page for more information about settings.</p>
+<hr>
+<h2 id="assets">Assets</h2>
+<h3 id="extending-base-css">Extending base CSS</h3>
+<pre class="language-shell"><code class="language-shell">$ grunt config:set:themes.styleBase:<span class="token entity" title="&quot;">&amp;quot;</span>custom.less<span class="token entity" title="&quot;">&amp;quot;</span>
+$ grunt config
+$ edit src/client/stylesheets/custom.less
+
+# Run this to update changes
+$ grunt themes
+</code></pre>
+<h4 id="example-file">Example file</h4>
+<pre class="language-css"><code class="language-css"><span class="token atrule"><span class="token rule">@import</span> <span class="token string">&quot;theme.less&quot;</span><span class="token punctuation">;</span></span>
+
+<span class="token comment" spellcheck="true">/* YOUR STYLES HERE */</span>
+</code></pre>
+<h3 id="add-to-template">Add to template</h3>
+<pre class="language-shell"><code class="language-shell"># Alternative 1:
+$ edit src/templates/dist/default/index.html
+
+# Alternative 2 (recomended):
+$ cp -r src/templates/dist/default src/templates/dist/mytemplate
+$ grunt config:set --name=build.dist.template --value=mytemplate
+$ edit src/templates/dist/mytemplate/index.html
+
+# Rebuild
+$ grunt build:core
+</code></pre>
+<h3 id="add-to-build">Add to build</h3>
+<p>See <code>src/conf/500-build.json</code> for example on how to add to build process.</p>
+<h3 id="add-to-boot">Add to boot</h3>
+<pre class="language-shell"><code class="language-shell">$ grunt config:add-preload --name=FOO --path=PATH
+</code></pre>
+<h3 id="add-to-package">Add to package</h3>
+<p>Modify your <code>metadata.json</code> file and modify the preload section:</p>
+<pre class="language-json"><code class="language-json"><span class="token punctuation">{</span>
+  <span class="token property">&quot;preload&quot;</span><span class="token operator">:</span> <span class="token punctuation">[</span>
+    <span class="token string">&quot;path-here&quot;</span>
+  <span class="token punctuation">]</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<h3 id="programatic-approach">Programatic approach</h3>
+<pre class="language-js"><code class="language-js"><span class="token keyword">var</span> list <span class="token operator">=</span> <span class="token punctuation">[</span>
+  <span class="token punctuation">{</span>type<span class="token punctuation">:</span> <span class="token string">&apos;javascript&apos;</span><span class="token punctuation">,</span> src<span class="token punctuation">:</span> <span class="token string">&apos;local/script/file.js&apos;</span><span class="token punctuation">}</span><span class="token punctuation">,</span>
+  <span class="token punctuation">{</span>type<span class="token punctuation">:</span> <span class="token string">&apos;stylesheet&apos;</span><span class="token punctuation">,</span> src<span class="token punctuation">:</span> <span class="token string">&apos;/vendor/stylesheet.css&apos;</span><span class="token punctuation">}</span><span class="token punctuation">,</span>
+  <span class="token punctuation">{</span>type<span class="token punctuation">:</span> <span class="token string">&apos;javascript&apos;</span><span class="token punctuation">,</span> src<span class="token punctuation">:</span> <span class="token string">&apos;http://external/javascript/file.js&apos;</span><span class="token punctuation">}</span>
+<span class="token punctuation">]</span><span class="token punctuation">;</span>
+
+Utils<span class="token punctuation">.</span><span class="token function">preload</span><span class="token punctuation">(</span>list<span class="token punctuation">,</span> <span class="token keyword">function</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token comment" spellcheck="true">/* done */</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre>
+<hr>
+<h2 id="packages">Packages</h2>
+<hr>
+<h2 id="proxies">Proxies</h2>
+<pre class="language-json"><code class="language-json"><span class="token punctuation">{</span>
+  <span class="token property">&quot;server&quot;</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+    <span class="token property">&quot;proxies&quot;</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+      <span class="token property">&quot;/^\\/starts\\-with/&quot;</span><span class="token operator">:</span> <span class="token string">&quot;http://remote-service/somewhere&quot;</span><span class="token punctuation">,</span>
+      <span class="token property">&quot;match-only/&quot;</span><span class="token operator">:</span> <span class="token string">&quot;http://localhost:5000/here&quot;</span>
+    <span class="token punctuation">}</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre>
+
+
+        <footer>
+          <p>Generated with  &mdash; <a href=""></a></p>
+        </footer>
+      </content>
+    </main>
+
+  </body>
+</html>
