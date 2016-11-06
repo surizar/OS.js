@@ -112,6 +112,26 @@ tbody tr td {
 tbody tr:nth-child(2n+1) td {
   background-color: #fafafa;
 }
+table.reference {
+  width: 600px;
+  border: 1px solid #e8e8e8;
+}
+table.reference tr {
+  border: 0 none;
+}
+table.reference tr:nth-child(1) td {
+  border-bottom: 1px solid #e8e8e8;
+}
+table.reference td:nth-child(1) {
+  background-color: #fafafa;
+  width: 200px;
+}
+table.reference td:nth-child(1) {
+  font-weight: bold;
+}
+table.reference td:nth-child(2) {
+  background-color: transparent;
+}
 /**
  * Header
  */

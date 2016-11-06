@@ -2,8 +2,8 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <title>Authentication Modules</title>
-    <meta name="description" content="OS.js" />
+    <title>Authentication Modules | OS.js Manual</title>
+    <meta name="description" content="OS.js Manual - OS.js" />
     <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,600" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.5.1/themes/prism-tomorrow.min.css">
@@ -82,7 +82,7 @@
             <li>
               <a href="/manual/storage">Storage</a>
               <ul>
-                <li><a href="/manual/auth/storage/modules">Modules</a></li>
+                <li><a href="/manual/storage/modules">Modules</a></li>
               </ul>
             </li>
 
@@ -140,8 +140,8 @@
                     <li>
                       <a href="/manual/package/application">Application</a>
                       <ul>
-                        <li><a href="/manual/package/application/windows">Windows</a></li>
                         <li><a href="/manual/package/application/events">Events</a></li>
+                        <li><a href="/manual/package/application/windows">Windows</a></li>
                         <li><a href="/manual/package/application/gui">GUI</a></li>
                         <li><a href="/manual/package/application/responsive">Responsive</a></li>
                       </ul>
@@ -165,9 +165,9 @@
             <li>
               <a href="/manual/corewm">CoreWM</a>
               <ul>
-                <li><a href="/manual/corewm/theme">Themes</a></li>
-                <li><a href="/manual/corewm/panel">Panel</a></li>
-                <li><a href="/manual/corewm/widget">Widget</a></li>
+                <li><a href="/manual/corewm/#themes">Themes</a></li>
+                <li><a href="/manual/corewm/#panel">Panel</a></li>
+                <li><a href="/manual/corewm/#widget">Widget</a></li>
               </ul>
             </li>
 
@@ -197,80 +197,80 @@
 <hr>
 <h2 id="mysql">Mysql</h2>
 <p>This is just a simple database backend that authorizes login attempts via mysql.</p>
-<p><strong>Also set up the <a href="storage.md">Mysql storage</a> module for this to work as intended.</strong></p>
-<pre class="language-shell"><code class="language-shell"># Install node dependency
-$ npm install mysql bcryptjs
+<p><strong>Also set up the <a href="/manual/storage/modules/#mysql">Mysql storage</a> module for this to work as intended.</strong></p>
+<pre class="language-bash"><code class="language-bash"><span class="token comment" spellcheck="true"># Install node dependency</span>
+$ npm <span class="token function">install</span> mysql bcryptjs
 
-# Change the configured authenticator and its options
-$ grunt config:set --name=authenticator --value=mysql
-$ grunt config:set --name=server.modules.auth.mysql.host --value=localhost
-$ grunt config:set --name=server.modules.auth.mysql.user --value=osjsuser
-$ grunt config:set --name=server.modules.auth.mysql.password --value=osjspassword
-$ grunt config:set --name=server.modules.auth.mysql.database --value=osjs
+<span class="token comment" spellcheck="true"># Change the configured authenticator and its options</span>
+$ grunt config:set --name<span class="token operator">=</span>authenticator --value<span class="token operator">=</span>mysql
+$ grunt config:set --name<span class="token operator">=</span>server.modules.auth.mysql.host --value<span class="token operator">=</span>localhost
+$ grunt config:set --name<span class="token operator">=</span>server.modules.auth.mysql.user --value<span class="token operator">=</span>osjsuser
+$ grunt config:set --name<span class="token operator">=</span>server.modules.auth.mysql.password --value<span class="token operator">=</span>osjspassword
+$ grunt config:set --name<span class="token operator">=</span>server.modules.auth.mysql.database --value<span class="token operator">=</span>osjs
 
-# Make OS.js reload after you log out
-$ grunt config:set --name=client.ReloadOnShutdown --value=true
+<span class="token comment" spellcheck="true"># Make OS.js reload after you log out</span>
+$ grunt config:set --name<span class="token operator">=</span>client.ReloadOnShutdown --value<span class="token operator">=</span>true
 
-# Rebuild
+<span class="token comment" spellcheck="true"># Rebuild</span>
 $ grunt build:config build:core
 
-# Set up database
+<span class="token comment" spellcheck="true"># Set up database</span>
 $ mysql -u root -p
 
-mysql<span class="token entity" title="&gt;">&amp;gt;</span> CREATE DATABASE osjs;
-mysql<span class="token entity" title="&gt;">&amp;gt;</span> GRANT USAGE ON *.* TO osjsuser@localhost IDENTIFIED BY <span class="token entity" title="&apos;">&amp;apos;</span>osjspassword<span class="token entity" title="&apos;">&amp;apos;</span>;
-mysql<span class="token entity" title="&gt;">&amp;gt;</span> GRANT ALL PRIVILEGES ON osjs.* TO osjsuser@localhost;
+mysql<span class="token operator">&gt;</span> CREATE DATABASE osjs<span class="token punctuation">;</span>
+mysql<span class="token operator">&gt;</span> GRANT USAGE ON *.* TO osjsuser@localhost IDENTIFIED BY <span class="token string">&apos;osjspassword&apos;</span><span class="token punctuation">;</span>
+mysql<span class="token operator">&gt;</span> GRANT ALL PRIVILEGES ON osjs.* TO osjsuser@localhost<span class="token punctuation">;</span>
 
-# Then set up database tables
-mysql<span class="token entity" title="&gt;">&amp;gt;</span> CREATE TABLE IF NOT EXISTS `users` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `username` varchar(255) NOT NULL,
-  `password` varchar(255) NOT NULL,
-  `name` varchar(255) NOT NULL,
-  `groups` text,
-  `settings` text,
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1;
+<span class="token comment" spellcheck="true"># Then set up database tables</span>
+mysql<span class="token operator">&gt;</span> CREATE TABLE IF NOT EXISTS <span class="token variable"><span class="token variable">`</span><span class="token function">users</span><span class="token variable">`</span></span> <span class="token punctuation">(</span>
+  <span class="token variable"><span class="token variable">`</span><span class="token function">id</span><span class="token variable">`</span></span> int<span class="token punctuation">(</span>11<span class="token punctuation">)</span> NOT NULL AUTO_INCREMENT,
+  <span class="token variable"><span class="token variable">`</span>username<span class="token variable">`</span></span> varchar<span class="token punctuation">(</span>255<span class="token punctuation">)</span> NOT NULL,
+  <span class="token variable"><span class="token variable">`</span>password<span class="token variable">`</span></span> varchar<span class="token punctuation">(</span>255<span class="token punctuation">)</span> NOT NULL,
+  <span class="token variable"><span class="token variable">`</span>name<span class="token variable">`</span></span> varchar<span class="token punctuation">(</span>255<span class="token punctuation">)</span> NOT NULL,
+  <span class="token variable"><span class="token variable">`</span><span class="token function">groups</span><span class="token variable">`</span></span> text,
+  <span class="token variable"><span class="token variable">`</span>settings<span class="token variable">`</span></span> text,
+  PRIMARY KEY <span class="token punctuation">(</span><span class="token variable"><span class="token variable">`</span><span class="token function">id</span><span class="token variable">`</span></span><span class="token punctuation">)</span>
+<span class="token punctuation">)</span> ENGINE<span class="token operator">=</span>MyISAM  DEFAULT CHARSET<span class="token operator">=</span>latin1 AUTO_INCREMENT<span class="token operator">=</span>1<span class="token punctuation">;</span>
 
-# And then add yourself a user
+<span class="token comment" spellcheck="true"># And then add yourself a user</span>
 $ node bin/mysql-user.js add anders admin
-$ mkdir vfs/home/myadminaccount
+$ <span class="token function">mkdir</span> vfs/home/myadminaccount
 </code></pre>
 <hr>
 <h2 id="pam-and-shadow">PAM and Shadow</h2>
 <p>Log in via the system (<code>PAM</code> or <code>Shadow</code>) authentication system. <strong>This is only available for Linux and Node</strong>.</p>
-<p><strong>Also set up the <a href="storage.md">System storage</a> module for this to work as intended.</strong></p>
+<p><strong>Also set up the <a href="/manual/storage/modules/#system">System storage</a> module for this to work as intended.</strong></p>
 <h3 id="setup-">Setup:</h3>
-<pre class="language-shell"><code class="language-shell"># You need the PAM developer package to build node gyp module
-$ sudo apt-get install libpam0g-dev
+<pre class="language-bash"><code class="language-bash"><span class="token comment" spellcheck="true"># You need the PAM developer package to build node gyp module</span>
+$ <span class="token function">sudo</span> <span class="token function">apt-get</span> <span class="token function">install</span> libpam0g-dev
 
-# PAM dependencies (you need PAM development package on your system)
-$ npm install nan@1.1.0
-$ npm install authenticate-pam
-$ npm install userid
+<span class="token comment" spellcheck="true"># PAM dependencies (you need PAM development package on your system)</span>
+$ npm <span class="token function">install</span> nan@1.1.0
+$ npm <span class="token function">install</span> authenticate-pam
+$ npm <span class="token function">install</span> userid
 
-# Shadow dependencies
-$ npm install git+https://github.com/andersevenrud/passwd-linux
-$ npm install userid
+<span class="token comment" spellcheck="true"># Shadow dependencies</span>
+$ npm <span class="token function">install</span> git+https://github.com/andersevenrud/passwd-linux
+$ npm <span class="token function">install</span> userid
 
-# Set up groups
-$ mkdir /etc/osjs
+<span class="token comment" spellcheck="true"># Set up groups</span>
+$ <span class="token function">mkdir</span> /etc/osjs
 $ edit /etc/osjs/groups.json
 
-# Set up package blacklist (optional)
+<span class="token comment" spellcheck="true"># Set up package blacklist (optional)</span>
 $ edit /etc/osjs/blacklist.json
 
-# Change the configured authenticator (or use <span class="token entity" title="&quot;">&amp;quot;</span>shadow<span class="token entity" title="&quot;">&amp;quot;</span> here)
-$ grunt config:set --name=authenticator --value=pam
+<span class="token comment" spellcheck="true"># Change the configured authenticator (or use &quot;shadow&quot; here)</span>
+$ grunt config:set --name<span class="token operator">=</span>authenticator --value<span class="token operator">=</span>pam
 
-# Make OS.js reload after you log out
-$ grunt config:set --name=client.ReloadOnShutdown --value=true
+<span class="token comment" spellcheck="true"># Make OS.js reload after you log out</span>
+$ grunt config:set --name<span class="token operator">=</span>client.ReloadOnShutdown --value<span class="token operator">=</span>true
 
-# Update configuration and template files
+<span class="token comment" spellcheck="true"># Update configuration and template files</span>
 $ grunt build:config
 
-# Rebuild (only required if you use `dist`)
-# grunt build:core --target=dist
+<span class="token comment" spellcheck="true"># Rebuild (only required if you use `dist`)</span>
+<span class="token comment" spellcheck="true"># grunt build:core --target=dist</span>
 </code></pre>
 <p><strong>NOTE:</strong> On some systems you might have to install <code>authenticate-pam</code> with <code>npm install -g</code> or else you might get a <em>Error in service module</em> upon request.</p>
 <p><strong>NOTE:</strong> Also, on some systems you might have to run OS.js server as an administrator (<code>sudo</code>) depending on the PAM setup.</p>

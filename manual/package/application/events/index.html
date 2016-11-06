@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Application Events | OS.js Manual</title>
+    <meta name="description" content="OS.js Manual - OS.js" />
+    <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,600" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.5.1/themes/prism-tomorrow.min.css">
+    <link href="/css/manual.css" rel="stylesheet" />
+  </head>
+  <body>
+    <header>
+      <div id="Logo"></div>
+      <nav>
+        <a href="/">Home</a>
+        <a href="/manual" class="active">Manual</a>
+        <a href="/doc">Documentation</a>
+      </nav>
+    </header>
+
+    <main>
+      <aside>
+        <nav>
+          <ol>
+            <li>
+              <a href="/manual">Overview</a>
+            </li>
+
+            <li>
+              <a href="/manual/installation">Installation</a>
+              <ul>
+                <li><a href="/manual/installation/nix">NIX</a></li>
+                <li><a href="/manual/installation/windows">Windows</a></li>
+                <li><a href="/manual/installation/other">Other</a></li>
+              </ul>
+            </li>
+
+            <li>
+              <a href="/manual/build">Build System</a>
+              <ul>
+                <li><a href="/manual/build/cli">Commands</a></li>
+                <li><a href="/manual/build/grunt">Grunt</a></li>
+              </ul>
+            </li>
+
+            <li>
+              <a href="/manual/configuration">Configuration</a>
+              <ul>
+                <li><a href="/manual/configuration/#environment">Environment</a></li>
+                <li><a href="/manual/configuration/#settings">Settings</a></li>
+                <li><a href="/manual/configuration/#assets">Assets</a></li>
+                <li><a href="/manual/configuration/#packages">Packages</a></li>
+                <li><a href="/manual/configuration/#proxies">Proxies</a></li>
+              </ul>
+            </li>
+
+            <li>
+              <a href="/manual/client">Client</a>
+              <ul>
+                <li><a href="/manual/client/features">Features</a></li>
+                <li><a href="/manual/client/broadway">Broadway</a></li>
+              </ul>
+            </li>
+
+            <li>
+              <a href="/manual/server">Server</a>
+              <ul>
+                <li><a href="/manual/server/node">Node</a></li>
+                <li><a href="/manual/server/php">PHP</a></li>
+              </ul>
+            </li>
+
+            <li>
+              <a href="/manual/auth">Authentication</a>
+              <ul>
+                <li><a href="/manual/auth/modules">Modules</a></li>
+                <li><a href="/manual/auth/permission">Groups and permissions</a></li>
+              </ul>
+            </li>
+
+            <li>
+              <a href="/manual/storage">Storage</a>
+              <ul>
+                <li><a href="/manual/storage/modules">Modules</a></li>
+              </ul>
+            </li>
+
+            <li>
+              <a href="/manual/connection">Connection</a>
+              <ul>
+                <li><a href="/manual/connection/websocket">WebSocket</a></li>
+                <li><a href="/manual/connection/http">HTTP/HTTP2/HTTPS</a></li>
+              </ul>
+            </li>
+
+            <li>
+              <a href="/manual/api">API</a>
+              <ul>
+                <li><a href="/manual/api/client">Client</a></li>
+                <li><a href="/manual/api/server">Server</a></li>
+                <li>
+                  <span>Usage</span>
+                  <ul>
+                    <li><a href="/manual/api/usage/curl">curl</a></li>
+                    <li><a href="/manual/api/usage/vfs">VFS</a></li>
+                  </ul>
+                </li>
+              </ul>
+            </li>
+
+            <li>
+              <a href="/manual/vfs">VFS</a>
+              <ul>
+                <li><a href="/manual/vfs/#mountpoints">Mountpoints</a></li>
+                <li>
+                  <a href="/manual/vfs/transport">Transports</a>
+                  <ul>
+                    <li><a href="/manual/vfs/transport/#googledrive">Google Drive</a></li>
+                    <li><a href="/manual/vfs/transport/#microsoft-onedrive">Microsoft OneDrive</a></li>
+                    <li><a href="/manual/vfs/transport/#dropbox">Dropbox</a></li>
+                    <li><a href="/manual/vfs/transport/#webdav">WebDAV</a></li>
+                  </ul>
+                </li>
+              </ul>
+            </li>
+
+            <li>
+              <a href="/manual/package">Package</a>
+              <ul>
+                <li><a href="/manual/package/#metadata">Metadata</a></li>
+                <li><a href="/manual/package/#preload">Preload</a></li>
+                <li><a href="/manual/package/#scripts">Scripts</a></li>
+                <li><a href="/manual/package/#spawner">Spawner</a></li>
+                <li><a href="/manual/package/#less-support">LESS Support</a></li>
+                <li><a href="/manual/package/#server-apis">Server APIs</a></li>
+                <li>
+                  <span>Types</span>
+                  <ul>
+                    <li>
+                      <a href="/manual/package/application">Application</a>
+                      <ul>
+                        <li><a href="/manual/package/application/events">Events</a></li>
+                        <li><a href="/manual/package/application/windows">Windows</a></li>
+                        <li><a href="/manual/package/application/gui">GUI</a></li>
+                        <li><a href="/manual/package/application/responsive">Responsive</a></li>
+                      </ul>
+                    </li>
+                    <li><a href="/manual/package/iframe">Iframe</a></li>
+                    <li><a href="/manual/package/service">Service</a></li>
+                    <li><a href="/manual/package/extension">Extension</a></li>
+                  </ul>
+                </li>
+              </ul>
+            </li>
+
+            <li>
+              <a href="/manual/gui">Scheme and GUI</a>
+              <ul>
+                <li><a href="/manual/gui/scheme">Scheme files</a></li>
+                <li><a href="/manual/gui/elements">GUI Elements</a></li>
+              </ul>
+            </li>
+
+            <li>
+              <a href="/manual/corewm">CoreWM</a>
+              <ul>
+                <li><a href="/manual/corewm/#themes">Themes</a></li>
+                <li><a href="/manual/corewm/#panel">Panel</a></li>
+                <li><a href="/manual/corewm/#widget">Widget</a></li>
+              </ul>
+            </li>
+
+            <li>
+              <a href="/manual/development">Development</a>
+              <ul>
+                <li><a href="/manual/development/#intro">Introduction</a></li>
+                <li><a href="/manual/development/#style">Style guide</a></li>
+                <li><a href="/manual/development/#setup">Set up environment</a></li>
+                <li><a href="/manual/development/#tips">Tips and tricks</a></li>
+                <li><a href="/manual/development/#test">Testing</a></li>
+                <li><a href="/manual/development/#contribute">Contributing</a></li>
+              </ul>
+            </li>
+
+            <li><a href="/manual/community">Community</a></li>
+          </ol>
+
+        </nav>
+      </aside>
+
+      <content>
+        <h1 id="application-events">Application Events</h1>
+<h2 id="events">Events</h2>
+<p>This is a list of the internal events for a Application. You can of course subscribe to custom ones.</p>
+<pre class="language-bash"><code class="language-bash">message       All events                               <span class="token operator">=</span><span class="token operator">&gt;</span> <span class="token punctuation">(</span>msg, object, options<span class="token punctuation">)</span>
+attention     When application gets attention signal   <span class="token operator">=</span><span class="token operator">&gt;</span> <span class="token punctuation">(</span>args<span class="token punctuation">)</span>
+hashchange    When URL <span class="token function">hash</span> has changed                <span class="token operator">=</span><span class="token operator">&gt;</span> <span class="token punctuation">(</span>args<span class="token punctuation">)</span>
+api           API event                                <span class="token operator">=</span><span class="token operator">&gt;</span> <span class="token punctuation">(</span>method<span class="token punctuation">)</span>
+destroy       Destruction event                        <span class="token operator">=</span><span class="token operator">&gt;</span> <span class="token punctuation">(</span>killed<span class="token punctuation">)</span>
+destroyWindow Attached window destruction event        <span class="token operator">=</span><span class="token operator">&gt;</span> <span class="token punctuation">(</span>win<span class="token punctuation">)</span>
+vfs           For all VFS events                       <span class="token operator">=</span><span class="token operator">&gt;</span> <span class="token punctuation">(</span>msg, object, options<span class="token punctuation">)</span>
+vfs:mount     VFS <span class="token function">mount</span> event                          <span class="token operator">=</span><span class="token operator">&gt;</span> <span class="token punctuation">(</span>module, options, msg<span class="token punctuation">)</span>
+vfs:unmount   VFS unmount event                        <span class="token operator">=</span><span class="token operator">&gt;</span> <span class="token punctuation">(</span>module, options, msg<span class="token punctuation">)</span>
+vfs:write     VFS <span class="token function">write</span> event                          <span class="token operator">=</span><span class="token operator">&gt;</span> <span class="token punctuation">(</span>dest, options, msg<span class="token punctuation">)</span>
+vfs:mkdir     VFS <span class="token function">mkdir</span> event                          <span class="token operator">=</span><span class="token operator">&gt;</span> <span class="token punctuation">(</span>dest, options, msg<span class="token punctuation">)</span>
+vfs:move      VFS move event                           <span class="token operator">=</span><span class="token operator">&gt;</span> <span class="token punctuation">(</span><span class="token punctuation">{</span>src,dest<span class="token punctuation">}</span>, options, msg<span class="token punctuation">)</span>
+vfs:delete    VFS delete event                         <span class="token operator">=</span><span class="token operator">&gt;</span> <span class="token punctuation">(</span>dest, options, msg<span class="token punctuation">)</span>
+vfs:upload    VFS upload event                         <span class="token operator">=</span><span class="token operator">&gt;</span> <span class="token punctuation">(</span>file, options, msg<span class="token punctuation">)</span>
+vfs:update    VFS update event                         <span class="token operator">=</span><span class="token operator">&gt;</span> <span class="token punctuation">(</span>dir, options, msg<span class="token punctuation">)</span>
+</code></pre>
+<h2 id="how-to-subscribe">How to subscribe</h2>
+<pre class="language-js"><code class="language-js"><span class="token punctuation">.</span><span class="token function">_on</span><span class="token punctuation">(</span><span class="token string">&apos;event&apos;</span><span class="token punctuation">,</span> <span class="token keyword">function</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment" spellcheck="true">// Subscribe to event</span>
+<span class="token punctuation">.</span><span class="token function">_off</span><span class="token punctuation">(</span><span class="token string">&apos;event&apos;</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment" spellcheck="true">// Unsubscribe to an event (you can pass the callback as second argument)</span>
+<span class="token punctuation">.</span><span class="token function">_emit</span><span class="token punctuation">(</span><span class="token string">&apos;event&apos;</span><span class="token punctuation">,</span> <span class="token punctuation">[</span>arg<span class="token punctuation">,</span> <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment" spellcheck="true">// Emit an event</span>
+</code></pre>
+<h2 id="how-to-broadcast">How to broadcast</h2>
+<p>You can broadcast messages to all applications (that will emit an event in your application) by simply doing:</p>
+<pre class="language-js"><code class="language-js">API<span class="token punctuation">.</span><span class="token function">message</span><span class="token punctuation">(</span><span class="token string">&apos;foo&apos;</span><span class="token punctuation">,</span> <span class="token punctuation">{</span>bar<span class="token punctuation">:</span> <span class="token string">&apos;baz&apos;</span><span class="token punctuation">}</span><span class="token punctuation">)</span>
+
+<span class="token comment" spellcheck="true">// If you send your application ID as a source, it will not be triggered in that application.</span>
+API<span class="token punctuation">.</span><span class="token function">message</span><span class="token punctuation">(</span><span class="token string">&apos;foo&apos;</span><span class="token punctuation">,</span> <span class="token punctuation">{</span>bar<span class="token punctuation">:</span> <span class="token string">&apos;baz&apos;</span><span class="token punctuation">}</span><span class="token punctuation">,</span> <span class="token punctuation">{</span>source<span class="token punctuation">:</span> app<span class="token punctuation">.</span>__pid<span class="token punctuation">}</span><span class="token punctuation">)</span>
+</code></pre>
+<p>Ref: <a href="https://os.js.org/doc/client/OSjs.Core.Process.html#_onMessage">https://os.js.org/doc/client/OSjs.Core.Process.html#_onMessage</a></p>
+
+
+        <footer>
+          <p>Generated with  &mdash; <a href=""></a></p>
+        </footer>
+      </content>
+    </main>
+
+  </body>
+</html>

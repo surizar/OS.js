@@ -2,8 +2,8 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <title></title>
-    <meta name="description" content="OS.js" />
+    <title>Storage Modules | OS.js Manual</title>
+    <meta name="description" content="OS.js Manual - OS.js" />
     <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,600" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.5.1/themes/prism-tomorrow.min.css">
@@ -82,7 +82,7 @@
             <li>
               <a href="/manual/storage">Storage</a>
               <ul>
-                <li><a href="/manual/auth/storage/modules">Modules</a></li>
+                <li><a href="/manual/storage/modules">Modules</a></li>
               </ul>
             </li>
 
@@ -140,8 +140,8 @@
                     <li>
                       <a href="/manual/package/application">Application</a>
                       <ul>
-                        <li><a href="/manual/package/application/windows">Windows</a></li>
                         <li><a href="/manual/package/application/events">Events</a></li>
+                        <li><a href="/manual/package/application/windows">Windows</a></li>
                         <li><a href="/manual/package/application/gui">GUI</a></li>
                         <li><a href="/manual/package/application/responsive">Responsive</a></li>
                       </ul>
@@ -165,9 +165,9 @@
             <li>
               <a href="/manual/corewm">CoreWM</a>
               <ul>
-                <li><a href="/manual/corewm/theme">Themes</a></li>
-                <li><a href="/manual/corewm/panel">Panel</a></li>
-                <li><a href="/manual/corewm/widget">Widget</a></li>
+                <li><a href="/manual/corewm/#themes">Themes</a></li>
+                <li><a href="/manual/corewm/#panel">Panel</a></li>
+                <li><a href="/manual/corewm/#widget">Widget</a></li>
               </ul>
             </li>
 
@@ -190,7 +190,43 @@
       </aside>
 
       <content>
-        <h1 id="index">Index</h1>
+        <h1 id="storage-modules">Storage Modules</h1>
+<p>In addition to <a href="/manual/auth">Authenticators</a>, OS.js uses a Storage module for saving user settings and other user data.</p>
+<h2 id="demo">Demo</h2>
+<p>This module only saves the data in the <em>Browser</em> using <code>LocalStorage</code>.</p>
+<pre class="language-bash"><code class="language-bash">$ grunt config:set --name<span class="token operator">=</span>storage --value<span class="token operator">=</span>demo
+$ grunt build:config build:core
+</code></pre>
+<hr>
+<h2 id="mysql">Mysql</h2>
+<p>Stores the data in a Mysql database. See the <a href="/manual/auth">Authenticators</a> documentation on how to set up the database and its users.</p>
+<pre class="language-bash"><code class="language-bash">$ grunt config:set --name<span class="token operator">=</span>storage --value<span class="token operator">=</span>mysql
+$ grunt config:set --name<span class="token operator">=</span>server.modules.storage.mysql.host --value<span class="token operator">=</span>localhost
+$ grunt config:set --name<span class="token operator">=</span>server.modules.storage.mysql.user --value<span class="token operator">=</span>osjsuser
+$ grunt config:set --name<span class="token operator">=</span>server.modules.storage.mysql.password --value<span class="token operator">=</span>osjspassword
+$ grunt config:set --name<span class="token operator">=</span>server.modules.storage.mysql.database --value<span class="token operator">=</span>osjs
+$ grunt build:config build:core
+</code></pre>
+<hr>
+<h2 id="system">System</h2>
+<p>Stores the data in the filesystem.</p>
+<pre class="language-bash"><code class="language-bash">$ grunt config:set --name<span class="token operator">=</span>storage --value<span class="token operator">=</span>system
+$ grunt build:config build:core
+</code></pre>
+<h3 id="groups-json">groups.json</h3>
+<p>This is an example file for <code>groups.json</code></p>
+<pre class="language-json"><code class="language-json"><span class="token punctuation">{</span>
+  <span class="token property">&quot;anders&quot;</span><span class="token operator">:</span> <span class="token punctuation">[</span><span class="token string">&quot;admin&quot;</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+  <span class="token property">&quot;guest&quot;</span><span class="token operator">:</span> <span class="token punctuation">[</span><span class="token string">&quot;api&quot;</span><span class="token punctuation">,</span> <span class="token string">&quot;application&quot;</span><span class="token punctuation">,</span> <span class="token string">&quot;upload&quot;</span><span class="token punctuation">,</span> <span class="token string">&quot;fs&quot;</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+  <span class="token property">&quot;marcello&quot;</span><span class="token operator">:</span> <span class="token punctuation">[</span><span class="token string">&quot;api&quot;</span><span class="token punctuation">,</span> <span class="token string">&quot;application&quot;</span><span class="token punctuation">,</span> <span class="token string">&quot;curl&quot;</span><span class="token punctuation">,</span> <span class="token string">&quot;upload&quot;</span><span class="token punctuation">,</span> <span class="token string">&quot;fs&quot;</span><span class="token punctuation">]</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<h3 id="blacklist-json">blacklist.json</h3>
+<p>This is an example file for <code>blacklist.json</code></p>
+<pre class="language-json"><code class="language-json"><span class="token punctuation">{</span>
+  <span class="token property">&quot;anders&quot;</span><span class="token operator">:</span> <span class="token punctuation">[</span><span class="token string">&quot;default/ApplicationDraw&quot;</span><span class="token punctuation">]</span>
+<span class="token punctuation">}</span>
+</code></pre>
 
 
         <footer>

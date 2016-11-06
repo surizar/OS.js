@@ -2,8 +2,8 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <title>VFS Transports</title>
-    <meta name="description" content="OS.js" />
+    <title>VFS Transports | OS.js Manual</title>
+    <meta name="description" content="OS.js Manual - OS.js" />
     <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,600" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.5.1/themes/prism-tomorrow.min.css">
@@ -82,7 +82,7 @@
             <li>
               <a href="/manual/storage">Storage</a>
               <ul>
-                <li><a href="/manual/auth/storage/modules">Modules</a></li>
+                <li><a href="/manual/storage/modules">Modules</a></li>
               </ul>
             </li>
 
@@ -140,8 +140,8 @@
                     <li>
                       <a href="/manual/package/application">Application</a>
                       <ul>
-                        <li><a href="/manual/package/application/windows">Windows</a></li>
                         <li><a href="/manual/package/application/events">Events</a></li>
+                        <li><a href="/manual/package/application/windows">Windows</a></li>
                         <li><a href="/manual/package/application/gui">GUI</a></li>
                         <li><a href="/manual/package/application/responsive">Responsive</a></li>
                       </ul>
@@ -165,9 +165,9 @@
             <li>
               <a href="/manual/corewm">CoreWM</a>
               <ul>
-                <li><a href="/manual/corewm/theme">Themes</a></li>
-                <li><a href="/manual/corewm/panel">Panel</a></li>
-                <li><a href="/manual/corewm/widget">Widget</a></li>
+                <li><a href="/manual/corewm/#themes">Themes</a></li>
+                <li><a href="/manual/corewm/#panel">Panel</a></li>
+                <li><a href="/manual/corewm/#widget">Widget</a></li>
               </ul>
             </li>
 
@@ -195,30 +195,30 @@
 <p>First you have to create <a href="https://console.developers.google.com/iam-admin/projects?pli=1">API Credentials</a> for OS.js to allow OS.js access.</p>
 <p>Create a new project, then find the &quot;Credentials&quot; menu and make a new OAuth Client ID. Make sure to enable the &quot;Drive API&quot; and &quot;Google+&quot; permission.</p>
 <p><strong>Only works over HTTPS</strong></p>
-<pre class="language-shell"><code class="language-shell">$ grunt config:set --name=client.GoogleAPI.ClientId --value=YOUR_CLIENT_ID
-$ grunt config:set --name=client.VFS.GoogleDrive.Enabled --value=true
+<pre class="language-bash"><code class="language-bash">$ grunt config:set --name<span class="token operator">=</span>client.GoogleAPI.ClientId --value<span class="token operator">=</span>YOUR_CLIENT_ID
+$ grunt config:set --name<span class="token operator">=</span>client.VFS.GoogleDrive.Enabled --value<span class="token operator">=</span>true
 $ grunt build:config
 </code></pre>
 <hr>
 <h2 id="microsoft-onedrive">Microsoft OneDrive</h2>
 <p>First you have to create <a href="https://msdn.microsoft.com/en-us/library/ff751474.aspx">API Credentials</a> to allow OS.js access.</p>
 <p>Set your redirect URL to <code>http://your-host/vendor/wlOauthReceiver.html</code>.</p>
-<pre class="language-shell"><code class="language-shell">$ grunt config:set --name=client.WindowsLiveAPI.ClientId --value=YOUR_CLIENT_ID
-$ grunt config:set --name=client.VFS.OneDrive.Enabled --value=true
+<pre class="language-bash"><code class="language-bash">$ grunt config:set --name<span class="token operator">=</span>client.WindowsLiveAPI.ClientId --value<span class="token operator">=</span>YOUR_CLIENT_ID
+$ grunt config:set --name<span class="token operator">=</span>client.VFS.OneDrive.Enabled --value<span class="token operator">=</span>true
 $ grunt build:config
 </code></pre>
 <hr>
 <h2 id="dropbox">Dropbox</h2>
 <p>First you have to create <a href="https://www.dropbox.com/login?cont=https%3A%2F%2Fwww.dropbox.com%2Fdevelopers%2Fapps">API Credentials</a> to allow OS.js access.</p>
 <p>Set your redirect URL to <code>http://your-host/vendor/dropboxOauthReceiver.html</code>.</p>
-<pre class="language-shell"><code class="language-shell">$ git clone https://github.com/dropbox/dropbox-js.git vendor/dropbox-js
+<pre class="language-bash"><code class="language-bash">$ <span class="token function">git</span> clone https://github.com/dropbox/dropbox-js.git vendor/dropbox-js
 
-# You may have to build dropbox.js manually before continuing
-# Windows users: You<span class="token entity" title="&apos;">&amp;apos;</span>d have to use resolve the symlinks in <span class="token entity" title="&quot;">&amp;quot;</span>dist/vendor<span class="token entity" title="&quot;">&amp;quot;</span>
+<span class="token comment" spellcheck="true"># You may have to build dropbox.js manually before continuing</span>
+<span class="token comment" spellcheck="true"># Windows users: You&apos;d have to use resolve the symlinks in &quot;dist/vendor&quot;</span>
 
-$ grunt config:set --name=client.DropboxAPI.ClientKey --value=YOUR_CLIENT_KEY
-$ grunt config:set --name=client.VFS.Dropbox.Enabled --value=true
-$ grunt config:add-preload name=dropbox --path=/vendor/dropbox.js
+$ grunt config:set --name<span class="token operator">=</span>client.DropboxAPI.ClientKey --value<span class="token operator">=</span>YOUR_CLIENT_KEY
+$ grunt config:set --name<span class="token operator">=</span>client.VFS.Dropbox.Enabled --value<span class="token operator">=</span>true
+$ grunt config:add-preload name<span class="token operator">=</span>dropbox --path<span class="token operator">=</span>/vendor/dropbox.js
 $ grunt build:config
 </code></pre>
 <hr>

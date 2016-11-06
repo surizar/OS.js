@@ -2,8 +2,8 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <title>Configuration</title>
-    <meta name="description" content="OS.js" />
+    <title>Configuration | OS.js Manual</title>
+    <meta name="description" content="OS.js Manual - OS.js" />
     <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,600" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.5.1/themes/prism-tomorrow.min.css">
@@ -82,7 +82,7 @@
             <li>
               <a href="/manual/storage">Storage</a>
               <ul>
-                <li><a href="/manual/auth/storage/modules">Modules</a></li>
+                <li><a href="/manual/storage/modules">Modules</a></li>
               </ul>
             </li>
 
@@ -140,8 +140,8 @@
                     <li>
                       <a href="/manual/package/application">Application</a>
                       <ul>
-                        <li><a href="/manual/package/application/windows">Windows</a></li>
                         <li><a href="/manual/package/application/events">Events</a></li>
+                        <li><a href="/manual/package/application/windows">Windows</a></li>
                         <li><a href="/manual/package/application/gui">GUI</a></li>
                         <li><a href="/manual/package/application/responsive">Responsive</a></li>
                       </ul>
@@ -165,9 +165,9 @@
             <li>
               <a href="/manual/corewm">CoreWM</a>
               <ul>
-                <li><a href="/manual/corewm/theme">Themes</a></li>
-                <li><a href="/manual/corewm/panel">Panel</a></li>
-                <li><a href="/manual/corewm/widget">Widget</a></li>
+                <li><a href="/manual/corewm/#themes">Themes</a></li>
+                <li><a href="/manual/corewm/#panel">Panel</a></li>
+                <li><a href="/manual/corewm/#widget">Widget</a></li>
               </ul>
             </li>
 
@@ -201,11 +201,11 @@
 <hr>
 <h2 id="assets">Assets</h2>
 <h3 id="extending-base-css">Extending base CSS</h3>
-<pre class="language-shell"><code class="language-shell">$ grunt config:set:themes.styleBase:<span class="token entity" title="&quot;">&amp;quot;</span>custom.less<span class="token entity" title="&quot;">&amp;quot;</span>
+<pre class="language-bash"><code class="language-bash">$ grunt config:set:themes.styleBase:<span class="token string">&quot;custom.less&quot;</span>
 $ grunt config
 $ edit src/client/stylesheets/custom.less
 
-# Run this to update changes
+<span class="token comment" spellcheck="true"># Run this to update changes</span>
 $ grunt themes
 </code></pre>
 <h4 id="example-file">Example file</h4>
@@ -214,21 +214,21 @@ $ grunt themes
 <span class="token comment" spellcheck="true">/* YOUR STYLES HERE */</span>
 </code></pre>
 <h3 id="add-to-template">Add to template</h3>
-<pre class="language-shell"><code class="language-shell"># Alternative 1:
+<pre class="language-bash"><code class="language-bash"><span class="token comment" spellcheck="true"># Alternative 1:</span>
 $ edit src/templates/dist/default/index.html
 
-# Alternative 2 (recomended):
-$ cp -r src/templates/dist/default src/templates/dist/mytemplate
-$ grunt config:set --name=build.dist.template --value=mytemplate
+<span class="token comment" spellcheck="true"># Alternative 2 (recomended):</span>
+$ <span class="token function">cp</span> -r src/templates/dist/default src/templates/dist/mytemplate
+$ grunt config:set --name<span class="token operator">=</span>build.dist.template --value<span class="token operator">=</span>mytemplate
 $ edit src/templates/dist/mytemplate/index.html
 
-# Rebuild
+<span class="token comment" spellcheck="true"># Rebuild</span>
 $ grunt build:core
 </code></pre>
 <h3 id="add-to-build">Add to build</h3>
 <p>See <code>src/conf/500-build.json</code> for example on how to add to build process.</p>
 <h3 id="add-to-boot">Add to boot</h3>
-<pre class="language-shell"><code class="language-shell">$ grunt config:add-preload --name=FOO --path=PATH
+<pre class="language-bash"><code class="language-bash">$ grunt config:add-preload --name<span class="token operator">=</span>FOO --path<span class="token operator">=</span>PATH
 </code></pre>
 <h3 id="add-to-package">Add to package</h3>
 <p>Modify your <code>metadata.json</code> file and modify the preload section:</p>
@@ -252,23 +252,23 @@ Utils<span class="token punctuation">.</span><span class="token function">preloa
 <hr>
 <h2 id="packages">Packages</h2>
 <h3 id="adding-a-repository">Adding a repository</h3>
-<pre class="language-shell"><code class="language-shell">$ git clone --recursive https://github.com/username/package-repository src/packages/package-repository
-$ grunt config:add-repository --name=package-repository
+<pre class="language-bash"><code class="language-bash">$ <span class="token function">git</span> clone --recursive https://github.com/username/package-repository src/packages/package-repository
+$ grunt config:add-repository --name<span class="token operator">=</span>package-repository
 $ grunt build:manifest build:packages
 </code></pre>
 <h3 id="removing-a-repository">Removing a repository</h3>
-<pre class="language-shell"><code class="language-shell">$ grunt config:remove-repository --name=package-repository
+<pre class="language-bash"><code class="language-bash">$ grunt config:remove-repository --name<span class="token operator">=</span>package-repository
 $ grunt build:manifest
 </code></pre>
 <h3 id="enable-or-disable-a-spesific-package">Enable or Disable a spesific package</h3>
 <p>Most packages are enabled by default, but in some cases, like with <code>Broadway</code> you have to manually enable it.</p>
-<pre class="language-shell"><code class="language-shell"># Enable
-grunt config:enable-package --name=REPO/PACKAGENAME
+<pre class="language-bash"><code class="language-bash"><span class="token comment" spellcheck="true"># Enable</span>
+grunt config:enable-package --name<span class="token operator">=</span>REPO/PACKAGENAME
 
-# Disable
-grunt config:disable-package --name=REPO/PACKAGENAME
+<span class="token comment" spellcheck="true"># Disable</span>
+grunt config:disable-package --name<span class="token operator">=</span>REPO/PACKAGENAME
 
-# Update manifest
+<span class="token comment" spellcheck="true"># Update manifest</span>
 grunt build:config build:manifest
 </code></pre>
 <hr>

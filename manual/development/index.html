@@ -2,8 +2,8 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <title>Development</title>
-    <meta name="description" content="OS.js" />
+    <title>Development | OS.js Manual</title>
+    <meta name="description" content="OS.js Manual - OS.js" />
     <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,600" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.5.1/themes/prism-tomorrow.min.css">
@@ -82,7 +82,7 @@
             <li>
               <a href="/manual/storage">Storage</a>
               <ul>
-                <li><a href="/manual/auth/storage/modules">Modules</a></li>
+                <li><a href="/manual/storage/modules">Modules</a></li>
               </ul>
             </li>
 
@@ -140,8 +140,8 @@
                     <li>
                       <a href="/manual/package/application">Application</a>
                       <ul>
-                        <li><a href="/manual/package/application/windows">Windows</a></li>
                         <li><a href="/manual/package/application/events">Events</a></li>
+                        <li><a href="/manual/package/application/windows">Windows</a></li>
                         <li><a href="/manual/package/application/gui">GUI</a></li>
                         <li><a href="/manual/package/application/responsive">Responsive</a></li>
                       </ul>
@@ -165,9 +165,9 @@
             <li>
               <a href="/manual/corewm">CoreWM</a>
               <ul>
-                <li><a href="/manual/corewm/theme">Themes</a></li>
-                <li><a href="/manual/corewm/panel">Panel</a></li>
-                <li><a href="/manual/corewm/widget">Widget</a></li>
+                <li><a href="/manual/corewm/#themes">Themes</a></li>
+                <li><a href="/manual/corewm/#panel">Panel</a></li>
+                <li><a href="/manual/corewm/#widget">Widget</a></li>
               </ul>
             </li>
 
@@ -200,24 +200,24 @@
 </ul>
 <hr>
 <h2 id="set-up-environment">Set up environment</h2>
-<pre class="language-shell"><code class="language-shell"># Clone OS.js
-$ git clone https://github.com/your-username/OS.js.git
-$ cd OS.js
+<pre class="language-bash"><code class="language-bash"><span class="token comment" spellcheck="true"># Clone OS.js</span>
+$ <span class="token function">git</span> clone https://github.com/your-username/OS.js.git
+$ <span class="token function">cd</span> OS.js
 
-# Install all dependencies and extra testing suite
-$ npm install
-$ npm install -g mocha
+<span class="token comment" spellcheck="true"># Install all dependencies and extra testing suite</span>
+$ npm <span class="token function">install</span>
+$ npm <span class="token function">install</span> -g mocha
 
-# Build everything
+<span class="token comment" spellcheck="true"># Build everything</span>
 $ grunt
 
-# Optionally run watch to automatically rebuild client files upon changes.
-$ grunt watch
+<span class="token comment" spellcheck="true"># Optionally run watch to automatically rebuild client files upon changes.</span>
+$ grunt <span class="token function">watch</span>
 
-# Optionally install the node supervisor to automaticall restart server upon changes.
-$ npm install -g supervisor
+<span class="token comment" spellcheck="true"># Optionally install the node supervisor to automaticall restart server upon changes.</span>
+$ npm <span class="token function">install</span> -g supervisor
 
-# Start server
+<span class="token comment" spellcheck="true"># Start server</span>
 $ ./bin/start-dev.sh
 </code></pre>
 <hr>
@@ -239,26 +239,26 @@ $ ./bin/start-dev.sh
 <li>Set up a developer environment described above, but change the repository URL to the fork you made.</li>
 <li>Now you can make changes and publish them to the main repository for addition.</li>
 </ul>
-<pre class="language-shell"><code class="language-shell"># Create a new branch
-# You can name the branch `issue-XXX` if you have an open issue for your planned changes.
-# Or if not, something like `translate-LANG`, `feature-X` or `bugfix-Y`
-$ git checkout -b issue-XXX
+<pre class="language-bash"><code class="language-bash"><span class="token comment" spellcheck="true"># Create a new branch</span>
+<span class="token comment" spellcheck="true"># You can name the branch `issue-XXX` if you have an open issue for your planned changes.</span>
+<span class="token comment" spellcheck="true"># Or if not, something like `translate-LANG`, `feature-X` or `bugfix-Y`</span>
+$ <span class="token function">git</span> checkout -b issue-XXX
 
-# Make modifications
+<span class="token comment" spellcheck="true"># Make modifications</span>
 $ edit src/client/javascript/init.js
 
-# Rebuild everything
+<span class="token comment" spellcheck="true"># Rebuild everything</span>
 $ grunt
 
-# Run tests
-$ grunt test
+<span class="token comment" spellcheck="true"># Run tests</span>
+$ grunt <span class="token function">test</span>
 
-# Commit and push changes
-$ git add src/client/javascript/init.js
-$ git commit -m <span class="token entity" title="&quot;">&amp;quot;</span>API: Fix exception on init when connection is lost<span class="token entity" title="&quot;">&amp;quot;</span>
-$ git push origin issue-XXX
+<span class="token comment" spellcheck="true"># Commit and push changes</span>
+$ <span class="token function">git</span> add src/client/javascript/init.js
+$ <span class="token function">git</span> commit -m <span class="token string">&quot;API: Fix exception on init when connection is lost&quot;</span>
+$ <span class="token function">git</span> push origin issue-XXX
 
-Now go to the OS.js repository [pull request](https://github.com/os-js/OS.js/pulls) page. Find your branch and press <span class="token entity" title="&quot;">&amp;quot;</span>Create pull request<span class="token entity" title="&quot;">&amp;quot;</span>. Fill in the details and submit. It will be looked at ASAP.
+Now go to the OS.js repository <span class="token punctuation">[</span>pull request<span class="token punctuation">]</span><span class="token punctuation">(</span>https://github.com/os-js/OS.js/pulls<span class="token punctuation">)</span> page. Find your branch and press <span class="token string">&quot;Create pull request&quot;</span><span class="token keyword">.</span> Fill <span class="token keyword">in</span> the details and submit. It will be looked at ASAP.
 </code></pre>
 
 

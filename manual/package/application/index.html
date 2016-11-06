@@ -2,8 +2,8 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <title>Application Package</title>
-    <meta name="description" content="OS.js" />
+    <title>Application Package | OS.js Manual</title>
+    <meta name="description" content="OS.js Manual - OS.js" />
     <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,600" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.5.1/themes/prism-tomorrow.min.css">
@@ -82,7 +82,7 @@
             <li>
               <a href="/manual/storage">Storage</a>
               <ul>
-                <li><a href="/manual/auth/storage/modules">Modules</a></li>
+                <li><a href="/manual/storage/modules">Modules</a></li>
               </ul>
             </li>
 
@@ -140,8 +140,8 @@
                     <li>
                       <a href="/manual/package/application">Application</a>
                       <ul>
-                        <li><a href="/manual/package/application/windows">Windows</a></li>
                         <li><a href="/manual/package/application/events">Events</a></li>
+                        <li><a href="/manual/package/application/windows">Windows</a></li>
                         <li><a href="/manual/package/application/gui">GUI</a></li>
                         <li><a href="/manual/package/application/responsive">Responsive</a></li>
                       </ul>
@@ -165,9 +165,9 @@
             <li>
               <a href="/manual/corewm">CoreWM</a>
               <ul>
-                <li><a href="/manual/corewm/theme">Themes</a></li>
-                <li><a href="/manual/corewm/panel">Panel</a></li>
-                <li><a href="/manual/corewm/widget">Widget</a></li>
+                <li><a href="/manual/corewm/#themes">Themes</a></li>
+                <li><a href="/manual/corewm/#panel">Panel</a></li>
+                <li><a href="/manual/corewm/#widget">Widget</a></li>
               </ul>
             </li>
 
@@ -193,10 +193,10 @@
         <h1 id="application-package">Application Package</h1>
 <p>Your standard package. Contains ready-to-go code to develop your own Applications with graphical interfaces and support for server-side API endpoints.</p>
 <h2 id="create-package">Create Package</h2>
-<pre class="language-shell"><code class="language-shell">$ grunt generate:package --name=default/MyName
+<pre class="language-bash"><code class="language-bash">$ grunt generate:package --name<span class="token operator">=</span>default/MyName
 
-# Simple type without prototypes
-$ grunt generate:package --name=default/MyName --type=simple
+<span class="token comment" spellcheck="true"># Simple type without prototypes</span>
+$ grunt generate:package --name<span class="token operator">=</span>default/MyName --type<span class="token operator">=</span>simple
 </code></pre>
 <hr>
 <h2 id="development">Development</h2>
@@ -209,7 +209,7 @@ $ grunt generate:package --name=default/MyName --type=simple
 </ul>
 <hr>
 <h2 id="building-and-installation">Building and installation</h2>
-<pre class="language-shell"><code class="language-shell">$ grunt build:manifest buid:config build:package --name=default/MyName
+<pre class="language-bash"><code class="language-bash">$ grunt build:manifest buid:config build:package --name<span class="token operator">=</span>default/MyName
 </code></pre>
 
 

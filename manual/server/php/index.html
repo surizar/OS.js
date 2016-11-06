@@ -2,8 +2,8 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <title>PHP Server</title>
-    <meta name="description" content="OS.js" />
+    <title>PHP Server | OS.js Manual</title>
+    <meta name="description" content="OS.js Manual - OS.js" />
     <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,600" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.5.1/themes/prism-tomorrow.min.css">
@@ -82,7 +82,7 @@
             <li>
               <a href="/manual/storage">Storage</a>
               <ul>
-                <li><a href="/manual/auth/storage/modules">Modules</a></li>
+                <li><a href="/manual/storage/modules">Modules</a></li>
               </ul>
             </li>
 
@@ -140,8 +140,8 @@
                     <li>
                       <a href="/manual/package/application">Application</a>
                       <ul>
-                        <li><a href="/manual/package/application/windows">Windows</a></li>
                         <li><a href="/manual/package/application/events">Events</a></li>
+                        <li><a href="/manual/package/application/windows">Windows</a></li>
                         <li><a href="/manual/package/application/gui">GUI</a></li>
                         <li><a href="/manual/package/application/responsive">Responsive</a></li>
                       </ul>
@@ -165,9 +165,9 @@
             <li>
               <a href="/manual/corewm">CoreWM</a>
               <ul>
-                <li><a href="/manual/corewm/theme">Themes</a></li>
-                <li><a href="/manual/corewm/panel">Panel</a></li>
-                <li><a href="/manual/corewm/widget">Widget</a></li>
+                <li><a href="/manual/corewm/#themes">Themes</a></li>
+                <li><a href="/manual/corewm/#panel">Panel</a></li>
+                <li><a href="/manual/corewm/#widget">Widget</a></li>
               </ul>
             </li>
 
@@ -192,21 +192,21 @@
       <content>
         <h1 id="php-server">PHP Server</h1>
 <h2 id="nix">NIX</h2>
-<pre class="language-shell"><code class="language-shell"># Start production server
-$ (cd dist; php -S 0.0.0.0:8000 ../src/server/php/server.php)
+<pre class="language-bash"><code class="language-bash"><span class="token comment" spellcheck="true"># Start production server</span>
+$ <span class="token punctuation">(</span>cd dist<span class="token punctuation">;</span> php -S 0.0.0.0:8000 <span class="token punctuation">..</span>/src/server/php/server.php<span class="token punctuation">)</span>
 
-# Start development server
-$ (cd dist-dev; php -S 0.0.0.0:8000 ../src/server/php/server.php)
+<span class="token comment" spellcheck="true"># Start development server</span>
+$ <span class="token punctuation">(</span>cd dist-dev<span class="token punctuation">;</span> php -S 0.0.0.0:8000 <span class="token punctuation">..</span>/src/server/php/server.php<span class="token punctuation">)</span>
 </code></pre>
 <hr>
 <h2 id="windows">Windows</h2>
-<pre class="language-shell"><code class="language-shell"># Start production server
-$ cd dist
-$ php -S 0.0.0.0:8000 ..\src\server\php\server.php
+<pre class="language-bash"><code class="language-bash"><span class="token comment" spellcheck="true"># Start production server</span>
+$ <span class="token function">cd</span> dist
+$ php -S 0.0.0.0:8000 <span class="token punctuation">..</span>\src\server\php\server.php
 
-# Start development server
-$ cd dist-dev
-$ php -S 0.0.0.0:8000 ..\src\server\php\server.php
+<span class="token comment" spellcheck="true"># Start development server</span>
+$ <span class="token function">cd</span> dist-dev
+$ php -S 0.0.0.0:8000 <span class="token punctuation">..</span>\src\server\php\server.php
 </code></pre>
 <hr>
 <h2 id="running-behind-a-webserver">Running behind a webserver</h2>

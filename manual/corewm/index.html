@@ -2,8 +2,8 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <title>CoreWM</title>
-    <meta name="description" content="OS.js" />
+    <title>CoreWM | OS.js Manual</title>
+    <meta name="description" content="OS.js Manual - OS.js" />
     <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,600" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.5.1/themes/prism-tomorrow.min.css">
@@ -82,7 +82,7 @@
             <li>
               <a href="/manual/storage">Storage</a>
               <ul>
-                <li><a href="/manual/auth/storage/modules">Modules</a></li>
+                <li><a href="/manual/storage/modules">Modules</a></li>
               </ul>
             </li>
 
@@ -140,8 +140,8 @@
                     <li>
                       <a href="/manual/package/application">Application</a>
                       <ul>
-                        <li><a href="/manual/package/application/windows">Windows</a></li>
                         <li><a href="/manual/package/application/events">Events</a></li>
+                        <li><a href="/manual/package/application/windows">Windows</a></li>
                         <li><a href="/manual/package/application/gui">GUI</a></li>
                         <li><a href="/manual/package/application/responsive">Responsive</a></li>
                       </ul>
@@ -165,9 +165,9 @@
             <li>
               <a href="/manual/corewm">CoreWM</a>
               <ul>
-                <li><a href="/manual/corewm/theme">Themes</a></li>
-                <li><a href="/manual/corewm/panel">Panel</a></li>
-                <li><a href="/manual/corewm/widget">Widget</a></li>
+                <li><a href="/manual/corewm/#themes">Themes</a></li>
+                <li><a href="/manual/corewm/#panel">Panel</a></li>
+                <li><a href="/manual/corewm/#widget">Widget</a></li>
               </ul>
             </li>
 
@@ -193,27 +193,27 @@
         <h1 id="corewm">CoreWM</h1>
 <h2 id="themes">Themes</h2>
 <h3 id="styles">Styles</h3>
-<pre class="language-shell"><code class="language-shell">$ cp -r src/client/themes/styles/default src/client/themes/styles/mytheme
+<pre class="language-bash"><code class="language-bash">$ <span class="token function">cp</span> -r src/client/themes/styles/default src/client/themes/styles/mytheme
 $ edit src/client/themes/styles/mytheme/metadata.json
 $ edit src/client/themes/styles/mytheme/style.less
-$ edit src/conf/112-themes.json # Or create your own file
-$ grunt build:config build:theme --style=mytheme
+$ edit src/conf/112-themes.json <span class="token comment" spellcheck="true"># Or create your own file</span>
+$ grunt build:config build:theme --style<span class="token operator">=</span>mytheme
 </code></pre>
 <h3 id="icons">Icons</h3>
-<pre class="language-shell"><code class="language-shell">$ cp -r src/client/themes/icons/default src/client/themes/icons/mytheme
+<pre class="language-bash"><code class="language-bash">$ <span class="token function">cp</span> -r src/client/themes/icons/default src/client/themes/icons/mytheme
 $ edit src/client/themes/icons/mytheme/metadata.json
-$ edit src/conf/112-themes.json # Or create your own file
+$ edit src/conf/112-themes.json <span class="token comment" spellcheck="true"># Or create your own file</span>
 $ grunt build:config build:themes
 </code></pre>
 <h3 id="sounds">Sounds</h3>
-<pre class="language-shell"><code class="language-shell">$ cp -r src/client/themes/sounds/default src/client/themes/sound/mytheme
+<pre class="language-bash"><code class="language-bash">$ <span class="token function">cp</span> -r src/client/themes/sounds/default src/client/themes/sound/mytheme
 $ edit src/client/themes/sound/mytheme/metadata.json
-$ edit src/conf/112-themes.json # Or create your own file
+$ edit src/conf/112-themes.json <span class="token comment" spellcheck="true"># Or create your own file</span>
 $ grunt build:config build:theme --static
 </code></pre>
 <h3 id="fonts">Fonts</h3>
 <p>See the included font theme for an example on how to set up.</p>
-<pre class="language-shell"><code class="language-shell">$ edit src/conf/112-themes.json # Or create your own file
+<pre class="language-bash"><code class="language-bash">$ edit src/conf/112-themes.json <span class="token comment" spellcheck="true"># Or create your own file</span>
 $ grunt build:config buid:theme --fonts
 </code></pre>
 <hr>
