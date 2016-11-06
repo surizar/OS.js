@@ -105,12 +105,12 @@
             <li>
               <a href="/manual/vfs">VFS</a>
               <ul>
-                <li><a href="/manual/vfs/#mount">Mountpoints</a></li>
+                <li><a href="/manual/vfs/#mountpoints">Mountpoints</a></li>
                 <li>
                   <a href="/manual/vfs/transport">Transports</a>
                   <ul>
                     <li><a href="/manual/vfs/transport/#googledrive">Google Drive</a></li>
-                    <li><a href="/manual/vfs/transport/#onedrive">Microsoft OneDrive</a></li>
+                    <li><a href="/manual/vfs/transport/#microsoft-onedrive">Microsoft OneDrive</a></li>
                     <li><a href="/manual/vfs/transport/#dropbox">Dropbox</a></li>
                     <li><a href="/manual/vfs/transport/#webdav">WebDAV</a></li>
                     <li><a href="/manual/vfs/transport/#other">Other</a></li>
@@ -123,19 +123,21 @@
               <a href="/manual/package">Package</a>
               <ul>
                 <li><a href="/manual/package/#metadata">Metadata</a></li>
-                <li><a href="/manual/package/#spawner">Scripts</a></li>
-                <li><a href="/manual/package/#script">Spawner</a></li>
-                <li><a href="/manual/package/#less">LESS Support</a></li>
+                <li><a href="/manual/package/#preload">Preload</a></li>
+                <li><a href="/manual/package/#scripts">Scripts</a></li>
+                <li><a href="/manual/package/#spawner">Spawner</a></li>
+                <li><a href="/manual/package/#less-support">LESS Support</a></li>
+                <li><a href="/manual/package/#server-apis">Server APIs</a></li>
                 <li>
                   <span>Types</span>
                   <ul>
                     <li>
                       <a href="/manual/package/application">Application</a>
                       <ul>
-                        <li><a href="/manual/package/application/#window">Windows</a></li>
-                        <li><a href="/manual/package/application/#event">Events</a></li>
-                        <li><a href="/manual/package/application/#gui">GUI</a></li>
-                        <li><a href="/manual/package/application/#responsive">Responsiveness</a></li>
+                        <li><a href="/manual/package/application/windows">Windows</a></li>
+                        <li><a href="/manual/package/application/events">Events</a></li>
+                        <li><a href="/manual/package/application/gui">GUI</a></li>
+                        <li><a href="/manual/package/application/responsive">Responsive</a></li>
                       </ul>
                     </li>
                     <li><a href="/manual/package/iframe">Iframe</a></li>
@@ -150,7 +152,7 @@
               <a href="/manual/gui">Scheme and GUI</a>
               <ul>
                 <li><a href="/manual/gui/scheme">Scheme files</a></li>
-                <li><a href="/manual/gui/element">GUI Elements</a></li>
+                <li><a href="/manual/gui/elements">GUI Elements</a></li>
               </ul>
             </li>
 
@@ -243,6 +245,26 @@ Utils<span class="token punctuation">.</span><span class="token function">preloa
 </code></pre>
 <hr>
 <h2 id="packages">Packages</h2>
+<h3 id="adding-a-repository">Adding a repository</h3>
+<pre class="language-shell"><code class="language-shell">$ git clone --recursive https://github.com/username/package-repository src/packages/package-repository
+$ grunt config:add-repository --name=package-repository
+$ grunt build:manifest build:packages
+</code></pre>
+<h3 id="removing-a-repository">Removing a repository</h3>
+<pre class="language-shell"><code class="language-shell">$ grunt config:remove-repository --name=package-repository
+$ grunt build:manifest
+</code></pre>
+<h3 id="enable-or-disable-a-spesific-package">Enable or Disable a spesific package</h3>
+<p>Most packages are enabled by default, but in some cases, like with <code>Broadway</code> you have to manually enable it.</p>
+<pre class="language-shell"><code class="language-shell"># Enable
+grunt config:enable-package --name=REPO/PACKAGENAME
+
+# Disable
+grunt config:disable-package --name=REPO/PACKAGENAME
+
+# Update manifest
+grunt build:config build:manifest
+</code></pre>
 <hr>
 <h2 id="proxies">Proxies</h2>
 <pre class="language-json"><code class="language-json"><span class="token punctuation">{</span>

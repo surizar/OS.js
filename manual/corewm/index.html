@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <title>Server</title>
+    <title>CoreWM</title>
     <meta name="description" content="OS.js" />
     <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,600" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" />
@@ -184,20 +184,39 @@
       </aside>
 
       <content>
-        <h1 id="server">Server</h1>
-<p>The <em>Server</em> is a HTTP server written in both Node and PHP. It has support for HTTPS, HTTP/2, Proxies and WebSockets.</p>
-<p>Handles requests from the client in a couple of ways:</p>
-<ul>
-<li>Static resources - Serving things from the <code>dist/</code> directory</li>
-<li>API - Endpoints exposed to globally to the client (ex: <code>/API/foo</code>)</li>
-<li>VFS - Endpoints for filesystem operations (ex: <code>/FS/bar</code>)</li>
-</ul>
-<h2 id="servers">Servers</h2>
-<ul>
-<li><a href="/manual/server/node">Node</a></li>
-<li><a href="/manual/server/php">PHP</a></li>
-<li><a href="/manual/server/webserver">Web servers</a></li>
-</ul>
+        <h1 id="corewm">CoreWM</h1>
+<h2 id="themes">Themes</h2>
+<h3 id="styles">Styles</h3>
+<pre class="language-shell"><code class="language-shell">$ cp -r src/client/themes/styles/default src/client/themes/styles/mytheme
+$ edit src/client/themes/styles/mytheme/metadata.json
+$ edit src/client/themes/styles/mytheme/style.less
+$ edit src/conf/112-themes.json # Or create your own file
+$ grunt build:config build:theme --style=mytheme
+</code></pre>
+<h3 id="icons">Icons</h3>
+<pre class="language-shell"><code class="language-shell">$ cp -r src/client/themes/icons/default src/client/themes/icons/mytheme
+$ edit src/client/themes/icons/mytheme/metadata.json
+$ edit src/conf/112-themes.json # Or create your own file
+$ grunt build:config build:themes
+</code></pre>
+<h3 id="sounds">Sounds</h3>
+<pre class="language-shell"><code class="language-shell">$ cp -r src/client/themes/sounds/default src/client/themes/sound/mytheme
+$ edit src/client/themes/sound/mytheme/metadata.json
+$ edit src/conf/112-themes.json # Or create your own file
+$ grunt build:config build:theme --static
+</code></pre>
+<h3 id="fonts">Fonts</h3>
+<p>See the included font theme for an example on how to set up.</p>
+<pre class="language-shell"><code class="language-shell">$ edit src/conf/112-themes.json # Or create your own file
+$ grunt build:config buid:theme --fonts
+</code></pre>
+<hr>
+<h2 id="panel">Panel</h2>
+<p>To create Panel Items, look at <code>src/packages/default/CoreWM/panelitems</code> for examples. Add your newly created file(s) to the CoreWM metadata.</p>
+<p><em>API documentation is coming soon.</em></p>
+<h2 id="widget">Widget</h2>
+<p>To create Widgets, look at <code>src/packages/default/CoreWM/widgets</code> for examples. Add your newly created file(s) to the CoreWM metadata.</p>
+<p><em>API documentation is coming soon.</em></p>
 
 
         <footer>

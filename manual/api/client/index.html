@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <title>Server</title>
+    <title>Client API</title>
     <meta name="description" content="OS.js" />
     <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,600" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" />
@@ -184,20 +184,33 @@
       </aside>
 
       <content>
-        <h1 id="server">Server</h1>
-<p>The <em>Server</em> is a HTTP server written in both Node and PHP. It has support for HTTPS, HTTP/2, Proxies and WebSockets.</p>
-<p>Handles requests from the client in a couple of ways:</p>
-<ul>
-<li>Static resources - Serving things from the <code>dist/</code> directory</li>
-<li>API - Endpoints exposed to globally to the client (ex: <code>/API/foo</code>)</li>
-<li>VFS - Endpoints for filesystem operations (ex: <code>/FS/bar</code>)</li>
-</ul>
-<h2 id="servers">Servers</h2>
-<ul>
-<li><a href="/manual/server/node">Node</a></li>
-<li><a href="/manual/server/php">PHP</a></li>
-<li><a href="/manual/server/webserver">Web servers</a></li>
-</ul>
+        <h1 id="client-api">Client API</h1>
+<p>The <em>Client API</em> is a collection of namespaces with methods and classes.</p>
+<p>Head over to the <a href="/doc/client">client API documentation</a> for a full overview.</p>
+<h2 id="api">API</h2>
+<p>Core API functions like launching of applications, resource resolving and base GUI helpers.</p>
+<h2 id="applications">Applications</h2>
+<p>The namespace Applications are loaded into.</p>
+<h2 id="auth">Auth</h2>
+<p>Collection of Authenticators included.</p>
+<h2 id="connections">Connections</h2>
+<p>Collection of Connections included.</p>
+<h2 id="core">Core</h2>
+<p>The namespace for base classes like <code>Window</code>, <code>Application</code> and managers. Many of these classes are singletons and have their instance getters here.</p>
+<h2 id="dialogs">Dialogs</h2>
+<p>The namespace for all the available Dialogs.</p>
+<h2 id="gui">GUI</h2>
+<p>The namespace for all GUI Elements, Scheme and other UI operations.</p>
+<h2 id="helpers">Helpers</h2>
+<p>A collection of classes and methods that is ment to assist in development, but not a part of the core.</p>
+<h2 id="locales">Locales</h2>
+<p>All the translations.</p>
+<h2 id="storage">Storage</h2>
+<p>Colletion of Storage modules included.</p>
+<h2 id="utils">Utils</h2>
+<p>Utility functions for manipulating the DOM, Strings, etc.</p>
+<h2 id="vfs">VFS</h2>
+<p>Namespace for all filesystem functions and Transport modules.</p>
 
 
         <footer>

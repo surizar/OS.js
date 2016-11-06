@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>GUI Scheme</title>
+    <meta name="description" content="OS.js" />
+    <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,600" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.5.1/themes/prism-tomorrow.min.css">
+    <link href="/css/manual.css" rel="stylesheet" />
+  </head>
+  <body>
+    <header>
+      <div id="Logo"></div>
+      <nav>
+        <a href="/">Home</a>
+        <a href="/manual" class="active">Manual</a>
+        <a href="/doc">Documentation</a>
+      </nav>
+    </header>
+
+    <main>
+      <aside>
+        <nav>
+          <ol>
+            <li>
+              <a href="/manual">Overview</a>
+            </li>
+
+            <li>
+              <a href="/manual/installation">Installation</a>
+              <ul>
+                <li><a href="/manual/installation/nix">NIX</a></li>
+                <li><a href="/manual/installation/windows">Windows</a></li>
+                <li><a href="/manual/installation/other">Other</a></li>
+              </ul>
+            </li>
+
+            <li>
+              <a href="/manual/build">Build System</a>
+              <ul>
+                <li><a href="/manual/build/cli">Commands</a></li>
+                <li><a href="/manual/build/grunt">Grunt</a></li>
+              </ul>
+            </li>
+
+            <li>
+              <a href="/manual/configuration">Configuration</a>
+              <ul>
+                <li><a href="/manual/configuration/#environment">Environment</a></li>
+                <li><a href="/manual/configuration/#settings">Settings</a></li>
+                <li><a href="/manual/configuration/#assets">Assets</a></li>
+                <li><a href="/manual/configuration/#packages">Packages</a></li>
+                <li><a href="/manual/configuration/#proxies">Proxies</a></li>
+              </ul>
+            </li>
+
+            <li>
+              <a href="/manual/client">Client</a>
+              <ul>
+                <li><a href="/manual/client/features">Features</a></li>
+                <li><a href="/manual/client/broadway">Broadway</a></li>
+              </ul>
+            </li>
+
+            <li>
+              <a href="/manual/server">Server</a>
+              <ul>
+                <li><a href="/manual/server/node">Node</a></li>
+                <li><a href="/manual/server/php">PHP</a></li>
+              </ul>
+            </li>
+
+            <li>
+              <a href="/manual/auth">Authentication</a>
+              <ul>
+                <li><a href="/manual/auth/modules">Modules</a></li>
+                <li><a href="/manual/auth/permission">Groups and permissions</a></li>
+              </ul>
+            </li>
+
+            <li>
+              <a href="/manual/storage">Storage</a>
+              <ul>
+                <li><a href="/manual/auth/storage/modules">Modules</a></li>
+              </ul>
+            </li>
+
+            <li>
+              <a href="/manual/connection">Connection</a>
+              <ul>
+                <li><a href="/manual/connection/websocket">WebSocket</a></li>
+                <li><a href="/manual/connection/http">HTTP/HTTP2/HTTPS</a></li>
+              </ul>
+            </li>
+
+            <li>
+              <a href="/manual/api">API</a>
+              <ul>
+                <li><a href="/manual/api/client">Client</a></li>
+                <li><a href="/manual/api/server">Server</a></li>
+              </ul>
+            </li>
+
+            <li>
+              <a href="/manual/vfs">VFS</a>
+              <ul>
+                <li><a href="/manual/vfs/#mountpoints">Mountpoints</a></li>
+                <li>
+                  <a href="/manual/vfs/transport">Transports</a>
+                  <ul>
+                    <li><a href="/manual/vfs/transport/#googledrive">Google Drive</a></li>
+                    <li><a href="/manual/vfs/transport/#microsoft-onedrive">Microsoft OneDrive</a></li>
+                    <li><a href="/manual/vfs/transport/#dropbox">Dropbox</a></li>
+                    <li><a href="/manual/vfs/transport/#webdav">WebDAV</a></li>
+                    <li><a href="/manual/vfs/transport/#other">Other</a></li>
+                  </ul>
+                </li>
+              </ul>
+            </li>
+
+            <li>
+              <a href="/manual/package">Package</a>
+              <ul>
+                <li><a href="/manual/package/#metadata">Metadata</a></li>
+                <li><a href="/manual/package/#preload">Preload</a></li>
+                <li><a href="/manual/package/#scripts">Scripts</a></li>
+                <li><a href="/manual/package/#spawner">Spawner</a></li>
+                <li><a href="/manual/package/#less-support">LESS Support</a></li>
+                <li><a href="/manual/package/#server-apis">Server APIs</a></li>
+                <li>
+                  <span>Types</span>
+                  <ul>
+                    <li>
+                      <a href="/manual/package/application">Application</a>
+                      <ul>
+                        <li><a href="/manual/package/application/windows">Windows</a></li>
+                        <li><a href="/manual/package/application/events">Events</a></li>
+                        <li><a href="/manual/package/application/gui">GUI</a></li>
+                        <li><a href="/manual/package/application/responsive">Responsive</a></li>
+                      </ul>
+                    </li>
+                    <li><a href="/manual/package/iframe">Iframe</a></li>
+                    <li><a href="/manual/package/service">Service</a></li>
+                    <li><a href="/manual/package/extension">Extension</a></li>
+                  </ul>
+                </li>
+              </ul>
+            </li>
+
+            <li>
+              <a href="/manual/gui">Scheme and GUI</a>
+              <ul>
+                <li><a href="/manual/gui/scheme">Scheme files</a></li>
+                <li><a href="/manual/gui/elements">GUI Elements</a></li>
+              </ul>
+            </li>
+
+            <li>
+              <a href="/manual/corewm">CoreWM</a>
+              <ul>
+                <li><a href="/manual/corewm/theme">Themes</a></li>
+                <li><a href="/manual/corewm/panel">Panel</a></li>
+                <li><a href="/manual/corewm/widget">Widget</a></li>
+              </ul>
+            </li>
+
+            <li>
+              <a href="/manual/development">Development</a>
+              <ul>
+                <li><a href="/manual/development/#intro">Introduction</a></li>
+                <li><a href="/manual/development/#style">Style guide</a></li>
+                <li><a href="/manual/development/#setup">Set up environment</a></li>
+                <li><a href="/manual/development/#tips">Tips and tricks</a></li>
+                <li><a href="/manual/development/#test">Testing</a></li>
+                <li><a href="/manual/development/#contribute">Contributing</a></li>
+              </ul>
+            </li>
+
+            <li><a href="/manual/community">Community</a></li>
+          </ol>
+
+        </nav>
+      </aside>
+
+      <content>
+        <h1 id="scheme">Scheme</h1>
+<p>A <em>Scheme</em> file is a HTML file that builds a Application User Interface. All normal HTML tags are supported, but OS.js provides custom tags that makes up <em>GUI Elements</em>.</p>
+<h2 id="rendering-a-layout-manually">Rendering a layout manually</h2>
+<pre class="language-js"><code class="language-js"><span class="token keyword">var</span> url <span class="token operator">=</span> <span class="token string">&apos;YOUR URL HERE&apos;</span><span class="token punctuation">;</span>
+<span class="token keyword">var</span> win <span class="token operator">=</span> <span class="token comment" spellcheck="true">/* Your Window Here */</span><span class="token punctuation">;</span>
+<span class="token keyword">var</span> parentElement <span class="token operator">=</span> <span class="token comment" spellcheck="true">/* Root DOM element to append to (win._$content is default) */</span><span class="token punctuation">;</span>
+
+<span class="token keyword">var</span> scheme <span class="token operator">=</span> GUI<span class="token punctuation">.</span><span class="token function">createScheme</span><span class="token punctuation">(</span>url<span class="token punctuation">)</span><span class="token punctuation">;</span>
+scheme<span class="token punctuation">.</span><span class="token function">load</span><span class="token punctuation">(</span><span class="token keyword">function</span><span class="token punctuation">(</span>error<span class="token punctuation">,</span> scheme<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  scheme<span class="token punctuation">.</span><span class="token function">render</span><span class="token punctuation">(</span>win<span class="token punctuation">,</span> <span class="token string">&apos;AboutWindow&apos;</span><span class="token punctuation">,</span> parentElement<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre>
+<h2 id="fragments">Fragments</h2>
+<p>There&apos;s also support for fragments and inclusions (split into several sections and/or files).</p>
+<h3 id="scheme-html">scheme.html</h3>
+<pre class="language-html"><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>application-window</span> <span class="token attr-name">data-id</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">&quot;</span>SchemeTestWindow<span class="token punctuation">&quot;</span></span><span class="token punctuation">&gt;</span></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>gui-vbox</span><span class="token punctuation">&gt;</span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>gui-vbox-container</span> <span class="token attr-name">data-grow</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">&quot;</span>0<span class="token punctuation">&quot;</span></span> <span class="token attr-name">data-shrink</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">&quot;</span>1<span class="token punctuation">&quot;</span></span> <span class="token attr-name">data-basis</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">&quot;</span>auto<span class="token punctuation">&quot;</span></span><span class="token punctuation">&gt;</span></span>
+
+      <span class="token comment" spellcheck="true">&lt;!-- Fragment within this file --&gt;</span>
+      <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>gui-fragment</span> <span class="token attr-name">data-fragment-id</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">&quot;</span>MenuBar<span class="token punctuation">&quot;</span></span> <span class="token punctuation">/&gt;</span></span>
+
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>gui-vbox-container</span><span class="token punctuation">&gt;</span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>gui-vbox-container</span> <span class="token attr-name">data-grow</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">&quot;</span>1<span class="token punctuation">&quot;</span></span> <span class="token attr-name">data-shrink</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">&quot;</span>0<span class="token punctuation">&quot;</span></span> <span class="token attr-name">data-basis</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">&quot;</span>auto<span class="token punctuation">&quot;</span></span> <span class="token attr-name">data-fill</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">&quot;</span>true<span class="token punctuation">&quot;</span></span><span class="token punctuation">&gt;</span></span>
+
+      <span class="token comment" spellcheck="true">&lt;!-- Fragment from external file --&gt;</span>
+      <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>gui-fragment</span> <span class="token attr-name">data-fragment-external</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">&quot;</span>scheme-part.html<span class="token punctuation">&quot;</span></span> <span class="token punctuation">/&gt;</span></span>
+
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>gui-vbox-container</span><span class="token punctuation">&gt;</span></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>gui-vbox</span><span class="token punctuation">&gt;</span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>application-window</span><span class="token punctuation">&gt;</span></span>
+
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>application-fragment</span> <span class="token attr-name">data-id</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">&quot;</span>MenuBar<span class="token punctuation">&quot;</span></span><span class="token punctuation">&gt;</span></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>gui-menu-bar</span><span class="token punctuation">&gt;</span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>gui-menu-bar-entry</span> <span class="token attr-name">data-label</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">&quot;</span>LBL_FILE<span class="token punctuation">&quot;</span></span><span class="token punctuation">&gt;</span></span>
+      <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>gui-menu</span> <span class="token attr-name">data-id</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">&quot;</span>SubmenuFile<span class="token punctuation">&quot;</span></span><span class="token punctuation">&gt;</span></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>gui-menu-entry</span> <span class="token attr-name">data-id</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">&quot;</span>MenuClose<span class="token punctuation">&quot;</span></span> <span class="token attr-name">data-label</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">&quot;</span>LBL_CLOSE<span class="token punctuation">&quot;</span></span><span class="token punctuation">&gt;</span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>gui-menu-entry</span><span class="token punctuation">&gt;</span></span>
+      <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>gui-menu</span><span class="token punctuation">&gt;</span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>gui-menu-bar-entry</span><span class="token punctuation">&gt;</span></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>gui-menu-bar</span><span class="token punctuation">&gt;</span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>application-fragment</span><span class="token punctuation">&gt;</span></span>
+</code></pre>
+<h3 id="scheme-part-html">scheme-part.html</h3>
+<pre class="language-html"><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span><span class="token punctuation">&gt;</span></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>h1</span><span class="token punctuation">&gt;</span></span>This is just a test<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>h1</span><span class="token punctuation">&gt;</span></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>p</span><span class="token punctuation">&gt;</span></span>ph&apos;nglui mglw&apos;nafh Cthulhu R&apos;lyeh wgah&apos;nagl fhtagn<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>p</span><span class="token punctuation">&gt;</span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">&gt;</span></span>
+</code></pre>
+
+
+        <footer>
+          <p>Generated with  &mdash; <a href=""></a></p>
+        </footer>
+      </content>
+    </main>
+
+  </body>
+</html>

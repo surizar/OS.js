@@ -105,12 +105,12 @@
             <li>
               <a href="/manual/vfs">VFS</a>
               <ul>
-                <li><a href="/manual/vfs/#mount">Mountpoints</a></li>
+                <li><a href="/manual/vfs/#mountpoints">Mountpoints</a></li>
                 <li>
                   <a href="/manual/vfs/transport">Transports</a>
                   <ul>
                     <li><a href="/manual/vfs/transport/#googledrive">Google Drive</a></li>
-                    <li><a href="/manual/vfs/transport/#onedrive">Microsoft OneDrive</a></li>
+                    <li><a href="/manual/vfs/transport/#microsoft-onedrive">Microsoft OneDrive</a></li>
                     <li><a href="/manual/vfs/transport/#dropbox">Dropbox</a></li>
                     <li><a href="/manual/vfs/transport/#webdav">WebDAV</a></li>
                     <li><a href="/manual/vfs/transport/#other">Other</a></li>
@@ -123,19 +123,21 @@
               <a href="/manual/package">Package</a>
               <ul>
                 <li><a href="/manual/package/#metadata">Metadata</a></li>
-                <li><a href="/manual/package/#spawner">Scripts</a></li>
-                <li><a href="/manual/package/#script">Spawner</a></li>
-                <li><a href="/manual/package/#less">LESS Support</a></li>
+                <li><a href="/manual/package/#preload">Preload</a></li>
+                <li><a href="/manual/package/#scripts">Scripts</a></li>
+                <li><a href="/manual/package/#spawner">Spawner</a></li>
+                <li><a href="/manual/package/#less-support">LESS Support</a></li>
+                <li><a href="/manual/package/#server-apis">Server APIs</a></li>
                 <li>
                   <span>Types</span>
                   <ul>
                     <li>
                       <a href="/manual/package/application">Application</a>
                       <ul>
-                        <li><a href="/manual/package/application/#window">Windows</a></li>
-                        <li><a href="/manual/package/application/#event">Events</a></li>
-                        <li><a href="/manual/package/application/#gui">GUI</a></li>
-                        <li><a href="/manual/package/application/#responsive">Responsiveness</a></li>
+                        <li><a href="/manual/package/application/windows">Windows</a></li>
+                        <li><a href="/manual/package/application/events">Events</a></li>
+                        <li><a href="/manual/package/application/gui">GUI</a></li>
+                        <li><a href="/manual/package/application/responsive">Responsive</a></li>
                       </ul>
                     </li>
                     <li><a href="/manual/package/iframe">Iframe</a></li>
@@ -150,7 +152,7 @@
               <a href="/manual/gui">Scheme and GUI</a>
               <ul>
                 <li><a href="/manual/gui/scheme">Scheme files</a></li>
-                <li><a href="/manual/gui/element">GUI Elements</a></li>
+                <li><a href="/manual/gui/elements">GUI Elements</a></li>
               </ul>
             </li>
 
@@ -187,12 +189,15 @@
 <h2 id="create-package">Create Package</h2>
 <pre class="language-shell"><code class="language-shell">$ grunt generate:package --name=default/MyPackageName --type=iframe
 </code></pre>
+<hr>
 <h2 id="development">Development</h2>
 <p>Just follow your normal workflow.</p>
 <ul>
 <li><code>main.js</code> - Client script</li>
 <li><code>metadata.json</code> - Package metadata</li>
 </ul>
+<p>Create a folder named <code>data/</code> and make a file called <code>index.html</code>. This is what is loaded by default in <code>main.js</code>.</p>
+<hr>
 <h2 id="bi-directional-communication">Bi-directional communication</h2>
 <p>You can communicate between OS.js and your IFrame application using the browser APIs and some helper methods.</p>
 <ul>
@@ -200,6 +205,7 @@
 <li><a href="https://gist.github.com/andersevenrud/a5296a51fb55540375e0f88a3a34784c">Application Example</a></li>
 <li><a href="https://gist.github.com/andersevenrud/6209484db09267c01ca5545c75271948">Markup Example</a></li>
 </ul>
+<hr>
 <h2 id="building-and-installation">Building and installation</h2>
 <pre class="language-shell"><code class="language-shell">$ grunt build:manifest buid:config build:package --name=default/MyName
 </code></pre>

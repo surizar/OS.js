@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <title>Install OS.js on other Platforms</title>
+    <title>Alternate OS.js installations</title>
     <meta name="description" content="OS.js" />
     <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,600" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" />
@@ -105,12 +105,12 @@
             <li>
               <a href="/manual/vfs">VFS</a>
               <ul>
-                <li><a href="/manual/vfs/#mount">Mountpoints</a></li>
+                <li><a href="/manual/vfs/#mountpoints">Mountpoints</a></li>
                 <li>
                   <a href="/manual/vfs/transport">Transports</a>
                   <ul>
                     <li><a href="/manual/vfs/transport/#googledrive">Google Drive</a></li>
-                    <li><a href="/manual/vfs/transport/#onedrive">Microsoft OneDrive</a></li>
+                    <li><a href="/manual/vfs/transport/#microsoft-onedrive">Microsoft OneDrive</a></li>
                     <li><a href="/manual/vfs/transport/#dropbox">Dropbox</a></li>
                     <li><a href="/manual/vfs/transport/#webdav">WebDAV</a></li>
                     <li><a href="/manual/vfs/transport/#other">Other</a></li>
@@ -123,19 +123,21 @@
               <a href="/manual/package">Package</a>
               <ul>
                 <li><a href="/manual/package/#metadata">Metadata</a></li>
-                <li><a href="/manual/package/#spawner">Scripts</a></li>
-                <li><a href="/manual/package/#script">Spawner</a></li>
-                <li><a href="/manual/package/#less">LESS Support</a></li>
+                <li><a href="/manual/package/#preload">Preload</a></li>
+                <li><a href="/manual/package/#scripts">Scripts</a></li>
+                <li><a href="/manual/package/#spawner">Spawner</a></li>
+                <li><a href="/manual/package/#less-support">LESS Support</a></li>
+                <li><a href="/manual/package/#server-apis">Server APIs</a></li>
                 <li>
                   <span>Types</span>
                   <ul>
                     <li>
                       <a href="/manual/package/application">Application</a>
                       <ul>
-                        <li><a href="/manual/package/application/#window">Windows</a></li>
-                        <li><a href="/manual/package/application/#event">Events</a></li>
-                        <li><a href="/manual/package/application/#gui">GUI</a></li>
-                        <li><a href="/manual/package/application/#responsive">Responsiveness</a></li>
+                        <li><a href="/manual/package/application/windows">Windows</a></li>
+                        <li><a href="/manual/package/application/events">Events</a></li>
+                        <li><a href="/manual/package/application/gui">GUI</a></li>
+                        <li><a href="/manual/package/application/responsive">Responsive</a></li>
                       </ul>
                     </li>
                     <li><a href="/manual/package/iframe">Iframe</a></li>
@@ -150,7 +152,7 @@
               <a href="/manual/gui">Scheme and GUI</a>
               <ul>
                 <li><a href="/manual/gui/scheme">Scheme files</a></li>
-                <li><a href="/manual/gui/element">GUI Elements</a></li>
+                <li><a href="/manual/gui/elements">GUI Elements</a></li>
               </ul>
             </li>
 
@@ -182,10 +184,70 @@
       </aside>
 
       <content>
-        <h1 id="install-os-js-on-other-platforms">Install OS.js on other Platforms</h1>
+        <h1 id="containers">Containers</h1>
+<h2 id="vagrant">Vagrant</h2>
+<p>Simply start the virtual machine and then follow normal instructions:</p>
+<pre class="language-shell"><code class="language-shell">$ vagrant up
+$ vagrant ssh
+</code></pre>
+<p>The <code>Vagrantfile</code> is included.</p>
+<hr>
+<h2 id="docker">Docker</h2>
+<p>Use the included <code>Dockerfile</code> or make your own image with <code>./bin/build-docker-image.sh</code>.</p>
+<hr>
+<h1 id="boards">Boards</h1>
 <h2 id="arduino">Arduino</h2>
+<p>Arduino has a custom build known as <a href="https://github.com/arduino-org/Arduino-OS">Arduino-OS</a>. This is a fork running on <code>Lua</code>.</p>
+<p>It is available for <strong>TIAN</strong> and <strong>Due</strong> (preloaded).</p>
+<hr>
 <h2 id="raspberrypi">RaspberryPI</h2>
+<p>Just follow the normal NIX instructions.</p>
+<p><strong>NOTE</strong> Installing on vfat sdcards is causing some problems with npm packages. Any other linux-based filesystem seems to work just fine.</p>
+<hr>
+<h2 id="intel-edison">Intel Edison</h2>
+<h3 id="manual">Manual</h3>
+<p>Follow normal instructions and use the Shadow authentication and System storage modules.</p>
+<pre class="language-shell"><code class="language-shell">$ edit vi /etc/opkg/base-feeds.conf
+
+  src all http://iotdk.intel.com/repos/2.0/iotdk/all
+  src x86 http://iotdk.intel.com/repos/2.0/iotdk/x86
+  src i586 http://iotdk.intel.com/repos/2.0/iotdk/i586
+
+$ opkg update
+$ opkg install git
+
+$ ./bin/build-opkg.sh osjs 2.0.0-VERSION all intel-edison
+$ ./bin/build-opkg.sh osjs 2.0.0-VERSION x86 intel-edison
+$ ./bin/build-opkg.sh osjs 2.0.0-VERSION i586 intel-edison
+
+$ opkg install <span class="token entity" title="&lt;">&amp;lt;</span>package-name<span class="token entity" title="&gt;">&amp;gt;</span>
+</code></pre>
+<p><strong>NOTE</strong> Installing on vfat sdcards is causing some problems with npm packages. Any other linux-based filesystem seems to work just fine.</p>
+<h3 id="prebuilt-images">Prebuilt images</h3>
+<p><em>Please note that these are not built on a regular basis, and most likely outdated</em></p>
+<pre class="language-shell"><code class="language-shell">$ edit vi /etc/opkg/base-feeds.conf
+
+  src all https://builds.os.js.org/opkg/edison/all
+  src x86 https://builds.os.js.org/opkg/edison/x86
+  src i586 https://builds.os.js.org/opkg/edison/i586
+
+$ opkg update
+$ opkg install osjs
+</code></pre>
+<h3 id="launch">Launch</h3>
+<pre class="language-shell"><code class="language-shell">mkdir /home/demo
+/osjs/bin/start-edison.sh
+</code></pre>
+<hr>
 <h2 id="other">Other</h2>
+<p>Same as RaspberryPI. Any device capable of running either Node or PHP should work just fine.</p>
+<hr>
+<h1 id="misc">Misc</h1>
+<h2 id="nw">NW</h2>
+<p>This is experimental. See the <a href="https://github.com/os-js/OS.js/blob/master/doc/NW.md">repository documentation</a> for more information.</p>
+<hr>
+<h2 id="x11">X11</h2>
+<p>This is very experimental. See the <a href="https://github.com/os-js/OS.js/blob/master/doc/X11.md">repository documentation</a> for more information.</p>
 
 
         <footer>

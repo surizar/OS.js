@@ -105,12 +105,12 @@
             <li>
               <a href="/manual/vfs">VFS</a>
               <ul>
-                <li><a href="/manual/vfs/#mount">Mountpoints</a></li>
+                <li><a href="/manual/vfs/#mountpoints">Mountpoints</a></li>
                 <li>
                   <a href="/manual/vfs/transport">Transports</a>
                   <ul>
                     <li><a href="/manual/vfs/transport/#googledrive">Google Drive</a></li>
-                    <li><a href="/manual/vfs/transport/#onedrive">Microsoft OneDrive</a></li>
+                    <li><a href="/manual/vfs/transport/#microsoft-onedrive">Microsoft OneDrive</a></li>
                     <li><a href="/manual/vfs/transport/#dropbox">Dropbox</a></li>
                     <li><a href="/manual/vfs/transport/#webdav">WebDAV</a></li>
                     <li><a href="/manual/vfs/transport/#other">Other</a></li>
@@ -123,19 +123,21 @@
               <a href="/manual/package">Package</a>
               <ul>
                 <li><a href="/manual/package/#metadata">Metadata</a></li>
-                <li><a href="/manual/package/#spawner">Scripts</a></li>
-                <li><a href="/manual/package/#script">Spawner</a></li>
-                <li><a href="/manual/package/#less">LESS Support</a></li>
+                <li><a href="/manual/package/#preload">Preload</a></li>
+                <li><a href="/manual/package/#scripts">Scripts</a></li>
+                <li><a href="/manual/package/#spawner">Spawner</a></li>
+                <li><a href="/manual/package/#less-support">LESS Support</a></li>
+                <li><a href="/manual/package/#server-apis">Server APIs</a></li>
                 <li>
                   <span>Types</span>
                   <ul>
                     <li>
                       <a href="/manual/package/application">Application</a>
                       <ul>
-                        <li><a href="/manual/package/application/#window">Windows</a></li>
-                        <li><a href="/manual/package/application/#event">Events</a></li>
-                        <li><a href="/manual/package/application/#gui">GUI</a></li>
-                        <li><a href="/manual/package/application/#responsive">Responsiveness</a></li>
+                        <li><a href="/manual/package/application/windows">Windows</a></li>
+                        <li><a href="/manual/package/application/events">Events</a></li>
+                        <li><a href="/manual/package/application/gui">GUI</a></li>
+                        <li><a href="/manual/package/application/responsive">Responsive</a></li>
                       </ul>
                     </li>
                     <li><a href="/manual/package/iframe">Iframe</a></li>
@@ -150,7 +152,7 @@
               <a href="/manual/gui">Scheme and GUI</a>
               <ul>
                 <li><a href="/manual/gui/scheme">Scheme files</a></li>
-                <li><a href="/manual/gui/element">GUI Elements</a></li>
+                <li><a href="/manual/gui/elements">GUI Elements</a></li>
               </ul>
             </li>
 
@@ -185,6 +187,31 @@
         <h1 id="vfs">VFS</h1>
 <p>The <em>Virtual File System</em> is an abstraction layer that allows you to connect to any source (or endpoint) and present it as it was a file or directory to OS.js.</p>
 <p>Modules known as <em>Transports</em> handles the incoming requests and responses. These are linked to a <em>Mountpoint</em> that is shown in OS.js.</p>
+<h2 id="mountpoints">Mountpoints</h2>
+<p>To create your own mountpoints you can use the included configuration tool:</p>
+<pre class="language-shell"><code class="language-shell"># Add with the built in shortcut
+grunt config:add-mount --name=data --description=<span class="token entity" title="&quot;">&amp;quot;</span>My data files<span class="token entity" title="&quot;">&amp;quot;</span> --path=/tmp
+
+# Update configuration
+grunt build:config
+</code></pre>
+<p>This will create the mountpoint <code>data://</code> and points to <code>/tmp</code> on the server.</p>
+<p>You can set it to read-only by using:</p>
+<pre class="language-json"><code class="language-json"><span class="token punctuation">{</span>
+  <span class="token property">&quot;server&quot;</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+    <span class="token property">&quot;vfs&quot;</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+      <span class="token property">&quot;proxy&quot;</span><span class="token operator">:</span> <span class="token boolean">false</span><span class="token punctuation">,</span>
+      <span class="token property">&quot;mounts&quot;</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+        <span class="token property">&quot;data&quot;</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+          <span class="token property">&quot;ro&quot;</span><span class="token operator">:</span> <span class="token boolean">true</span><span class="token punctuation">,</span>
+          <span class="token property">&quot;destination&quot;</span><span class="token operator">:</span> <span class="token string">&quot;/tmp&quot;</span>
+        <span class="token punctuation">}</span>
+      <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<p><em>Better CLI configuration support coming soon</em></p>
 
 
         <footer>

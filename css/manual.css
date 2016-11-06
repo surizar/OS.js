@@ -76,9 +76,11 @@ h1 {
   font-size: 2em;
 }
 h2 {
-  background: #e8e8e8;
+  background-color: #fafafa;
+  border: 1px solid #e8e8e8;
   padding: .5em;
   font-size: 1.5em;
+  font-weight: normal;
 }
 h3 {
   font-size: 1.2em;
@@ -87,6 +89,28 @@ hr {
   background-color: transparent;
   border: 0 none;
   height: 2em;
+}
+a {
+  text-decoration: none;
+}
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 1em;
+}
+th,
+td {
+  padding: 4px;
+}
+thead {
+  text-align: left;
+  font-weight: normal;
+}
+tbody tr td {
+  border-bottom: 1px solid #e8e8e8;
+}
+tbody tr:nth-child(2n+1) td {
+  background-color: #fafafa;
 }
 /**
  * Header
@@ -104,7 +128,6 @@ header > nav > a {
   display: inline-block;
   color: #fff;
   position: relative;
-  text-decoration: none;
   padding: 10px;
   padding-left: 20px;
   padding-right: 20px;

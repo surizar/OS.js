@@ -105,12 +105,12 @@
             <li>
               <a href="/manual/vfs">VFS</a>
               <ul>
-                <li><a href="/manual/vfs/#mount">Mountpoints</a></li>
+                <li><a href="/manual/vfs/#mountpoints">Mountpoints</a></li>
                 <li>
                   <a href="/manual/vfs/transport">Transports</a>
                   <ul>
                     <li><a href="/manual/vfs/transport/#googledrive">Google Drive</a></li>
-                    <li><a href="/manual/vfs/transport/#onedrive">Microsoft OneDrive</a></li>
+                    <li><a href="/manual/vfs/transport/#microsoft-onedrive">Microsoft OneDrive</a></li>
                     <li><a href="/manual/vfs/transport/#dropbox">Dropbox</a></li>
                     <li><a href="/manual/vfs/transport/#webdav">WebDAV</a></li>
                     <li><a href="/manual/vfs/transport/#other">Other</a></li>
@@ -123,19 +123,21 @@
               <a href="/manual/package">Package</a>
               <ul>
                 <li><a href="/manual/package/#metadata">Metadata</a></li>
-                <li><a href="/manual/package/#spawner">Scripts</a></li>
-                <li><a href="/manual/package/#script">Spawner</a></li>
-                <li><a href="/manual/package/#less">LESS Support</a></li>
+                <li><a href="/manual/package/#preload">Preload</a></li>
+                <li><a href="/manual/package/#scripts">Scripts</a></li>
+                <li><a href="/manual/package/#spawner">Spawner</a></li>
+                <li><a href="/manual/package/#less-support">LESS Support</a></li>
+                <li><a href="/manual/package/#server-apis">Server APIs</a></li>
                 <li>
                   <span>Types</span>
                   <ul>
                     <li>
                       <a href="/manual/package/application">Application</a>
                       <ul>
-                        <li><a href="/manual/package/application/#window">Windows</a></li>
-                        <li><a href="/manual/package/application/#event">Events</a></li>
-                        <li><a href="/manual/package/application/#gui">GUI</a></li>
-                        <li><a href="/manual/package/application/#responsive">Responsiveness</a></li>
+                        <li><a href="/manual/package/application/windows">Windows</a></li>
+                        <li><a href="/manual/package/application/events">Events</a></li>
+                        <li><a href="/manual/package/application/gui">GUI</a></li>
+                        <li><a href="/manual/package/application/responsive">Responsive</a></li>
                       </ul>
                     </li>
                     <li><a href="/manual/package/iframe">Iframe</a></li>
@@ -150,7 +152,7 @@
               <a href="/manual/gui">Scheme and GUI</a>
               <ul>
                 <li><a href="/manual/gui/scheme">Scheme files</a></li>
-                <li><a href="/manual/gui/element">GUI Elements</a></li>
+                <li><a href="/manual/gui/elements">GUI Elements</a></li>
               </ul>
             </li>
 
@@ -183,11 +185,297 @@
 
       <content>
         <h1 id="packages">Packages</h1>
+<p>Packages comes in packages known as &quot;repositories&quot;. Each repository contains a series of packages that can be of several types:</p>
 <ul>
 <li><a href="/manual/package/application">Application</a></li>
 <li><a href="/manual/package/iframe">Iframe</a></li>
 <li><a href="/manual/package/service">Service</a></li>
 <li><a href="/manual/package/extension">Extension</a></li>
+</ul>
+<h2 id="metadata">Metadata</h2>
+<p>The metadata file contains information about your package. All the package metadata files are compiled together into a <em>Manifest</em> which is delievered to the client.</p>
+<p>This file is also used to describe the build process.</p>
+<table>
+<thead>
+<tr>
+<th>Key</th>
+<th>Description</th>
+<th>Required</th>
+<th>Default</th>
+<th>Restriction</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>className</td>
+<td>Name of package in client namespace</td>
+<td>Yes</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>enabled</td>
+<td>Global enabled state</td>
+<td>No</td>
+<td>true</td>
+<td></td>
+</tr>
+<tr>
+<td>singular</td>
+<td>Only allow one running instance</td>
+<td>No</td>
+<td>false</td>
+<td></td>
+</tr>
+<tr>
+<td>autostart</td>
+<td>Automatically start on boot</td>
+<td>No</td>
+<td>false</td>
+<td></td>
+</tr>
+<tr>
+<td>name</td>
+<td>A name (title)</td>
+<td>Yes</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>description</td>
+<td>A short description</td>
+<td>Yes</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>category</td>
+<td>A category</td>
+<td>No</td>
+<td>other</td>
+<td></td>
+</tr>
+<tr>
+<td>visible</td>
+<td>Used for visibility in application launch menu etc.</td>
+<td>No</td>
+<td>true</td>
+<td></td>
+</tr>
+<tr>
+<td>icon</td>
+<td>A icon</td>
+<td>Yes</td>
+<td></td>
+<td>Application</td>
+</tr>
+<tr>
+<td>splash</td>
+<td>Show the loading splash when launching</td>
+<td>No</td>
+<td>true</td>
+<td></td>
+</tr>
+<tr>
+<td>names</td>
+<td>A map of locales and translated names</td>
+<td>No</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>descriptions</td>
+<td>A map of locales and translated descriptions</td>
+<td>No</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>mime</td>
+<td>An array of what MIME types is supported</td>
+<td>No</td>
+<td></td>
+<td>Application</td>
+</tr>
+<tr>
+<td>compability</td>
+<td>An array of what features to check for support</td>
+<td>No</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>preload</td>
+<td>An array of static resources to load (see below)</td>
+<td>Yes</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>depends</td>
+<td>An array of dependent packages to load first</td>
+<td>No</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>uses</td>
+<td>An array of package names that autoload this package</td>
+<td>No</td>
+<td></td>
+<td>Extension</td>
+</tr>
+<tr>
+<td>spawn</td>
+<td>A path to a node script to spawn on load</td>
+<td>No</td>
+<td></td>
+<td>Extension</td>
+</tr>
+<tr>
+<td>build</td>
+<td>An object to describe certain parts of the build process</td>
+<td>No</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>build.copy</td>
+<td>An array of files to copy into dist.</td>
+<td>No</td>
+<td>Entire directory</td>
+<td></td>
+</tr>
+<tr>
+<td>build.scripts</td>
+<td>Build scripts (see below)</td>
+<td>No</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>build.less</td>
+<td>Map with LESS files to compile (see below)</td>
+<td>No</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h3 id="example-file">Example file</h3>
+<pre class="language-json"><code class="language-json"><span class="token punctuation">{</span>
+  <span class="token property">&quot;className&quot;</span><span class="token operator">:</span> <span class="token string">&quot;ApplicationExample&quot;</span><span class="token punctuation">,</span>
+  <span class="token property">&quot;name&quot;</span><span class="token operator">:</span> <span class="token string">&quot;Example&quot;</span><span class="token punctuation">,</span>
+  <span class="token property">&quot;description&quot;</span><span class="token operator">:</span> <span class="token string">&quot;Showing off an example&quot;</span><span class="token punctuation">,</span>
+  <span class="token property">&quot;names&quot;</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+    <span class="token property">&quot;no_NO&quot;</span><span class="token operator">:</span> <span class="token string">&quot;Eksempel&quot;</span>
+  <span class="token punctuation">}</span><span class="token punctuation">,</span>
+  <span class="token property">&quot;descriptions&quot;</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+    <span class="token property">&quot;no_NO&quot;</span><span class="token operator">:</span> <span class="token string">&quot;Vise fram et eksempel&quot;</span>
+  <span class="token punctuation">}</span><span class="token punctuation">,</span>
+  <span class="token property">&quot;icon&quot;</span><span class="token operator">:</span> <span class="token string">&quot;apps/help-browser.png&quot;</span><span class="token punctuation">,</span>
+  <span class="token property">&quot;depends&quot;</span><span class="token operator">:</span> <span class="token punctuation">[</span>
+    <span class="token string">&quot;ApplicationSettings&quot;</span>
+  <span class="token punctuation">]</span><span class="token punctuation">,</span>
+  <span class="token property">&quot;compabiltiy&quot;</span><span class="token operator">:</span> <span class="token punctuation">[</span>
+    <span class="token string">&quot;canvas&quot;</span><span class="token punctuation">,</span> <span class="token string">&quot;blob&quot;</span><span class="token punctuation">,</span> <span class="token string">&quot;audio&quot;</span><span class="token punctuation">,</span> <span class="token string">&quot;video&quot;</span>
+  <span class="token punctuation">]</span><span class="token punctuation">,</span>
+  <span class="token property">&quot;mime&quot;</span><span class="token operator">:</span> <span class="token punctuation">[</span>
+    <span class="token string">&quot;^text&quot;</span><span class="token punctuation">,</span>
+    <span class="token string">&quot;inode\\/x\\-empty&quot;</span><span class="token punctuation">,</span>
+    <span class="token string">&quot;application\\/x\\-empty&quot;</span><span class="token punctuation">,</span>
+    <span class="token string">&quot;application\\/x\\-lua&quot;</span><span class="token punctuation">,</span>
+    <span class="token string">&quot;application\\/x\\-python&quot;</span><span class="token punctuation">,</span>
+    <span class="token string">&quot;application\\/javascript&quot;</span><span class="token punctuation">,</span>
+    <span class="token string">&quot;application\\/json&quot;</span>
+  <span class="token punctuation">]</span><span class="token punctuation">,</span>
+  <span class="token property">&quot;preload&quot;</span><span class="token operator">:</span> <span class="token punctuation">[</span>
+    <span class="token string">&quot;main.js&quot;</span><span class="token punctuation">,</span>
+    <span class="token string">&quot;main.css&quot;</span><span class="token punctuation">,</span>
+    <span class="token punctuation">{</span>
+      <span class="token property">&quot;src&quot;</span><span class="token operator">:</span> <span class="token string">&quot;scheme.html&quot;</span><span class="token punctuation">,</span>
+      <span class="token property">&quot;type&quot;</span><span class="token operator">:</span> <span class="token string">&quot;scheme&quot;</span>
+    <span class="token punctuation">}</span><span class="token punctuation">,</span>
+    <span class="token punctuation">{</span>
+      <span class="token property">&quot;src&quot;</span><span class="token operator">:</span> <span class="token string">&quot;foo.js&quot;</span><span class="token punctuation">,</span>
+      <span class="token property">&quot;type&quot;</span><span class="token operator">:</span> <span class="token string">&quot;javascript&quot;</span><span class="token punctuation">,</span>
+      <span class="token property">&quot;combine&quot;</span><span class="token operator">:</span> <span class="token boolean">false</span>
+    <span class="token punctuation">}</span>
+  <span class="token punctuation">]</span><span class="token punctuation">,</span>
+  <span class="token property">&quot;build&quot;</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+    <span class="token property">&quot;copy&quot;</span><span class="token operator">:</span> <span class="token punctuation">[</span>
+      <span class="token string">&quot;foo.js&quot;</span><span class="token punctuation">,</span>
+      <span class="token string">&quot;main.js&quot;</span><span class="token punctuation">,</span>
+      <span class="token string">&quot;main.css&quot;</span><span class="token punctuation">,</span>
+      <span class="token string">&quot;scheme.html&quot;</span>
+    <span class="token punctuation">]</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<hr>
+<h2 id="preload">Preload</h2>
+<p>This array defined what files are loaded when the application starts. It supports normal URLs (also absolute).</p>
+<p>You can see usage in the above example.</p>
+<hr>
+<h2 id="scripts">Scripts</h2>
+<p>You can run scripts that trigger <code>before</code> and <code>after</code> the build process of your package.</p>
+<pre class="language-json"><code class="language-json"><span class="token punctuation">{</span>
+  <span class="token property">&quot;build&quot;</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+    <span class="token property">&quot;scripts&quot;</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+      <span class="token property">&quot;before&quot;</span><span class="token operator">:</span> <span class="token punctuation">[</span><span class="token string">&quot;echo 1&quot;</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+      <span class="token property">&quot;after&quot;</span><span class="token operator">:</span> <span class="token punctuation">[</span><span class="token string">&quot;echo 2&quot;</span><span class="token punctuation">]</span>
+    <span class="token punctuation">}</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<p>The <em>working directory</em> is set to <code>src/packages/&lt;path&gt;</code> on <em>before</em> and <code>dist/packages/&lt;path&gt;</code> on <em>after</em>. Available environment variables:</p>
+<ul>
+<li><code>OSJS_TARGET</code> - Which dist directory we&apos;re in</li>
+<li><code>OSJS_PACKAGE</code> - Name path to the package source</li>
+</ul>
+<hr>
+<h2 id="spawner">Spawner</h2>
+<p>You can also spawn other node.js processes when the OS.js server starts:</p>
+<pre class="language-json"><code class="language-json"><span class="token punctuation">{</span>
+  <span class="token property">&quot;spawn&quot;</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+    <span class="token property">&quot;enabled&quot;</span><span class="token operator">:</span> <span class="token boolean">true</span><span class="token punctuation">,</span>
+    <span class="token property">&quot;exec&quot;</span><span class="token operator">:</span> <span class="token string">&quot;mycustomscript.js&quot;</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<p><em>This is currently only for extensions.</em></p>
+<hr>
+<h2 id="less-support">LESS Support</h2>
+<p>Simply add this to the metadata file and the file is built whenever the <code>grunt build:package</code> task is run.</p>
+<pre class="language-json"><code class="language-json"><span class="token punctuation">{</span>
+<span class="token property">&quot;build&quot;</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+  <span class="token property">&quot;less&quot;</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+      <span class="token property">&quot;src.less&quot;</span><span class="token operator">:</span> <span class="token string">&quot;dest.css&quot;</span>
+    <span class="token punctuation">}</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<hr>
+<h2 id="server-apis">Server APIs</h2>
+<p>You can make your own server-side API methods for your applications. These are defined in <code>api.js</code>.</p>
+<h3 id="example-server-method">Example server method</h3>
+<pre class="language-js"><code class="language-js">test<span class="token punctuation">:</span> <span class="token keyword">function</span><span class="token punctuation">(</span>instance<span class="token punctuation">,</span> http<span class="token punctuation">,</span> resolve<span class="token punctuation">,</span> reject<span class="token punctuation">,</span> args<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token function">resolve</span><span class="token punctuation">(</span><span class="token string">&apos;This is a response from your application&apos;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<h3 id="example-client-usage">Example client usage</h3>
+<pre class="language-js"><code class="language-js"><span class="token keyword">this</span><span class="token punctuation">.</span><span class="token function">_api</span><span class="token punctuation">(</span><span class="token string">&apos;test&apos;</span><span class="token punctuation">,</span> <span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token punctuation">,</span> <span class="token keyword">function</span><span class="token punctuation">(</span>err<span class="token punctuation">,</span> res<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">&apos;Result from your server API method&apos;</span><span class="token punctuation">,</span> err<span class="token punctuation">,</span> res<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre>
+<hr>
+<h1 id="repositories">Repositories</h1>
+<ul>
+<li><a href="https://github.com/os-js/OS.js-examples">https://github.com/os-js/OS.js-examples</a></li>
+<li><a href="https://github.com/os-js/OS.js-experimental">https://github.com/os-js/OS.js-experimental</a></li>
+<li><a href="https://github.com/os-js/OS.js-submissions">https://github.com/os-js/OS.js-submissions</a></li>
+<li><a href="https://github.com/os-js/OS.js-development">https://github.com/os-js/OS.js-development</a></li>
+<li><a href="https://github.com/os-js/OS.js-system">https://github.com/os-js/OS.js-system</a></li>
+<li><a href="https://github.com/os-js/OS.js-games">https://github.com/os-js/OS.js-games</a></li>
 </ul>
 
 
