@@ -99,6 +99,13 @@
               <ul>
                 <li><a href="/manual/api/client">Client</a></li>
                 <li><a href="/manual/api/server">Server</a></li>
+                <li>
+                  <span>Usage</span>
+                  <ul>
+                    <li><a href="/manual/api/usage/curl">curl</a></li>
+                    <li><a href="/manual/api/usage/vfs">VFS</a></li>
+                  </ul>
+                </li>
               </ul>
             </li>
 
@@ -113,7 +120,6 @@
                     <li><a href="/manual/vfs/transport/#microsoft-onedrive">Microsoft OneDrive</a></li>
                     <li><a href="/manual/vfs/transport/#dropbox">Dropbox</a></li>
                     <li><a href="/manual/vfs/transport/#webdav">WebDAV</a></li>
-                    <li><a href="/manual/vfs/transport/#other">Other</a></li>
                   </ul>
                 </li>
               </ul>
@@ -458,6 +464,7 @@
 <h2 id="server-apis">Server APIs</h2>
 <p>You can make your own server-side API methods for your applications. These are defined in <code>api.js</code>.</p>
 <h3 id="example-server-method">Example server method</h3>
+<p>You can read about the arguments in the <a href="/doc/server">server API documentation</a>.</p>
 <pre class="language-js"><code class="language-js">test<span class="token punctuation">:</span> <span class="token keyword">function</span><span class="token punctuation">(</span>instance<span class="token punctuation">,</span> http<span class="token punctuation">,</span> resolve<span class="token punctuation">,</span> reject<span class="token punctuation">,</span> args<span class="token punctuation">)</span> <span class="token punctuation">{</span>
   <span class="token function">resolve</span><span class="token punctuation">(</span><span class="token string">&apos;This is a response from your application&apos;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span class="token punctuation">}</span>
