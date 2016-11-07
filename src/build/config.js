@@ -290,13 +290,6 @@
       return settings.Preloads[k];
     });
 
-    if ( target === 'dist-dev' ) {
-      preloads.push({
-        type: 'javascript',
-        src: '/' + ['client', 'javascript', 'handlers', cfg.handler, 'handler.js'].join('/')
-      });
-    }
-
     if ( !(settings.AutoStart instanceof Array) ) {
       settings.AutoStart = [];
     }
@@ -386,6 +379,7 @@
 
         settings.extensions = loadExtensions;
         settings.mimes = config.mime.mapping;
+        settings.vfs.maxuploadsize = config.client.VFS.MaxUploadSize;
 
         _fs.writeFile(dest, JSON.stringify(settings, null, 4), function(err) {
           done(err, !!err);
@@ -424,11 +418,13 @@
         });
       }, function() {
 
-        var handler = data.handler || 'demo';
+        var authenticator = data.authenticator || 'demo';
         var connection = data.connection || 'http';
+        var storage = data.storage || 'demo';
 
         var tmp = JSON.stringify(data).replace(/%ROOT%/g, _utils.fixWinPath(ROOT))
-          .replace(/%HANDLER%/g, handler)
+          .replace(/%AUTHENTICATOR%/g, authenticator)
+          .replace(/%STORAGE%/g, storage)
           .replace(/%CONNECTION%/g, connection);
 
         CACHE = Object.freeze(JSON.parse(tmp));

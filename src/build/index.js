@@ -154,7 +154,6 @@
           standalone: cli.option('standalone'),
           compress: cli.option('compress'),
           repositories: cfg.repositories,
-          handler: cfg.handler,
           client: cfg.client,
           build: cfg.build
         }, next);

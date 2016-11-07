@@ -243,10 +243,8 @@
         }
       };
 
-      return function(cb) {
-        var sm = OSjs.Core.getSettingsManager();
-        sm.instance('VFS').set(null, vfsSettings, cb, false);
-      };
+      var sm = OSjs.Core.getSettingsManager();
+      sm.instance('VFS').set(null, vfsSettings, false, false);
     }
   };
 

@@ -51,7 +51,7 @@
   var signingOut = false;
 
   // Make sure these namespaces exist
-  (['Utils', 'API', 'GUI', 'Core', 'Dialogs', 'Helpers', 'Applications', 'Locales', 'VFS', 'Extensions']).forEach(function(ns) {
+  (['Utils', 'API', 'GUI', 'Core', 'Dialogs', 'Helpers', 'Applications', 'Locales', 'VFS', 'Extensions', 'Auth', 'Storage', 'Connections']).forEach(function(ns) {
     OSjs[ns] = OSjs[ns] || {};
   });
 
@@ -358,15 +358,6 @@
         return;
       }
 
-      if ( !inited ) {
-        if ( !handler.loggedIn ) {
-          if ( confirm(OSjs.API._('ERR_NO_SESSION')) ) {
-            handler.init(_done);
-          }
-          return;
-        }
-      }
-
       inited = true;
 
       callback();
@@ -666,9 +657,9 @@
       initPreload,
       initHandler,
       initVFS,
+      initSettingsManager,
       initPackageManager,
       initExtensions,
-      initSettingsManager,
       initSearch,
       function(cfg, cb) {
         OSjs.Core.getMountManager().restore(cb);

@@ -273,10 +273,6 @@
       grunt.log.writeln('This task is deprecated. use "grunt generate:package --name=REPO/NAME" instead.'['yellow'].bold);
     });
 
-    grunt.registerTask('create-handler', '(DEPRECATED) Create a new handler with given name', function(arg1) {
-      grunt.log.writeln('This task is deprecated. use "grunt generate:handler --name=MyName" instead.'['yellow'].bold);
-    });
-
     //
     // Register aliases
     //

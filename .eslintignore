@@ -5,6 +5,7 @@ src/client/stylesheets/**
 src/client/themes/**
 src/templates/**
 src/installer/**
+src/server/node/modules/**/example.js
 src/server/php/**
 src/server/test/**
 src/client/test/**

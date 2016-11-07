@@ -27,64 +27,50 @@
  * @author  Anders Evenrud <andersevenrud@gmail.com>
  * @licence Simplified BSD License
  */
-(function(_path, _server) {
-  'use strict';
 
-  /**
-   * @namespace Server
-   */
+// TODO: Fix proxies according to specced docs (htaccess is broken atm)
 
-  var DIST = (process && process.argv.length > 2) ? process.argv[2] : 'dist';
-  var ROOT = _path.join(__dirname, '/../../../');
-  var PORT = null;
-  var NOLOG = false;
+const _instance = require('./lib/instance.js');
+const _minimist = require('minimist');
 
-  (function() {
-    var i, arg;
-    for ( i = 0; i < process.argv.length; i++ ) {
-      arg = process.argv[i];
+///////////////////////////////////////////////////////////////////////////////
+// MAIN
+///////////////////////////////////////////////////////////////////////////////
 
-      if ( ['-nl', '--no-log'].indexOf(arg) >= 0 ) {
-        NOLOG = true;
-      } else if ( ['-p', '--port'].indexOf(arg) >= 0 ) {
-        i++;
-        PORT = process.argv[i];
-      } else if ( ['-r', '--root'].indexOf(arg) >= 0 ) {
-        i++;
-        ROOT = process.argv[i];
-      }
-    }
-  })();
+const argv = _minimist(process.argv.slice(2));
+const opts = {
+  DIST: argv._[0],
+  ROOT: argv.r || argv.root,
+  PORT: argv.p || argv.port,
+  LOGLEVEL: argv.l || argv.loglevel
+};
 
-  if ( DIST === 'x11' ) {
-    DIST = 'dist';
-    ROOT = _path.dirname(__dirname);
-  } else {
-    if ( (process.argv[1] || '').match(/(mocha|grunt)$/) ) {
-      DIST = 'dist-dev';
-    }
+_instance.init(opts).then(function(instance) {
+  const logger = _instance.getLogger();
+  const httpConfig = instance.CONFIG.http || {};
+
+  if ( instance.CONFIG.tz ) {
+    process.env.TZ = instance.CONFIG.tz;
   }
 
-  /////////////////////////////////////////////////////////////////////////////
-  // MAIN
-  /////////////////////////////////////////////////////////////////////////////
-
-  process.chdir(ROOT);
-
   process.on('exit', function() {
-    _server.close();
+    _instance.destroy();
   });
+
+  logger.log('INFO', logger.colored('Starting OS.js server', 'green'));
+  logger.log('INFO', logger.colored(['Using', httpConfig.mode, 'on port', instance.PORT, 'in', instance.DIST].join(' '), 'green'));
+  if ( httpConfig.connection === 'ws' ) {
+    logger.log('INFO', logger.colored('Using WebSocket', 'green'));
+  }
+
+  _instance.run();
 
   process.on('uncaughtException', function(error) {
     console.log('UNCAUGHT EXCEPTION', error, error.stack);
   });
 
-  _server.listen({
-    port: PORT,
-    dirname: __dirname,
-    root: ROOT,
-    dist: DIST,
-    logging: !NOLOG,
-    nw: false
-  });
-})(require('path'), require('./http.js'));
+  logger.log('INFO', logger.colored('Ready...', 'green'));
+}).catch(function(error) {
+  console.log(error);
+  process.exit(1);
+});

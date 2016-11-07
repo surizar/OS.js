@@ -127,7 +127,6 @@
     var tpl = _fs.readFileSync(_path.join(tpldir, 'index.html')).toString();
     tpl = _utils.replaceAll(tpl, '%STYLES%', styles.join('\n'));
     tpl = _utils.replaceAll(tpl, '%SCRIPTS%', scripts.join('\n'));
-    tpl = _utils.replaceAll(tpl, '%HANDLER%', opts.handler);
 
     _fs.writeFileSync(_path.join(outdir, 'index.html'), tpl);
   }
@@ -215,9 +214,7 @@
     'dist-dev': function(opts, done) {
       _createIndex(opts, 'dist-dev', function(addStyle, addScript) {
         opts.build.javascript.forEach(function(i) {
-          if ( !i.match(/handlers\/(\w+)\/handler\.js$/) ) { // handler scripts are automatically preloaded by config!
-            addScript(i.replace(/src\/client\/(.*)/, 'client/$1'));
-          }
+          addScript(i.replace(/src\/client\/(.*)/, 'client/$1'));
         });
 
         opts.build.locales.forEach(function(i) {
