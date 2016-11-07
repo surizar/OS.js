@@ -85,7 +85,7 @@ h2 {
 h3 {
   font-size: 1.2em;
 }
-hr {
+content > hr {
   background-color: transparent;
   border: 0 none;
   height: 2em;
@@ -139,7 +139,7 @@ header {
   text-align: right;
 }
 header:before {
-  background: url('/manual/images/header.png') no-repeat 50% 50%;
+  background: url('/images/header.png') no-repeat 50% 50%;
 }
 header > nav {
   padding: 20px;
@@ -173,7 +173,7 @@ header > nav > a.active:before {
   left: 0;
   top: 0;
   bottom: 0;
-  background: url('/manual/images/logo.png') no-repeat 50% 50%;
+  background: url('/images/logo.png') no-repeat 50% 50%;
   background-size: auto 80%;
 }
 #Logo:before {
@@ -228,4 +228,14 @@ content {
 footer {
   text-align: center;
   font-size: 70%;
+}
+/**
+ * Documentation pages
+ */
+body#documentation #Logo {
+  width: 360px;
+}
+body#documentation aside#sidebar {
+  flex: 0 0 360px;
+  width: 360px;
 }

@@ -29,7 +29,7 @@
       <nav>
         <a href="/">Home</a>
         <a href="/manual" class="active">Manual</a>
-        <a href="/doc">Documentation</a>
+        <a href="/doc" >Documentation</a>
       </nav>
     </header>
 
@@ -158,6 +158,7 @@
                         <li><a href="/manual/package/application/windows">Windows</a></li>
                         <li><a href="/manual/package/application/gui">GUI</a></li>
                         <li><a href="/manual/package/application/responsive">Responsive</a></li>
+                        <li><a href="/manual/package/application/misc">Misc</a></li>
                       </ul>
                     </li>
                     <li><a href="/manual/package/iframe">Iframe</a></li>
@@ -262,11 +263,17 @@ VFS<span class="token punctuation">.</span><span class="token function">scandir<
 <pre class="language-js"><code class="language-js">
 <span class="token keyword">const</span> _vfs <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">&apos;lib/vfs.js&apos;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 
-_vfs<span class="token punctuation">.</span><span class="token function">_request</span><span class="token punctuation">(</span>instance<span class="token punctuation">,</span> http<span class="token punctuation">,</span> <span class="token string">&apos;read&apos;</span><span class="token punctuation">,</span> <span class="token punctuation">{</span>path<span class="token punctuation">:</span> <span class="token string">&apos;osjs:///foo.txt&apos;</span><span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">then</span><span class="token punctuation">(</span><span class="token keyword">function</span><span class="token punctuation">(</span>data<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+<span class="token comment" spellcheck="true">// Normal way</span>
+_vfs<span class="token punctuation">.</span><span class="token function">_request</span><span class="token punctuation">(</span>http<span class="token punctuation">,</span> <span class="token string">&apos;read&apos;</span><span class="token punctuation">,</span> <span class="token punctuation">{</span>path<span class="token punctuation">:</span> <span class="token string">&apos;osjs:///foo.txt&apos;</span><span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">then</span><span class="token punctuation">(</span><span class="token keyword">function</span><span class="token punctuation">(</span>data<span class="token punctuation">)</span> <span class="token punctuation">{</span>
   console<span class="token punctuation">.</span><span class="token function">info</span><span class="token punctuation">(</span>data<span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token keyword">catch</span><span class="token punctuation">(</span><span class="token keyword">function</span><span class="token punctuation">(</span>error<span class="token punctuation">)</span> <span class="token punctuation">{</span>
   console<span class="token punctuation">.</span><span class="token function">error</span><span class="token punctuation">(</span>error<span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token comment" spellcheck="true">// Or alternatively. Here you also have access to a special `$:///` mount, which is the root of your system.</span>
+_vfs<span class="token punctuation">.</span><span class="token function">_vrequest</span><span class="token punctuation">(</span><span class="token string">&apos;read&apos;</span><span class="token punctuation">,</span> <span class="token punctuation">{</span>path<span class="token punctuation">:</span> <span class="token string">&apos;home:///foo.txt&apos;</span><span class="token punctuation">}</span><span class="token punctuation">,</span> <span class="token punctuation">{</span>username<span class="token punctuation">:</span> <span class="token string">&apos;demo&apos;</span><span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">then</span><span class="token punctuation">(</span><span class="token keyword">function</span><span class="token punctuation">(</span>data<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token comment" spellcheck="true">// ...</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token keyword">catch</span><span class="token punctuation">(</span><span class="token comment" spellcheck="true">/* ... */</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 </code></pre>
 
 

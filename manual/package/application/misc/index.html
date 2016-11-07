@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <title>Application Events | OS.js Manual</title>
+    <title>Application - Misc | OS.js Manual</title>
     <meta name="description" content="OS.js Manual - OS.js" />
     <meta name="keywords" content="OS.js,Documentation,Client,Server,API,Tutorial,Tutorials,Manual,Manuals" />
 
@@ -205,38 +205,26 @@
       </aside>
 
       <content>
-        <h1 id="application-events">Application Events</h1>
-<h2 id="events">Events</h2>
-<p>This is a list of the internal events for a Application. You can of course subscribe to custom ones.</p>
-<pre class="language-bash"><code class="language-bash">message       All events                               <span class="token operator">=</span><span class="token operator">&gt;</span> <span class="token punctuation">(</span>msg, object, options<span class="token punctuation">)</span>
-attention     When application gets attention signal   <span class="token operator">=</span><span class="token operator">&gt;</span> <span class="token punctuation">(</span>args<span class="token punctuation">)</span>
-hashchange    When URL <span class="token function">hash</span> has changed                <span class="token operator">=</span><span class="token operator">&gt;</span> <span class="token punctuation">(</span>args<span class="token punctuation">)</span>
-api           API event                                <span class="token operator">=</span><span class="token operator">&gt;</span> <span class="token punctuation">(</span>method<span class="token punctuation">)</span>
-destroy       Destruction event                        <span class="token operator">=</span><span class="token operator">&gt;</span> <span class="token punctuation">(</span>killed<span class="token punctuation">)</span>
-destroyWindow Attached window destruction event        <span class="token operator">=</span><span class="token operator">&gt;</span> <span class="token punctuation">(</span>win<span class="token punctuation">)</span>
-vfs           For all VFS events                       <span class="token operator">=</span><span class="token operator">&gt;</span> <span class="token punctuation">(</span>msg, object, options<span class="token punctuation">)</span>
-vfs:mount     VFS <span class="token function">mount</span> event                          <span class="token operator">=</span><span class="token operator">&gt;</span> <span class="token punctuation">(</span>module, options, msg<span class="token punctuation">)</span>
-vfs:unmount   VFS unmount event                        <span class="token operator">=</span><span class="token operator">&gt;</span> <span class="token punctuation">(</span>module, options, msg<span class="token punctuation">)</span>
-vfs:write     VFS <span class="token function">write</span> event                          <span class="token operator">=</span><span class="token operator">&gt;</span> <span class="token punctuation">(</span>dest, options, msg<span class="token punctuation">)</span>
-vfs:mkdir     VFS <span class="token function">mkdir</span> event                          <span class="token operator">=</span><span class="token operator">&gt;</span> <span class="token punctuation">(</span>dest, options, msg<span class="token punctuation">)</span>
-vfs:move      VFS move event                           <span class="token operator">=</span><span class="token operator">&gt;</span> <span class="token punctuation">(</span><span class="token punctuation">{</span>src,dest<span class="token punctuation">}</span>, options, msg<span class="token punctuation">)</span>
-vfs:delete    VFS delete event                         <span class="token operator">=</span><span class="token operator">&gt;</span> <span class="token punctuation">(</span>dest, options, msg<span class="token punctuation">)</span>
-vfs:upload    VFS upload event                         <span class="token operator">=</span><span class="token operator">&gt;</span> <span class="token punctuation">(</span>file, options, msg<span class="token punctuation">)</span>
-vfs:update    VFS update event                         <span class="token operator">=</span><span class="token operator">&gt;</span> <span class="token punctuation">(</span>dir, options, msg<span class="token punctuation">)</span>
-</code></pre>
-<h2 id="how-to-subscribe">How to subscribe</h2>
-<pre class="language-js"><code class="language-js"><span class="token punctuation">.</span><span class="token function">_on</span><span class="token punctuation">(</span><span class="token string">&apos;event&apos;</span><span class="token punctuation">,</span> <span class="token keyword">function</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment" spellcheck="true">// Subscribe to event</span>
-<span class="token punctuation">.</span><span class="token function">_off</span><span class="token punctuation">(</span><span class="token string">&apos;event&apos;</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment" spellcheck="true">// Unsubscribe to an event (you can pass the callback as second argument)</span>
-<span class="token punctuation">.</span><span class="token function">_emit</span><span class="token punctuation">(</span><span class="token string">&apos;event&apos;</span><span class="token punctuation">,</span> <span class="token punctuation">[</span>arg<span class="token punctuation">,</span> <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment" spellcheck="true">// Emit an event</span>
-</code></pre>
-<h2 id="how-to-broadcast">How to broadcast</h2>
-<p>You can broadcast messages to all applications (that will emit an event in your application) by simply doing:</p>
-<pre class="language-js"><code class="language-js">API<span class="token punctuation">.</span><span class="token function">message</span><span class="token punctuation">(</span><span class="token string">&apos;foo&apos;</span><span class="token punctuation">,</span> <span class="token punctuation">{</span>bar<span class="token punctuation">:</span> <span class="token string">&apos;baz&apos;</span><span class="token punctuation">}</span><span class="token punctuation">)</span>
+        <h1 id="application-misc">Application - Misc</h1>
+<h2 id="handling-launch-arguments">Handling launch arguments</h2>
+<p>When you launch an Application it normally recieves arguments based on how it was opened. Most included Applications with file interactions have a <code>file</code> argument to open a file (etc).</p>
+<p>These are stored in your session, so you can set these and make your Application restore to the file the user was last using.</p>
+<pre class="language-js"><code class="language-js"><span class="token punctuation">.</span><span class="token function">_getArgument</span><span class="token punctuation">(</span><span class="token string">&apos;key&apos;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 
-<span class="token comment" spellcheck="true">// If you send your application ID as a source, it will not be triggered in that application.</span>
-API<span class="token punctuation">.</span><span class="token function">message</span><span class="token punctuation">(</span><span class="token string">&apos;foo&apos;</span><span class="token punctuation">,</span> <span class="token punctuation">{</span>bar<span class="token punctuation">:</span> <span class="token string">&apos;baz&apos;</span><span class="token punctuation">}</span><span class="token punctuation">,</span> <span class="token punctuation">{</span>source<span class="token punctuation">:</span> app<span class="token punctuation">.</span>__pid<span class="token punctuation">}</span><span class="token punctuation">)</span>
+<span class="token punctuation">.</span><span class="token function">_setArgument</span><span class="token punctuation">(</span><span class="token string">&apos;key&apos;</span><span class="token punctuation">,</span> <span class="token string">&apos;value&apos;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 </code></pre>
-<p>Ref: <a href="https://os.js.org/doc/client/OSjs.Core.Process.html#_onMessage">https://os.js.org/doc/client/OSjs.Core.Process.html#_onMessage</a></p>
+<h2 id="handling-settings">Handling settings</h2>
+<p>You can also store settings in your application. These are stored across all instances, but not a part of the session data.</p>
+<pre class="language-js"><code class="language-js"><span class="token punctuation">.</span><span class="token function">_setSetting</span><span class="token punctuation">(</span><span class="token string">&apos;key&apos;</span><span class="token punctuation">,</span> <span class="token string">&apos;value&apos;</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment" spellcheck="true">// As key/value</span>
+
+<span class="token punctuation">.</span><span class="token function">_setSetting</span><span class="token punctuation">(</span><span class="token keyword">null</span><span class="token punctuation">,</span> <span class="token punctuation">{</span> <span class="token comment" spellcheck="true">// As tree</span>
+  key<span class="token punctuation">:</span> <span class="token string">&apos;value&apos;</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token punctuation">.</span><span class="token function">_getSetting</span><span class="token punctuation">(</span><span class="token string">&apos;key&apos;</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment" spellcheck="true">// By key</span>
+
+<span class="token punctuation">.</span><span class="token function">_getSetting</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment" spellcheck="true">// Everything</span>
+</code></pre>
 
 
         <footer>

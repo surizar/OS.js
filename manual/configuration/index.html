@@ -29,7 +29,7 @@
       <nav>
         <a href="/">Home</a>
         <a href="/manual" class="active">Manual</a>
-        <a href="/doc">Documentation</a>
+        <a href="/doc" >Documentation</a>
       </nav>
     </header>
 
@@ -158,6 +158,7 @@
                         <li><a href="/manual/package/application/windows">Windows</a></li>
                         <li><a href="/manual/package/application/gui">GUI</a></li>
                         <li><a href="/manual/package/application/responsive">Responsive</a></li>
+                        <li><a href="/manual/package/application/misc">Misc</a></li>
                       </ul>
                     </li>
                     <li><a href="/manual/package/iframe">Iframe</a></li>
@@ -209,6 +210,10 @@
 <p>The files are divided into sections and prefixed with a number so that they load in correct order.</p>
 <h2 id="environment">Environment</h2>
 <p>See the <a href="/manual/build/cli">Build Commands</a> page for more information about environments.</p>
+<pre class="language-bash"><code class="language-bash">
+<span class="token comment" spellcheck="true"># Set your timezone manually</span>
+$ grunt config:set --name<span class="token operator">=</span>tz --value<span class="token operator">=</span>Europe/Oslo
+</code></pre>
 <hr>
 <h2 id="settings">Settings</h2>
 <p>See the <a href="/manual/build/cli">Build Commands</a> page for more information about settings.</p>
