@@ -499,14 +499,18 @@
    * @function _setSetting
    * @memberof OSjs.Core.Application#
    *
-   * @param   {String}    k             Key
-   * @param   {String}    v             Value
-   * @param   {boolean}   save          Immediately save settings ?
-   * @param   {Function}  saveCallback  If you save, this will be called when done
+   * @param   {String}              k             Key
+   * @param   {String}              v             Value
+   * @param   {Boolean|Function}    [save=true]   Save given setting(s) (can be a callback function)
    */
-  Application.prototype._setSetting = function(k, v, save, saveCallback) {
-    save = (typeof save === 'undefined' || save === true);
-    this.__settings.set(k, v, save ? (saveCallback || function() {}) : false);
+  Application.prototype._setSetting = function(k, v, save) {
+    if ( typeof save === 'undefined' ) {
+      save = true;
+    }
+    if ( arguments.length === 4 && typeof arguments[3] === 'function' ) {
+      save = arguments[3];
+    }
+    this.__settings.set(k, v, save);
   };
 
   /**
