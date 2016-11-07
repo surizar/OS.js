@@ -131,6 +131,35 @@
     _fs.writeFileSync(_path.join(outdir, 'index.html'), tpl);
   }
 
+  function getBuildFiles(opts) {
+    var javascripts = opts.javascript;
+    var stylesheets = opts.stylesheets;
+    var locales = opts.locales;
+
+    if ( opts.overlays ) {
+      Object.keys(opts.overlays).forEach(function(k) {
+        var a = opts.overlays[k];
+        if ( a ) {
+          if ( a.javascript instanceof Array ) {
+            javascripts = javascripts.concat(a.javascript);
+          }
+          if ( a.stylesheets instanceof Array ) {
+            stylesheets = stylesheets.concat(a.stylesheets);
+          }
+          if ( a.locales instanceof Array ) {
+            locales = locales.concat(a.locales);
+          }
+        }
+      });
+    }
+
+    return {
+      javascript: javascripts,
+      stylesheets: stylesheets,
+      locales: locales
+    };
+  }
+
   /////////////////////////////////////////////////////////////////////////////
   // HELPERS
   /////////////////////////////////////////////////////////////////////////////
@@ -177,10 +206,11 @@
         }
       }
 
+      var build = getBuildFiles(opts.build);
       var end = opts.compress ? '.min' : '';
-      _fs.writeFileSync(_path.join(ROOT, 'dist', 'osjs' + end +  '.js'), jsh + _readJS(opts, opts.build.javascript));
-      _fs.writeFileSync(_path.join(ROOT, 'dist', 'locales' + end +  '.js'), jsh + _readJS(opts, opts.build.locales));
-      _fs.writeFileSync(_path.join(ROOT, 'dist', 'osjs' + end +  '.css'), cssh + _readCSS(opts, opts.build.stylesheets));
+      _fs.writeFileSync(_path.join(ROOT, 'dist', 'osjs' + end +  '.js'), jsh + _readJS(opts, build.javascript));
+      _fs.writeFileSync(_path.join(ROOT, 'dist', 'locales' + end +  '.js'), jsh + _readJS(opts, build.locales));
+      _fs.writeFileSync(_path.join(ROOT, 'dist', 'osjs' + end +  '.css'), cssh + _readCSS(opts, build.stylesheets));
 
       var appendString = '';
       if ( opts.client.Connection.AppendVersion ) {
@@ -213,15 +243,17 @@
 
     'dist-dev': function(opts, done) {
       _createIndex(opts, 'dist-dev', function(addStyle, addScript) {
-        opts.build.javascript.forEach(function(i) {
+        var build = getBuildFiles(opts.build);
+
+        build.javascript.forEach(function(i) {
           addScript(i.replace(/src\/client\/(.*)/, 'client/$1'));
         });
 
-        opts.build.locales.forEach(function(i) {
+        build.locales.forEach(function(i) {
           addScript(i.replace(/src\/client\/(.*)/, 'client/$1'));
         });
 
-        opts.build.stylesheets.forEach(function(i) {
+        build.stylesheets.forEach(function(i) {
           if ( _filter(i, {target: 'dist-dev'}) ) {
             addStyle(i.replace(/^(dev|prod):/, '').replace(/src\/client\/(.*)/, 'client/$1'));
           }
