@@ -257,6 +257,19 @@ $ grunt build:core
   <span class="token punctuation">]</span>
 <span class="token punctuation">}</span>
 </code></pre>
+<h3 id="adding-overlays">Adding overlays</h3>
+<p>You can also add overlays into the build process:</p>
+<pre class="language-json"><code class="language-json"><span class="token punctuation">{</span>
+ <span class="token property">&quot;build&quot;</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+  <span class="token property">&quot;overlays&quot;</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+    <span class="token property">&quot;example&quot;</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+      <span class="token property">&quot;locales&quot;</span><span class="token operator">:</span> <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+      <span class="token property">&quot;javascript&quot;</span><span class="token operator">:</span> <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+      <span class="token property">&quot;stylesheets&quot;</span><span class="token operator">:</span> <span class="token punctuation">[</span><span class="token punctuation">]</span>
+    <span class="token punctuation">}</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre>
 <h3 id="programatic-approach">Programatic approach</h3>
 <pre class="language-js"><code class="language-js"><span class="token keyword">var</span> list <span class="token operator">=</span> <span class="token punctuation">[</span>
   <span class="token punctuation">{</span>type<span class="token punctuation">:</span> <span class="token string">&apos;javascript&apos;</span><span class="token punctuation">,</span> src<span class="token punctuation">:</span> <span class="token string">&apos;local/script/file.js&apos;</span><span class="token punctuation">}</span><span class="token punctuation">,</span>
