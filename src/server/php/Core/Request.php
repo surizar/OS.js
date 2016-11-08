@@ -48,8 +48,15 @@ class Request
    * Constructor
    */
   public function __construct() {
+    $requestURI = isset($_SERVER['REQUEST_URI']) ? $_SERVER['REQUEST_URI'] : '/';
+    $phpSelf = isset($_SERVER['PHP_SELF']) ? dirname($_SERVER['PHP_SELF']) : '/';
+
+    if ( $phpSelf !== '/' ) {
+      $requestURI = substr($requestURI, strlen($phpSelf));
+    }
+
     $this->method = empty($_SERVER['REQUEST_METHOD']) ? 'GET' : $_SERVER['REQUEST_METHOD'];
-    $this->url = isset($_SERVER['REQUEST_URI']) ? $_SERVER['REQUEST_URI'] : '/';
+    $this->url = $requestURI;
 
     if ( $this->method === 'POST' ) {
       if ( strpos($_SERVER['CONTENT_TYPE'], 'application/json') !== false ) {
