@@ -23,7 +23,7 @@
       }
     </script>
   </head>
-  <body>
+  <body class="manual_build_grunt">
     <header>
       <div id="Logo"></div>
       <nav>
@@ -173,7 +173,12 @@
               <a href="/manual/gui">Scheme and GUI</a>
               <ul>
                 <li><a href="/manual/gui/scheme">Scheme files</a></li>
-                <li><a href="/manual/gui/elements">GUI Elements</a></li>
+                <li>
+                  <a href="/manual/gui/elements">GUI Elements</a>
+                  <ul>
+                    <li><a href="/manual/gui/elements/library">Element library</a></li>
+                  </ul>
+                </li>
               </ul>
             </li>
 
@@ -208,14 +213,44 @@
         <h1 id="grunt">Grunt</h1>
 <p><em>Grunt</em> is mostly used for developer tasks, but can also use the <a href="/manual/build/cli">OS.js build commands</a>.</p>
 <h2 id="tasks">Tasks</h2>
-<pre class="language-bash"><code class="language-bash">all                   <span class="token comment" spellcheck="true"># Build everything</span>
-<span class="token function">test</span>                  <span class="token comment" spellcheck="true"># Run all tests</span>
-mochaTest             <span class="token comment" spellcheck="true"># Run server unit tests</span>
-eslint                <span class="token comment" spellcheck="true"># Run javascript linting</span>
-csslint               <span class="token comment" spellcheck="true"># Run css linting</span>
-validate_xml          <span class="token comment" spellcheck="true"># Run HTML linting</span>
-<span class="token function">watch</span>                 <span class="token comment" spellcheck="true"># Start watching files for changes (auto build)</span>
-</code></pre>
+<table>
+<thead>
+<tr>
+<th>Task</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>all</td>
+<td>Build everything</td>
+</tr>
+<tr>
+<td>test</td>
+<td>Run all tests</td>
+</tr>
+<tr>
+<td>mochaTest</td>
+<td>Run server unit tests</td>
+</tr>
+<tr>
+<td>eslint</td>
+<td>Run javascript linting</td>
+</tr>
+<tr>
+<td>csslint</td>
+<td>Run css linting</td>
+</tr>
+<tr>
+<td>validate_xml</td>
+<td>Run HTML linting</td>
+</tr>
+<tr>
+<td>watch</td>
+<td>Start watching files for changes (auto build)</td>
+</tr>
+</tbody>
+</table>
 
 
         <footer>

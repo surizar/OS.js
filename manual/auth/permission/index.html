@@ -23,7 +23,7 @@
       }
     </script>
   </head>
-  <body>
+  <body class="manual_auth_permission">
     <header>
       <div id="Logo"></div>
       <nav>
@@ -173,7 +173,12 @@
               <a href="/manual/gui">Scheme and GUI</a>
               <ul>
                 <li><a href="/manual/gui/scheme">Scheme files</a></li>
-                <li><a href="/manual/gui/elements">GUI Elements</a></li>
+                <li>
+                  <a href="/manual/gui/elements">GUI Elements</a>
+                  <ul>
+                    <li><a href="/manual/gui/elements/library">Element library</a></li>
+                  </ul>
+                </li>
               </ul>
             </li>
 
@@ -207,10 +212,10 @@
       <content>
         <h1 id="groups-and-permissions">Groups and Permissions</h1>
 <h2 id="user-groups">User groups</h2>
-<p>This depends on what <a href="/manual/auth/module">Authenticator Module</a> is used.</p>
+<p>This depends on what <a href="/manual/auth/modules">Authenticator Module</a> is used.</p>
 <hr>
 <h2 id="blacklisting-packages">Blacklisting packages</h2>
-<p>This depends on what <a href="/manual/auth/module">Authenticator Module</a> is used.</p>
+<p>This depends on what <a href="/manual/storage/modules">Storage Module</a> is used.</p>
 <hr>
 <h2 id="assoicate-server-vfs-mountpoint-with-a-group">Assoicate server VFS mountpoint with a group</h2>
 <pre class="language-json"><code class="language-json"><span class="token punctuation">{</span>

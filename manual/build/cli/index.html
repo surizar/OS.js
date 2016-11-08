@@ -23,7 +23,7 @@
       }
     </script>
   </head>
-  <body>
+  <body class="manual_build_cli">
     <header>
       <div id="Logo"></div>
       <nav>
@@ -173,7 +173,12 @@
               <a href="/manual/gui">Scheme and GUI</a>
               <ul>
                 <li><a href="/manual/gui/scheme">Scheme files</a></li>
-                <li><a href="/manual/gui/elements">GUI Elements</a></li>
+                <li>
+                  <a href="/manual/gui/elements">GUI Elements</a>
+                  <ul>
+                    <li><a href="/manual/gui/elements/library">Element library</a></li>
+                  </ul>
+                </li>
               </ul>
             </li>
 
@@ -208,37 +213,134 @@
         <h1 id="commands">Commands</h1>
 <p>You can use these tasks via <code>grunt &lt;task&gt;</code> or using <code>node osjs &lt;task&gt;</code></p>
 <h2 id="build-tasks">Build Tasks</h2>
-<p>Available targets: dist, dist-dev (default is both. Exception is for &apos;build:config&apos;, which uses targets from configuration section below)</p>
-<pre class="language-bash"><code class="language-bash">build --target<span class="token operator">=</span>TARGET
-build:config --target<span class="token operator">=</span>TARGET
-build:manifest
-build:core --target<span class="token operator">=</span>TARGET <span class="token punctuation">(</span>--standalone<span class="token punctuation">)</span> <span class="token punctuation">(</span>--nw<span class="token punctuation">)</span> <span class="token punctuation">(</span>--compress<span class="token punctuation">)</span>
-build:package --name<span class="token operator">=</span>REPO/NAME --target<span class="token operator">=</span>TARGET <span class="token punctuation">(</span>--compress<span class="token punctuation">)</span>
-build:packages --target<span class="token operator">=</span>TARGET <span class="token punctuation">(</span>--compress<span class="token punctuation">)</span>
-build:theme --style<span class="token operator">=</span>NAME
-build:theme --icons<span class="token operator">=</span>NAME
-build:theme --static
-build:theme --fonts
-build:themes
-</code></pre>
+<p>Available targets: <code>dist</code>, <code>dist-dev</code> (default is both. Exception is for <code>build:config</code>, which uses targets from configuration section below)</p>
+<table>
+<thead>
+<tr>
+<th>Task</th>
+<th>Arguments</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>build</td>
+<td><code>--target=TARGET</code></td>
+<td>Build everything</td>
+</tr>
+<tr>
+<td>build:config</td>
+<td><code>--target=TARGET</code></td>
+<td>Build configuration files</td>
+</tr>
+<tr>
+<td>build:manifest</td>
+<td></td>
+<td>Build package manifest file</td>
+</tr>
+<tr>
+<td>build:core</td>
+<td><code>--target=TARGET (--standalone) (--nw) (--compress)</code></td>
+<td>Build core files and dist directories</td>
+</tr>
+<tr>
+<td>build:package</td>
+<td><code>--name=REPO/NAME --target=TARGET (--compress)</code></td>
+<td>Build spesific package</td>
+</tr>
+<tr>
+<td>build:packages</td>
+<td><code>--target=TARGET (--compress)</code></td>
+<td>Build all packages</td>
+</tr>
+<tr>
+<td>build:theme</td>
+<td><code>--style=NAME</code></td>
+<td>Builds spesific style theme</td>
+</tr>
+<tr>
+<td>build:theme</td>
+<td><code>--icons=NAME</code></td>
+<td>Builds spesific icon theme</td>
+</tr>
+<tr>
+<td>build:theme</td>
+<td><code>--static</code></td>
+<td>Copies all static theme resources dist</td>
+</tr>
+<tr>
+<td>build:theme</td>
+<td><code>--fonts</code></td>
+<td>Copies all fonts to dist</td>
+</tr>
+<tr>
+<td>build:themes</td>
+</tr>
+</tbody>
+</table>
 <h3 id="examples">Examples</h3>
 <pre class="language-bash"><code class="language-bash">$ grunt build:config build:themes
 $ grunt build:core --target<span class="token operator">=</span>dist-dev
 </code></pre>
 <hr>
 <h2 id="configuration-tasks">Configuration Tasks</h2>
-<p>Available targets: client, server (default is both)</p>
-<pre class="language-bash"><code class="language-bash">config --target<span class="token operator">=</span>TARGET
-config:add-repository --name<span class="token operator">=</span>FOO
-config:remove-repository --name<span class="token operator">=</span>FOO
-config:list-packages
-config:enable-package --name<span class="token operator">=</span>FOO
-config:disable-package --name<span class="token operator">=</span>FOO
-config:add-mount --name<span class="token operator">=</span>FOO --description<span class="token operator">=</span>BAR --path<span class="token operator">=</span>PATH
-config:add-preload --name<span class="token operator">=</span>FOO --path<span class="token operator">=</span>PATH
-config:get --name<span class="token operator">=</span>FOO
-config:set --name<span class="token operator">=</span>FOO --value<span class="token operator">=</span>BAR
-</code></pre>
+<p>Available targets: <code>client</code>, <code>server</code> (default is both)</p>
+<table>
+<thead>
+<tr>
+<th>Task</th>
+<th>Arguments</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>config:add-repository</td>
+<td><code>--name=FOO</code></td>
+<td>Adds a repository (directory basename)</td>
+</tr>
+<tr>
+<td>config:remove-repository</td>
+<td><code>--name=FOO</code></td>
+<td>Removes a repository (directory basename)</td>
+</tr>
+<tr>
+<td>config:list-packages</td>
+<td></td>
+<td>Lists all repository packages states</td>
+</tr>
+<tr>
+<td>config:enable-package</td>
+<td><code>--name=FOO</code></td>
+<td>Force-enable given package</td>
+</tr>
+<tr>
+<td>config:disable-package</td>
+<td><code>--name=FOO</code></td>
+<td>Force-disable given package</td>
+</tr>
+<tr>
+<td>config:add-mount</td>
+<td><code>--name=FOO --description=BAR --path=PATH</code></td>
+<td>Adds a filesystem mountpoint</td>
+</tr>
+<tr>
+<td>config:add-preload</td>
+<td><code>--name=FOO --path=PATH</code></td>
+<td>Adds a preload file</td>
+</tr>
+<tr>
+<td>config:get</td>
+<td><code>--name=FOO</code></td>
+<td>Gets a configuration entry</td>
+</tr>
+<tr>
+<td>config:set</td>
+<td><code>--name=FOO --value=BAR</code></td>
+<td>Sets a configuration entry</td>
+</tr>
+</tbody>
+</table>
 <h3 id="examples">Examples</h3>
 <pre class="language-bash"><code class="language-bash">$ grunt config:add-repository --name<span class="token operator">=</span>extras
 $ grunt config:set --name<span class="token operator">=</span>client.BugReporting --value<span class="token operator">=</span>false
@@ -246,13 +348,43 @@ $ grunt config:add-mount --name<span class="token operator">=</span>tmp --descri
 </code></pre>
 <hr>
 <h2 id="generators">Generators</h2>
-<p>Available targets: dist, dist-dev (default is dist-dev)</p>
-<pre class="language-bash"><code class="language-bash">generate:apache-htaccess <span class="token punctuation">(</span>--target<span class="token operator">=</span>TARGET<span class="token punctuation">)</span>
-generate:apache-vhost --out<span class="token operator">=</span>FILE <span class="token punctuation">(</span>--target<span class="token operator">=</span>TARGET<span class="token punctuation">)</span>
-generate:nginx-config --out<span class="token operator">=</span>FILE
-generate:lighttpd-config --OUT<span class="token operator">=</span>FILE
-generate:package --name<span class="token operator">=</span>REPO/NAME <span class="token punctuation">(</span>--type<span class="token operator">=</span>FOO<span class="token punctuation">)</span>
-</code></pre>
+<p>Available targets: <code>dist</code>, <code>dist-dev</code> (default is <code>dist-dev</code>)</p>
+<table>
+<thead>
+<tr>
+<th>Task</th>
+<th>Arguments</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>generate:apache-htaccess</td>
+<td><code>(--target=TARGET)</code></td>
+<td>Builds the Apache <code>.htaccess</code> file</td>
+</tr>
+<tr>
+<td>generate:apache-vhost</td>
+<td><code>--out=FILE (--target=TARGET)</code></td>
+<td>Generate a Apache vhost config</td>
+</tr>
+<tr>
+<td>generate:nginx-config</td>
+<td><code>--out=FILE</code></td>
+<td>Generate a Nginx config</td>
+</tr>
+<tr>
+<td>generate:lighttpd-config</td>
+<td><code>--OUT=FILE</code></td>
+<td>Generate a lighttpd config</td>
+</tr>
+<tr>
+<td>generate:package</td>
+<td><code>--name=REPO/NAME (--type=FOO)</code></td>
+<td>Creates a new package</td>
+</tr>
+</tbody>
+</table>
 <h3 id="examples">Examples</h3>
 <pre class="language-bash"><code class="language-bash">$ grunt generate:package --name<span class="token operator">=</span>default/AwesomeApp --type<span class="token operator">=</span>iframe
 $ <span class="token function">sudo</span> grunt generate:apache-vhost --out<span class="token operator">=</span>/etc/apache2/sites-enabled/100-osjs.conf --target<span class="token operator">=</span>dist

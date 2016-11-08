@@ -23,7 +23,7 @@
       }
     </script>
   </head>
-  <body>
+  <body class="manual_configuration">
     <header>
       <div id="Logo"></div>
       <nav>
@@ -173,7 +173,12 @@
               <a href="/manual/gui">Scheme and GUI</a>
               <ul>
                 <li><a href="/manual/gui/scheme">Scheme files</a></li>
-                <li><a href="/manual/gui/elements">GUI Elements</a></li>
+                <li>
+                  <a href="/manual/gui/elements">GUI Elements</a>
+                  <ul>
+                    <li><a href="/manual/gui/elements/library">Element library</a></li>
+                  </ul>
+                </li>
               </ul>
             </li>
 
@@ -210,8 +215,7 @@
 <p>The files are divided into sections and prefixed with a number so that they load in correct order.</p>
 <h2 id="environment">Environment</h2>
 <p>See the <a href="/manual/build/cli">Build Commands</a> page for more information about environments.</p>
-<pre class="language-bash"><code class="language-bash">
-<span class="token comment" spellcheck="true"># Set your timezone manually</span>
+<pre class="language-bash"><code class="language-bash"><span class="token comment" spellcheck="true"># Set your timezone manually</span>
 $ grunt config:set --name<span class="token operator">=</span>tz --value<span class="token operator">=</span>Europe/Oslo
 </code></pre>
 <hr>
@@ -221,11 +225,8 @@ $ grunt config:set --name<span class="token operator">=</span>tz --value<span cl
 <h2 id="assets">Assets</h2>
 <h3 id="extending-base-css">Extending base CSS</h3>
 <pre class="language-bash"><code class="language-bash">$ grunt config:set:themes.styleBase:<span class="token string">&quot;custom.less&quot;</span>
-$ grunt config
 $ edit src/client/stylesheets/custom.less
-
-<span class="token comment" spellcheck="true"># Run this to update changes</span>
-$ grunt themes
+$ grunt build:themes build:config
 </code></pre>
 <h4 id="example-file">Example file</h4>
 <pre class="language-css"><code class="language-css"><span class="token atrule"><span class="token rule">@import</span> <span class="token string">&quot;theme.less&quot;</span><span class="token punctuation">;</span></span>
@@ -260,21 +261,22 @@ $ grunt build:core
 <h3 id="adding-overlays">Adding overlays</h3>
 <p>You can also add overlays into the build process:</p>
 <pre class="language-json"><code class="language-json"><span class="token punctuation">{</span>
- <span class="token property">&quot;build&quot;</span><span class="token operator">:</span> <span class="token punctuation">{</span>
-  <span class="token property">&quot;overlays&quot;</span><span class="token operator">:</span> <span class="token punctuation">{</span>
-    <span class="token property">&quot;example&quot;</span><span class="token operator">:</span> <span class="token punctuation">{</span>
-      <span class="token property">&quot;locales&quot;</span><span class="token operator">:</span> <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
-      <span class="token property">&quot;javascript&quot;</span><span class="token operator">:</span> <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
-      <span class="token property">&quot;stylesheets&quot;</span><span class="token operator">:</span> <span class="token punctuation">[</span><span class="token punctuation">]</span>
+  <span class="token property">&quot;build&quot;</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+    <span class="token property">&quot;overlays&quot;</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+      <span class="token property">&quot;example&quot;</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+        <span class="token property">&quot;locales&quot;</span><span class="token operator">:</span> <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+        <span class="token property">&quot;javascript&quot;</span><span class="token operator">:</span> <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+        <span class="token property">&quot;stylesheets&quot;</span><span class="token operator">:</span> <span class="token punctuation">[</span><span class="token punctuation">]</span>
+      <span class="token punctuation">}</span>
     <span class="token punctuation">}</span>
   <span class="token punctuation">}</span>
 <span class="token punctuation">}</span>
 </code></pre>
 <h3 id="programatic-approach">Programatic approach</h3>
 <pre class="language-js"><code class="language-js"><span class="token keyword">var</span> list <span class="token operator">=</span> <span class="token punctuation">[</span>
-  <span class="token punctuation">{</span>type<span class="token punctuation">:</span> <span class="token string">&apos;javascript&apos;</span><span class="token punctuation">,</span> src<span class="token punctuation">:</span> <span class="token string">&apos;local/script/file.js&apos;</span><span class="token punctuation">}</span><span class="token punctuation">,</span>
-  <span class="token punctuation">{</span>type<span class="token punctuation">:</span> <span class="token string">&apos;stylesheet&apos;</span><span class="token punctuation">,</span> src<span class="token punctuation">:</span> <span class="token string">&apos;/vendor/stylesheet.css&apos;</span><span class="token punctuation">}</span><span class="token punctuation">,</span>
-  <span class="token punctuation">{</span>type<span class="token punctuation">:</span> <span class="token string">&apos;javascript&apos;</span><span class="token punctuation">,</span> src<span class="token punctuation">:</span> <span class="token string">&apos;http://external/javascript/file.js&apos;</span><span class="token punctuation">}</span>
+  <span class="token string">&apos;local/script/file.js&apos;</span><span class="token punctuation">,</span>
+  <span class="token string">&apos;/vendor/stylesheet.css&apos;</span><span class="token punctuation">,</span>
+  <span class="token string">&apos;http://external/javascript/file.js&apos;</span>
 <span class="token punctuation">]</span><span class="token punctuation">;</span>
 
 Utils<span class="token punctuation">.</span><span class="token function">preload</span><span class="token punctuation">(</span>list<span class="token punctuation">,</span> <span class="token keyword">function</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>

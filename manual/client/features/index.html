@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <title> | OS.js Manual</title>
+    <title>Client Features | OS.js Manual</title>
     <meta name="description" content="OS.js Manual - OS.js" />
     <meta name="keywords" content="OS.js,Documentation,Client,Server,API,Tutorial,Tutorials,Manual,Manuals" />
 
@@ -23,7 +23,7 @@
       }
     </script>
   </head>
-  <body>
+  <body class="manual_client_features">
     <header>
       <div id="Logo"></div>
       <nav>
@@ -173,7 +173,12 @@
               <a href="/manual/gui">Scheme and GUI</a>
               <ul>
                 <li><a href="/manual/gui/scheme">Scheme files</a></li>
-                <li><a href="/manual/gui/elements">GUI Elements</a></li>
+                <li>
+                  <a href="/manual/gui/elements">GUI Elements</a>
+                  <ul>
+                    <li><a href="/manual/gui/elements/library">Element library</a></li>
+                  </ul>
+                </li>
               </ul>
             </li>
 
@@ -205,7 +210,28 @@
       </aside>
 
       <content>
-        <h1 id="index">Index</h1>
+        <h1 id="client-features">Client Features</h1>
+<p>OS.js is shipped with all features pre-enabled, with some exceptions, which are noted below.</p>
+<h2 id="extras">Extras</h2>
+<p>You can get extra features and packages from these official repositories:</p>
+<ul>
+<li><a href="https://github.com/os-js/OS.js-examples">https://github.com/os-js/OS.js-examples</a></li>
+<li><a href="https://github.com/os-js/OS.js-experimental">https://github.com/os-js/OS.js-experimental</a></li>
+<li><a href="https://github.com/os-js/OS.js-submissions">https://github.com/os-js/OS.js-submissions</a></li>
+<li><a href="https://github.com/os-js/OS.js-development">https://github.com/os-js/OS.js-development</a></li>
+<li><a href="https://github.com/os-js/OS.js-system">https://github.com/os-js/OS.js-system</a></li>
+<li><a href="https://github.com/os-js/OS.js-games">https://github.com/os-js/OS.js-games</a></li>
+</ul>
+<h2 id="login">Login</h2>
+<p>See the <a href="/manual/auth/modules">Authenticator Modules</a> section for more information.</p>
+<h2 id="user-management">User Management</h2>
+<p>See the <a href="/manual/auth/modules">Authenticator Modules</a> section for more information.</p>
+<h2 id="cloud-storage">Cloud Storage</h2>
+<p>See the <a href="/manual/vfs/transport">VFS Transports</a> section for information on how to set up.</p>
+<h2 id="add-zip-helper-support">Add zip helper support</h2>
+<p>The client ZIP-file helper is loaded by default, but requires this library:</p>
+<pre class="language-bash"><code class="language-bash">$ <span class="token function">git</span> clone https://github.com/gildas-lormeau/zip.js.git vendor/zip.js
+</code></pre>
 
 
         <footer>

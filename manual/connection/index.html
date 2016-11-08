@@ -23,7 +23,7 @@
       }
     </script>
   </head>
-  <body>
+  <body class="manual_connection">
     <header>
       <div id="Logo"></div>
       <nav>
@@ -173,7 +173,12 @@
               <a href="/manual/gui">Scheme and GUI</a>
               <ul>
                 <li><a href="/manual/gui/scheme">Scheme files</a></li>
-                <li><a href="/manual/gui/elements">GUI Elements</a></li>
+                <li>
+                  <a href="/manual/gui/elements">GUI Elements</a>
+                  <ul>
+                    <li><a href="/manual/gui/elements/library">Element library</a></li>
+                  </ul>
+                </li>
               </ul>
             </li>
 
@@ -206,6 +211,7 @@
 
       <content>
         <h1 id="connection">Connection</h1>
+<p>OS.js normally operates over HTTP, but there are alternatives to <em>certain parts</em> of the communication between the client and server:</p>
 <ul>
 <li><a href="/manual/connection/http">HTTP</a></li>
 <li><a href="/manual/connection/websocket">WebSocket</a></li>

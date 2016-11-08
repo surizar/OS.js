@@ -239,3 +239,12 @@ body#documentation aside#sidebar {
   flex: 0 0 360px;
   width: 360px;
 }
+.manual_build_grunt table td:nth-child(1) {
+  width: 200px;
+}
+.manual_build_cli table td:nth-child(1) {
+  width: 200px;
+}
+.manual_build_cli table td:nth-child(2) {
+  width: 500px;
+}

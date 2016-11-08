@@ -23,7 +23,7 @@
       }
     </script>
   </head>
-  <body>
+  <body class="manual_auth_modules">
     <header>
       <div id="Logo"></div>
       <nav>
@@ -173,7 +173,12 @@
               <a href="/manual/gui">Scheme and GUI</a>
               <ul>
                 <li><a href="/manual/gui/scheme">Scheme files</a></li>
-                <li><a href="/manual/gui/elements">GUI Elements</a></li>
+                <li>
+                  <a href="/manual/gui/elements">GUI Elements</a>
+                  <ul>
+                    <li><a href="/manual/gui/elements/library">Element library</a></li>
+                  </ul>
+                </li>
               </ul>
             </li>
 
@@ -209,6 +214,7 @@
 <p>You can change the login behaviour of OS.js by changing the configuration to a module that is included. You can also, of course; make your own!</p>
 <h2 id="demo">Demo</h2>
 <p>For demonstration purposes. Does not do any actual athentication and has no restrictions.</p>
+<p><em>Please note that this module has no support for user management.</em></p>
 <hr>
 <h2 id="mysql">Mysql</h2>
 <p>This is just a simple database backend that authorizes login attempts via mysql.</p>
@@ -289,6 +295,7 @@ $ grunt build:config
 </code></pre>
 <p><strong>NOTE:</strong> On some systems you might have to install <code>authenticate-pam</code> with <code>npm install -g</code> or else you might get a <em>Error in service module</em> upon request.</p>
 <p><strong>NOTE:</strong> Also, on some systems you might have to run OS.js server as an administrator (<code>sudo</code>) depending on the PAM setup.</p>
+<p><strong>NOTE:</strong> This module has no support for user management at the moment. You&apos;ll have to use the system tools.*</p>
 
 
         <footer>

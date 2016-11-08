@@ -23,7 +23,7 @@
       }
     </script>
   </head>
-  <body>
+  <body class="manual_gui_scheme">
     <header>
       <div id="Logo"></div>
       <nav>
@@ -173,7 +173,12 @@
               <a href="/manual/gui">Scheme and GUI</a>
               <ul>
                 <li><a href="/manual/gui/scheme">Scheme files</a></li>
-                <li><a href="/manual/gui/elements">GUI Elements</a></li>
+                <li>
+                  <a href="/manual/gui/elements">GUI Elements</a>
+                  <ul>
+                    <li><a href="/manual/gui/elements/library">Element library</a></li>
+                  </ul>
+                </li>
               </ul>
             </li>
 
@@ -207,16 +212,6 @@
       <content>
         <h1 id="scheme">Scheme</h1>
 <p>A <em>Scheme</em> file is a HTML file that builds a Application User Interface. All normal HTML tags are supported, but OS.js provides custom tags that makes up <em>GUI Elements</em>.</p>
-<h2 id="rendering-a-layout-manually">Rendering a layout manually</h2>
-<pre class="language-js"><code class="language-js"><span class="token keyword">var</span> url <span class="token operator">=</span> <span class="token string">&apos;YOUR URL HERE&apos;</span><span class="token punctuation">;</span>
-<span class="token keyword">var</span> win <span class="token operator">=</span> <span class="token comment" spellcheck="true">/* Your Window Here */</span><span class="token punctuation">;</span>
-<span class="token keyword">var</span> parentElement <span class="token operator">=</span> <span class="token comment" spellcheck="true">/* Root DOM element to append to (win._$content is default) */</span><span class="token punctuation">;</span>
-
-<span class="token keyword">var</span> scheme <span class="token operator">=</span> GUI<span class="token punctuation">.</span><span class="token function">createScheme</span><span class="token punctuation">(</span>url<span class="token punctuation">)</span><span class="token punctuation">;</span>
-scheme<span class="token punctuation">.</span><span class="token function">load</span><span class="token punctuation">(</span><span class="token keyword">function</span><span class="token punctuation">(</span>error<span class="token punctuation">,</span> scheme<span class="token punctuation">)</span> <span class="token punctuation">{</span>
-  scheme<span class="token punctuation">.</span><span class="token function">render</span><span class="token punctuation">(</span>win<span class="token punctuation">,</span> <span class="token string">&apos;AboutWindow&apos;</span><span class="token punctuation">,</span> parentElement<span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-</code></pre>
 <h2 id="fragments">Fragments</h2>
 <p>There&apos;s also support for fragments and inclusions (split into several sections and/or files).</p>
 <h3 id="scheme-html">scheme.html</h3>
@@ -252,6 +247,25 @@ scheme<span class="token punctuation">.</span><span class="token function">load<
   <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>h1</span><span class="token punctuation">&gt;</span></span>This is just a test<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>h1</span><span class="token punctuation">&gt;</span></span>
   <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>p</span><span class="token punctuation">&gt;</span></span>ph&apos;nglui mglw&apos;nafh Cthulhu R&apos;lyeh wgah&apos;nagl fhtagn<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>p</span><span class="token punctuation">&gt;</span></span>
 <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">&gt;</span></span>
+</code></pre>
+<hr>
+<h2 id="resources">Resources</h2>
+<p>You can use built in sources to get your application and stock resources:</p>
+<pre class="language-html"><code class="language-html"><span class="token comment" spellcheck="true">&lt;!--  Examples --&gt;</span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>img</span> <span class="token attr-name">src</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">&quot;</span>stock://16x16/image.png<span class="token punctuation">&quot;</span></span> <span class="token punctuation">/&gt;</span></span>
+
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>img</span> <span class="token attr-name">src</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">&quot;</span>app://image.png<span class="token punctuation">&quot;</span></span> <span class="token punctuation">/&gt;</span></span>
+</code></pre>
+<hr>
+<h2 id="rendering-a-layout-manually">Rendering a layout manually</h2>
+<pre class="language-js"><code class="language-js"><span class="token keyword">var</span> url <span class="token operator">=</span> <span class="token string">&apos;YOUR URL HERE&apos;</span><span class="token punctuation">;</span>
+<span class="token keyword">var</span> win <span class="token operator">=</span> <span class="token comment" spellcheck="true">/* Your Window Here */</span><span class="token punctuation">;</span>
+<span class="token keyword">var</span> parentElement <span class="token operator">=</span> <span class="token comment" spellcheck="true">/* Root DOM element to append to (win._$content is default) */</span><span class="token punctuation">;</span>
+
+<span class="token keyword">var</span> scheme <span class="token operator">=</span> GUI<span class="token punctuation">.</span><span class="token function">createScheme</span><span class="token punctuation">(</span>url<span class="token punctuation">)</span><span class="token punctuation">;</span>
+scheme<span class="token punctuation">.</span><span class="token function">load</span><span class="token punctuation">(</span><span class="token keyword">function</span><span class="token punctuation">(</span>error<span class="token punctuation">,</span> scheme<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  scheme<span class="token punctuation">.</span><span class="token function">render</span><span class="token punctuation">(</span>win<span class="token punctuation">,</span> <span class="token string">&apos;AboutWindow&apos;</span><span class="token punctuation">,</span> parentElement<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 </code></pre>
 
 
