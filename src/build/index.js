@@ -256,7 +256,7 @@
    * cli config:X
    */
   module.exports.config = function(cli, arg, done, misc) {
-    arg = arg.replace('-', '_');
+    arg = (arg || '').replace('-', '_');
 
     if ( !CONFIG_ACTIONS[arg] ) {
       console.error('Invalid argument');
