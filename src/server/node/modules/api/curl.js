@@ -54,7 +54,7 @@ const _instance = require('./../../core/instance.js');
  * @memberof modules.api
  */
 module.exports.curl = function(http, args) {
-  const instance = _instance.getInstance();
+  const logger = _instance.getLogger();
   const url = args.url;
 
   if ( !url ) {
@@ -97,7 +97,7 @@ module.exports.curl = function(http, args) {
               return encodeURIComponent(k) + '=' + encodeURIComponent(query[k]);
             }).join('&');
           } catch ( e ) {
-            instance.LOGGER.log(instance.LOGGER.WARNING, 'Failed to transform curl query', e.stack, e);
+            logger.log(logger.WARNING, 'Failed to transform curl query', e.stack, e);
           }
         }
       }

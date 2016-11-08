@@ -47,10 +47,11 @@ const opts = {
 
 _instance.init(opts).then(function(instance) {
   const logger = _instance.getLogger();
-  const httpConfig = instance.CONFIG.http || {};
+  const config = _instance.getConfig();
 
-  if ( instance.CONFIG.tz ) {
-    process.env.TZ = instance.CONFIG.tz;
+  const httpConfig = config.http || {};
+  if ( config.tz ) {
+    process.env.TZ = config.tz;
   }
 
   process.on('exit', function() {

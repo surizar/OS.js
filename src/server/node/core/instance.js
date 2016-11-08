@@ -598,3 +598,4 @@ module.exports.getConfig = function() {
 module.exports.getLogger = function() {
   return instance.LOGGER;
 };
+

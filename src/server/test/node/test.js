@@ -6,8 +6,8 @@
   const _req = require('request');
   const _path = require('path');
   const _fs = require('fs');
-  const _osjs = require('../../node/lib/instance.js');
-  const _vfs = require('../../node/lib/vfs.js');
+  const _osjs = require('../../node/core/instance.js');
+  const _vfs = require('../../node/core/vfs.js');
 
   var instance;
 

@@ -97,7 +97,7 @@ var proxyServer = null;
  * will perform a proxy request.
  */
 function proxyCall(instance, proxy, request, response) {
-  const logger = instance.LOGGER;
+  const logger = _instance.getLogger();
 
   function _getMatcher(k) {
     var matcher = k;
@@ -130,7 +130,7 @@ function proxyCall(instance, proxy, request, response) {
     return rm === um;
   }
 
-  const proxies = instance.CONFIG.proxies;
+  const proxies = (_instance.getConfig()).proxies;
   if ( proxy && proxies ) {
     return !Object.keys(proxies).every(function(k) {
       const matcher = _getMatcher(k);
@@ -295,8 +295,9 @@ function createHttpObject(request, response, path, data, responder, session_id, 
  * Creates the HTTP, WebSocket and Proxy servers for OS.js
  */
 function createServer(instance, resolve, reject) {
-  const httpConfig = instance.CONFIG.http || {};
-  const logger = instance.LOGGER;
+  const config = _instance.getConfig();
+  const httpConfig = config.http || {};
+  const logger = _instance.getLogger();
 
   function onRequest(request, response) {
     const rurl = request.url === '/' ? '/index.html' : request.url;
@@ -326,7 +327,7 @@ function createServer(instance, resolve, reject) {
         });
       } else if ( contentType.indexOf('multipart/form-data') !== -1 ) {
         const form = new _formidable.IncomingForm({
-          uploadDir: instance.CONFIG.tmpdir
+          uploadDir: config.tmpdir
         });
 
         form.parse(request, function(err, fields, files) {

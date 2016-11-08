@@ -67,8 +67,8 @@ function getTransportName(query, mount) {
 
   if ( !mount ) {
     const protocol = query.split(':')[0];
-    const instance = _instance.getInstance();
-    const mountpoints = instance.CONFIG.vfs.mounts || {};
+    const config = _instance.getConfig();
+    const mountpoints = config.vfs.mounts || {};
     mount = mountpoints[protocol];
   }
 
@@ -206,8 +206,8 @@ module.exports.createWriteStream = function(http, path) {
 module.exports.getMime = function getMime(iter) {
   const dotindex = iter.lastIndexOf('.');
   const ext = (dotindex === -1) ? null : iter.substr(dotindex);
-  const instance = _instance.getInstance();
-  return instance.CONFIG.mimes[ext || 'default'];
+  const config = _instance.getConfig();
+  return config.mimes[ext || 'default'];
 };
 
 /**
@@ -247,8 +247,8 @@ module.exports.parseVirtualPath = function(query, options) {
     query = query.path || query.root || query.src || '';
   }
 
-  const instance = _instance.getInstance();
-  const mountpoints = instance.CONFIG.vfs.mounts || {};
+  const config = _instance.getConfig();
+  const mountpoints = config.vfs.mounts || {};
 
   const parts = query.split(/(.*)\:\/\/(.*)/);
   const protocol = parts[1];

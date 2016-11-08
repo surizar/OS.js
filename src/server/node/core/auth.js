@@ -59,7 +59,8 @@ module.exports.initSession = function(http) {
  */
 module.exports.checkPermission = function(http, type, options) {
   const instance = _instance.getInstance();
-  const groups = instance.CONFIG.api.groups;
+  const config = _instance.getConfig();
+  const groups = config.api.groups;
   const username = http.session.get('username');
 
   function checkApiPermission() {
@@ -84,10 +85,10 @@ module.exports.checkPermission = function(http, type, options) {
   function checkMountPermission() {
     function _check() {
       const parsed = _vfs.parseVirtualPath(options.args, http);
-      const mountpoints = instance.CONFIG.vfs.mounts || {};
+      const mountpoints = config.vfs.mounts || {};
       const mount = mountpoints[parsed.protocol];
       const writeableMap = ['upload', 'write', 'delete', 'copy', 'move', 'mkdir'];
-      const groups = instance.CONFIG.vfs.groups || {};
+      const groups = config.vfs.groups || {};
 
       if ( typeof mount === 'object' ) {
         if ( mount.enabled === false || (mount.ro === true && writeableMap.indexOf(options.method) !== -1) ) {

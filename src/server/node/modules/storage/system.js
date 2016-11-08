@@ -47,8 +47,8 @@ function _readFile(username, path, resolve) {
 }
 
 module.exports.setSettings = function(username, settings) {
-  const instance = _instance.getInstance();
-  const path = _vfs.resolvePathArguments(instance.CONFIG.modules.storage.system.settings, {
+  const config = _instance.getConfig();
+  const path = _vfs.resolvePathArguments(config.modules.storage.system.settings, {
     username: username
   });
 
@@ -64,8 +64,8 @@ module.exports.setSettings = function(username, settings) {
 };
 
 module.exports.getSettings = function(username) {
-  const instance = _instance.getInstance();
-  const path = _vfs.resolvePathArguments(instance.CONFIG.modules.storage.system.settings, {
+  const config = _instance.getConfig();
+  const path = _vfs.resolvePathArguments(config.modules.storage.system.settings, {
     username: username
   });
   return new Promise(function(resolve) {
@@ -74,16 +74,16 @@ module.exports.getSettings = function(username) {
 };
 
 module.exports.getGroups = function(username) {
-  const instance = _instance.getInstance();
-  const path = instance.CONFIG.modules.storage.system.groups;
+  const config = _instance.getConfig();
+  const path = config.modules.storage.system.groups;
   return new Promise(function(resolve) {
     _readFile(username, path, resolve);
   });
 };
 
 module.exports.getBlacklist = function(username) {
-  const instance = _instance.getInstance();
-  const path = instance.CONFIG.modules.storage.system.blacklist;
+  const config = _instance.getConfig();
+  const path = config.modules.storage.system.blacklist;
   return new Promise(function(resolve) {
     _readFile(username, path, resolve);
   });

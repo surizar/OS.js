@@ -50,6 +50,7 @@ const _instance = require('./../../core/instance.js');
  */
 module.exports.application = function(http, data) {
   const instance = _instance.getInstance();
+  const logger = _instance.getLogger();
 
   /*eslint dot-notation: "off"*/
   const apath = data.path || null;
@@ -83,12 +84,12 @@ module.exports.application = function(http, data) {
               } else {
                 resolve(result);
               }
-            }, http.request, http.response, instance.CONFIG);
+            }, http.request, http.response, _instance.getConfig());
           };
         }
       }
     } catch ( e ) {
-      instance.LOGGER.log(instance.LOGGER.WARNING, e.stack, e.trace);
+      logger.log(logger.WARNING, e.stack, e.trace);
       return reject('Application API error or missing: ' + e.toString(), null);
     }
 
