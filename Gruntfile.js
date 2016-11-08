@@ -41,10 +41,6 @@
     //
     // Load plugins
     //
-    try {
-      require('time-grunt')(grunt);
-    } catch (e) { }
-
     if ( grunt.option('nw') ) {
       grunt.loadNpmTasks('grunt-nw-builder');
     }
