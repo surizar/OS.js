@@ -28,8 +28,8 @@
  * @licence Simplified BSD License
  */
 const _fs = require('node-fs-extra');
-const _vfs = require('./../../lib/vfs.js');
-const _instance = require('./../../lib/instance.js');
+const _vfs = require('./../../core/vfs.js');
+const _instance = require('./../../core/instance.js');
 
 function _readFile(username, path, resolve) {
   function _done(data) {

@@ -32,7 +32,7 @@
  * @namespace modules.api
  */
 
-const _pm = require('./../../lib/packagemanager.js');
+const _pm = require('./../../core/packagemanager.js');
 
 /**
  * Manage Packages

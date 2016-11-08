@@ -29,7 +29,7 @@
  */
 
 /**
- * @namespace lib.auth
+ * @namespace core.auth
  */
 
 const _instance = require('./instance.js');
@@ -41,7 +41,7 @@ const _vfs = require('./vfs.js');
  * @param   {ServerRequest}    http          OS.js Server Request
  *
  * @function initSession
- * @memberof lib.auth
+ * @memberof core.auth
  */
 module.exports.initSession = function(http) {
   return _instance.getAuth().initSession(http);
@@ -55,7 +55,7 @@ module.exports.initSession = function(http) {
  * @param   {Object}           [options]     Permission options/arguments
  *
  * @function checkPermission
- * @memberof lib.auth
+ * @memberof core.auth
  */
 module.exports.checkPermission = function(http, type, options) {
   const instance = _instance.getInstance();
@@ -160,7 +160,7 @@ module.exports.checkPermission = function(http, type, options) {
  * @param   {ServerRequest}    http          OS.js Server Request
  *
  * @function checkSession
- * @memberof lib.auth
+ * @memberof core.auth
  */
 module.exports.checkSession = function(http) {
   return _instance.getAuth().checkSession(http);
@@ -174,7 +174,7 @@ module.exports.checkSession = function(http) {
  * @param   {Boolean}          [all=true]    Check if all and not some
  *
  * @function hasGroup
- * @memberof lib.auth
+ * @memberof core.auth
  */
 module.exports.hasGroup = function(http, groupList, all) {
   if ( !(groupList instanceof Array) || !groupList.length ) {

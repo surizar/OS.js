@@ -30,7 +30,7 @@
 
 // TODO: Fix proxies according to specced docs (htaccess is broken atm)
 
-const _instance = require('./lib/instance.js');
+const _instance = require('./core/instance.js');
 const _minimist = require('minimist');
 
 ///////////////////////////////////////////////////////////////////////////////

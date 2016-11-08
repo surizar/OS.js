@@ -29,7 +29,7 @@
  */
 
 /**
- * @namespace lib.http
+ * @namespace core.http
  */
 
 /**
@@ -416,7 +416,7 @@ function destroyServer() {
  * Initializes the HTTP server
  *
  * @function init
- * @memberof lib.http
+ * @memberof core.http
  */
 module.exports.init = function init(instance) {
   return new Promise(function(resolve, reject) {
@@ -430,7 +430,7 @@ module.exports.init = function init(instance) {
  * @param {Number}    port      Which port number
  *
  * @function run
- * @memberof lib.http
+ * @memberof core.http
  */
 module.exports.run = function run(port) {
   httpServer.listen(port);
@@ -440,6 +440,6 @@ module.exports.run = function run(port) {
  * Destroys the HTTP server
  *
  * @function destroy
- * @memberof lib.http
+ * @memberof core.http
  */
 module.exports.destroy = destroyServer;

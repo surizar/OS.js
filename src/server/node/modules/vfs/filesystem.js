@@ -32,8 +32,8 @@ const _nfs = require('fs');
 const _path = require('path');
 const _fstream = require('fstream');
 
-const _utils = require('./../../lib/utils.js');
-const _vfs = require('./../../lib/vfs.js');
+const _utils = require('./../../core/utils.js');
+const _vfs = require('./../../core/vfs.js');
 
 ///////////////////////////////////////////////////////////////////////////////
 // HELPERS

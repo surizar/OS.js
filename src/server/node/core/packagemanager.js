@@ -36,7 +36,7 @@ const _utils = require('./utils.js');
 const _instance = require('./instance.js');
 
 /**
- * @namespace lib.packagemanager
+ * @namespace core.packagemanager
  */
 
 /////////////////////////////////////////////////////////////////////////////
@@ -155,7 +155,7 @@ function generateUserMetadata(http, resolve, reject, args) {
  * @param   {Array}     args.paths      Package paths (for user scope)
  *
  * @function install
- * @memberof lib.packagemanager
+ * @memberof core.packagemanager
  */
 module.exports.install = function(http, resolve, reject, args) {
   /*eslint new-cap: "warn"*/
@@ -204,7 +204,7 @@ module.exports.install = function(http, resolve, reject, args) {
  * @param   {String}    args.path    Package path
  *
  * @function uninstall
- * @memberof lib.packagemanager
+ * @memberof core.packagemanager
  */
 module.exports.uninstall = function(http, resolve, reject, args) {
   if ( args.path ) {
@@ -226,7 +226,7 @@ module.exports.uninstall = function(http, resolve, reject, args) {
  *
  *
  * @function update
- * @memberof lib.packagemanager
+ * @memberof core.packagemanager
  */
 module.exports.update = function(http, resolve, reject, args) {
   reject('Unavailable');
@@ -244,7 +244,7 @@ module.exports.update = function(http, resolve, reject, args) {
  * @param   {Array}     [args.paths]    Package paths (for user scope)
  *
  * @function cache
- * @memberof lib.packagemanager
+ * @memberof core.packagemanager
  */
 module.exports.cache = function(http, resolve, reject, args) {
   var action = args.action;
@@ -267,7 +267,7 @@ module.exports.cache = function(http, resolve, reject, args) {
  * @param   {Array}     [args.paths]    Package paths (for user scope)
  *
  * @function list
- * @memberof lib.packagemanager
+ * @memberof core.packagemanager
  */
 module.exports.list = function(http, resolve, reject, args) {
   if ( !args.scope ) {

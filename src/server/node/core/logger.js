@@ -30,7 +30,7 @@
 
 /*
  * You can reach these methods via `instance.logger`
- * @namespace lib.logger
+ * @namespace core.logger
  */
 
 /*
@@ -128,7 +128,7 @@ module.exports.create = function createLogger(lvl) {
      * @param {Number}          lvl     Log level
      * @param {String|Array}    msg     Log message (as a series of string or an array)
      *
-     * @memberof lib.logger
+     * @memberof core.logger
      * @function log
      */
     log: function() {
@@ -141,7 +141,7 @@ module.exports.create = function createLogger(lvl) {
      * @param {Number}          lvl     Log level
      * @param {String|Array}    msg     Log message (as a series of string or an array)
      *
-     * @memberof lib.logger
+     * @memberof core.logger
      * @function lognt
      */
     lognt: function() {
@@ -151,7 +151,7 @@ module.exports.create = function createLogger(lvl) {
     /**
      * Colors the given string
      *
-     * @memberof lib.logger
+     * @memberof core.logger
      * @function colored
      */
     colored: (function() {
@@ -180,7 +180,7 @@ module.exports.create = function createLogger(lvl) {
     /**
      * Gets the log level
      *
-     * @memberof lib.logger
+     * @memberof core.logger
      * @function getLevel
      */
     getLevel: function() {
@@ -192,7 +192,7 @@ module.exports.create = function createLogger(lvl) {
      *
      * @param {Number}      lvl     Log level
      *
-     * @memberof lib.logger
+     * @memberof core.logger
      * @function setLevel
      */
     setLevel: function(lvl) {

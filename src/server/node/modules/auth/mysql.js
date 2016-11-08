@@ -29,7 +29,7 @@
  */
 const _mysql = require('mysql');
 const _bcrypt = require('bcrypt');
-const _utils = require('./../../lib/utils.js');
+const _utils = require('./../../core/utils.js');
 
 var pool;
 

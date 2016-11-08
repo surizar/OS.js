@@ -29,7 +29,7 @@
  */
 
 /**
- * @namespace lib.utils
+ * @namespace core.utils
  */
 
 /**
@@ -40,7 +40,7 @@
  * @param {Function}  done      Callback on done
  *
  * @function iterate
- * @memberof lib.utils
+ * @memberof core.utils
  */
 module.exports.iterate = function iterate(list, entry, done) {
   (function _next(i) {
@@ -60,7 +60,7 @@ module.exports.iterate = function iterate(list, entry, done) {
  *
  * @return {String}
  * @function permissionToString
- * @memberof lib.utils
+ * @memberof core.utils
  */
 module.exports.permissionToString = function permissionToString(mode) {
   var str = '';
@@ -118,7 +118,7 @@ module.exports.permissionToString = function permissionToString(mode) {
  * @param {Boolean}   [first]   Select first row only
  *
  * @function mysqlQuery
- * @memberof lib.utils
+ * @memberof core.utils
  */
 module.exports.mysqlQuery = function(pool, q, a, cb, first) {
   if ( pool ) {
@@ -147,7 +147,7 @@ module.exports.mysqlQuery = function(pool, q, a, cb, first) {
  * @param {Object}    config      Configuration tree
  *
  * @function mysqlConfiguration
- * @memberof lib.utils
+ * @memberof core.utils
  */
 module.exports.mysqlConfiguration = function(config) {
   var ccfg = {};

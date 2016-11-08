@@ -29,7 +29,7 @@
  */
 
 /**
- * @namespace lib.vfs
+ * @namespace core.vfs
  */
 
 const _path = require('path');
@@ -96,7 +96,7 @@ function getTransportName(query, mount) {
  * @param   {Object}           args          VFS Method arguments
  *
  * @function request
- * @memberof lib.vfs
+ * @memberof core.vfs
  */
 module.exports.request = function(http, method, args) {
   const transportName = getTransportName(args);
@@ -130,7 +130,7 @@ module.exports.request = function(http, method, args) {
  * @return  {Promise}
  *
  * @function _request
- * @memberof lib.vfs
+ * @memberof core.vfs
  */
 module.exports._request = function(http, method, args) {
   return createRequest(http, method, args);
@@ -148,7 +148,7 @@ module.exports._request = function(http, method, args) {
  * @return  {Promise}
  *
  * @function _vrequest
- * @memberof lib.vfs
+ * @memberof core.vfs
  */
 module.exports._vrequest = function(method, args, options) {
   return createRequest({
@@ -171,7 +171,7 @@ module.exports._vrequest = function(method, args, options) {
  * @return  {Promise}
  *
  * @function createReadStream
- * @memberof lib.vfs
+ * @memberof core.vfs
  */
 module.exports.createReadStream = function(http, path) {
   const found = findTransport(http, 'read', {path: path});
@@ -187,7 +187,7 @@ module.exports.createReadStream = function(http, path) {
  * @return  {Promise}
  *
  * @function createWriteStream
- * @memberof lib.vfs
+ * @memberof core.vfs
  */
 module.exports.createWriteStream = function(http, path) {
   const found = findTransport(http, 'read', {path: path});
@@ -201,7 +201,7 @@ module.exports.createWriteStream = function(http, path) {
  *
  * @return {String}
  * @function getMime
- * @memberof lib.vfs
+ * @memberof core.vfs
  */
 module.exports.getMime = function getMime(iter) {
   const dotindex = iter.lastIndexOf('.');
@@ -217,7 +217,7 @@ module.exports.getMime = function getMime(iter) {
  *
  * @return {Object}
  * @function getTransport
- * @memberof lib.vfs
+ * @memberof core.vfs
  */
 module.exports.getTransport = function(transportName) {
   const instance = _instance.getInstance();
@@ -238,7 +238,7 @@ module.exports.getTransport = function(transportName) {
  *
  * @return {Object}
  * @function parseVirtualPath
- * @memberof lib.vfs
+ * @memberof core.vfs
  */
 module.exports.parseVirtualPath = function(query, options) {
   var realPath = '';
@@ -292,7 +292,7 @@ module.exports.parseVirtualPath = function(query, options) {
  *
  * @return {String}
  * @function resolvePathArguments
- * @memberof lib.vfs
+ * @memberof core.vfs
  */
 module.exports.resolvePathArguments = function(path, options) {
   options = options || {};

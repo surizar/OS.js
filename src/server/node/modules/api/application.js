@@ -33,7 +33,7 @@
  */
 
 const _path = require('path');
-const _instance = require('./../../lib/instance.js');
+const _instance = require('./../../core/instance.js');
 
 /**
  * Sends a request to an application

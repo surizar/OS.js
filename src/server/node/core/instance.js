@@ -29,7 +29,7 @@
  */
 
 /**
- * @namespace lib.instance
+ * @namespace core.instance
  */
 
 /**
@@ -488,7 +488,7 @@ function request(http) {
  * @param   {ServerRequest} http          OS.js Server Request
  *
  * @function request
- * @memberof lib.instance
+ * @memberof core.instance
  */
 module.exports.request = request;
 
@@ -498,7 +498,7 @@ module.exports.request = request;
  * @param   {ServerRequest} http          OS.js Server Request
  *
  * @function destroy
- * @memberof lib.instance
+ * @memberof core.instance
  */
 module.exports.destroy = function destroy() {
   if ( instance.AUTH ) {
@@ -518,7 +518,7 @@ module.exports.destroy = function destroy() {
  * @param   {ServerOptions}   opts           Server Options
  *
  * @function init
- * @memberof lib.instance
+ * @memberof core.instance
  */
 module.exports.init = function init(opts) {
   return new Promise(function(resolve, reject) {
@@ -542,7 +542,7 @@ module.exports.init = function init(opts) {
  * Runs the OS.js Server
  *
  * @function run
- * @memberof lib.instance
+ * @memberof core.instance
  */
 module.exports.run = function run(port) {
   return _osjs.http.run(instance.PORT);
@@ -552,7 +552,7 @@ module.exports.run = function run(port) {
  * Gets the `instance` object
  *
  * @function getInstance
- * @memberof lib.instance
+ * @memberof core.instance
  * @return {ServerInstance}
  */
 module.exports.getInstance = function() {
@@ -563,7 +563,7 @@ module.exports.getInstance = function() {
  * Gets the `Authenticator`
  *
  * @function getAuthenticator
- * @memberof lib.instance
+ * @memberof core.instance
  */
 module.exports.getAuth = function() {
   return instance.AUTH;
@@ -573,7 +573,7 @@ module.exports.getAuth = function() {
  * Gets the `Storage`
  *
  * @function getStorage
- * @memberof lib.instance
+ * @memberof core.instance
  */
 module.exports.getStorage = function() {
   return instance.STORAGE;
@@ -583,7 +583,7 @@ module.exports.getStorage = function() {
  * Gets the `Config`
  *
  * @function getConfig
- * @memberof lib.instance
+ * @memberof core.instance
  */
 module.exports.getConfig = function() {
   return Object.freeze(instance.CONFIG);
@@ -593,7 +593,7 @@ module.exports.getConfig = function() {
  * Gets the `Logger"
  *
  * @function getLogger
- * @memberof lib.instance
+ * @memberof core.instance
  */
 module.exports.getLogger = function() {
   return instance.LOGGER;

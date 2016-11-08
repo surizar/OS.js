@@ -28,7 +28,7 @@
  * @licence Simplified BSD License
  */
 const _mysql = require('mysql');
-const _utils = require('./../../lib/utils.js');
+const _utils = require('./../../core/utils.js');
 
 var pool;
 

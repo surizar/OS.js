@@ -32,7 +32,7 @@
  * @namespace modules.api
  */
 
-const _instance = require('./../../lib/instance.js');
+const _instance = require('./../../core/instance.js');
 
 /**
  * Attempt to store settings
