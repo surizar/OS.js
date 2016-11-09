@@ -47,18 +47,15 @@ module.exports.login = function(http, data) {
   function _login(resolve, reject) {
     function _fail(e) {
       http.session.set('username', null);
-      http.session.set('groups', null);
       reject(e);
     }
 
     function _proceed(userData) {
       http.session.set('username', userData.username);
-      http.session.set('groups', JSON.stringify(userData.groups));
 
       _instance.getStorage().getSettings(userData.username).then(function(userSettings) {
         _instance.getStorage().getBlacklist(userData.username).then(function(blacklist) {
           http.session.set('username', userData.username);
-          http.session.set('groups', JSON.stringify(userData.groups));
 
           resolve({
             userData: userData,
@@ -99,7 +96,6 @@ module.exports.logout = function(http, resolve, reject) {
   return new Promise(function(resolve, reject) {
     _instance.getAuth().logout(http).then(function(arg) {
       http.session.set('username', null);
-      http.session.set('groups', null);
 
       resolve(arg);
     }).catch(reject);

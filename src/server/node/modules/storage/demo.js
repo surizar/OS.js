@@ -42,7 +42,7 @@ module.exports.getSettings = function(username) {
 
 module.exports.getGroups = function(username) {
   return new Promise(function(resolve) {
-    resolve([]); // Unused in this case
+    resolve(['admin']);
   });
 };
 

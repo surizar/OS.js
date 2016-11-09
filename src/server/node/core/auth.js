@@ -63,7 +63,7 @@ module.exports.checkPermission = function(http, type, options) {
   const groups = config.api.groups;
   const username = http.session.get('username');
 
-  function checkApiPermission() {
+  function checkApiPermission(userGroups) {
     return new Promise(function(resolve, reject) {
       var checks = [];
       if ( type === 'fs' ) {
@@ -74,7 +74,7 @@ module.exports.checkPermission = function(http, type, options) {
         }
       }
 
-      if ( module.exports.hasGroup(http, checks) ) {
+      if ( module.exports.hasGroup(userGroups, checks) ) {
         resolve();
       } else {
         reject('Access denied!');
@@ -82,7 +82,7 @@ module.exports.checkPermission = function(http, type, options) {
     });
   }
 
-  function checkMountPermission() {
+  function checkMountPermission(userGroups) {
     function _check() {
       const parsed = _vfs.parseVirtualPath(options.args, http);
       const mountpoints = config.vfs.mounts || {};
@@ -97,7 +97,7 @@ module.exports.checkPermission = function(http, type, options) {
       }
 
       if ( groups[parsed.protocol] ) {
-        if ( !module.exports.hasGroup(instance, http, groups[parsed.protocol]) ) {
+        if ( !module.exports.hasGroup(userGroups, groups[parsed.protocol]) ) {
           return false;
         }
       }
@@ -118,7 +118,7 @@ module.exports.checkPermission = function(http, type, options) {
     });
   }
 
-  function checkPackagePermission() {
+  function checkPackagePermission(userGroups) {
     return new Promise(function(resolve, reject) {
       if ( type === 'package' ) {
         _instance.getStorage().getBlacklist(username).then(function(blacklist) {
@@ -143,9 +143,11 @@ module.exports.checkPermission = function(http, type, options) {
       }
 
       if ( checkGroups ) {
-        checkApiPermission(checkGroups).then(function() {
-          checkMountPermission().then(function() {
-            checkPackagePermission().then(resolve).catch(reject);
+        _instance.getStorage().getGroups(username).then(function(userGroups) {
+          checkApiPermission(userGroups).then(function() {
+            checkMountPermission(userGroups).then(function() {
+              checkPackagePermission(userGroups).then(resolve).catch(reject);
+            }).catch(reject);
           }).catch(reject);
         }).catch(reject);
       } else {
@@ -171,21 +173,17 @@ module.exports.checkSession = function(http) {
  * Checks if user has given group(s)
  *
  * @param   {ServerRequest}    http          OS.js Server Request
+ * @param   {Array}            userGroups    User groups
  * @param   {String|Array}     groupList     Group(s)
  * @param   {Boolean}          [all=true]    Check if all and not some
  *
  * @function hasGroup
  * @memberof core.auth
  */
-module.exports.hasGroup = function(http, groupList, all) {
+module.exports.hasGroup = function(userGroups, groupList, all) {
   if ( !(groupList instanceof Array) || !groupList.length ) {
     return true;
   }
-
-  var userGroups = [];
-  try {
-    userGroups = JSON.parse(http.session.get('groups')) || [];
-  } catch ( e ) {};
 
   if ( userGroups.indexOf('admin') !== -1 ) {
     return true;
