@@ -130,7 +130,7 @@ class Authenticator
     }
 
     if ( $checks ) {
-      $groups = isset($_SESSION['groups']) ? $_SESSION['groups'] : [];
+      $groups = Storage::getInstance()->getGroups($request);
       if ( in_array('admin', $groups) ) {
         return true;
       } else if ( sizeof(array_diff($groups, $checks)) ) {

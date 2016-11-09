@@ -46,12 +46,12 @@ abstract class Core
     $authenticator = Authenticator::getInstance();
     $userData = $authenticator->login($request);
 
+    $_SESSION['username'] = $userData['username']; // Set before storage queries!"
+
     $storage = Storage::getInstance();
     $userSettings = $storage->getSettings($request);
     $blacklist = $storage->getBlacklist($request);
-
-    $_SESSION['username'] = $userData['username'];
-    $_SESSION['groups'] = $userData['groups'];;
+    $groups = $storage->getGroups($request);
 
     return [
       'userData' => $userData,

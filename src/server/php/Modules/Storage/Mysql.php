@@ -51,6 +51,13 @@ class Mysql extends Storage
     return $stmt;
   }
 
+  final public function getGroups(Request $request) {
+    if ( $result = self::_query('SELECT `groups` FROM `users` WHERE `username` = ? LIMIT 1;', [$_SESSION['username']])->fetch() ) {
+      return json_decode($result['groups']) ?: [];
+    }
+    return [];
+  }
+
   final public function getSettings(Request $request) {
     if ( $result = self::_query('SELECT settings FROM `users` WHERE `username` = ? LIMIT 1;', [$_SESSION['username']])->fetch() ) {
       return json_decode($result['settings']) ?: [];

@@ -59,7 +59,6 @@ class Mysql extends Authenticator
           'id'  => $row['id'],
           'username' => $row['username'],
           'name' => $row['name'],
-          'groups' => json_decode($row['groups']) ?: []
         ];
       }
     }
