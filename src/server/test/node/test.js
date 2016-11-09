@@ -10,9 +10,21 @@
   const _vfs = require('../../node/core/vfs.js');
 
   var instance;
+  var session = (function() {
+    var _cache = {};
+    return {
+      get: function(key) {
+        return _cache[key];
+      },
+      set: function(key, value) {
+        _cache[key] = value;
+      }
+    };
+  })();
 
   function _callAPI(m, a, cb) {
-    instance.API.application({
+    instance.API[m]({
+      session: session,
       data: a
     }, a).then(function(result) {
       cb(null, result);
@@ -23,16 +35,7 @@
 
   function _callVFS(m, a, cb) {
     _vfs._request({
-      session: {
-        get: function(key) {
-          if ( key === 'username' ) {
-            return 'demo';
-          }
-          return null;
-        },
-        set: function() {
-        }
-      },
+      session: session,
       request: {}
     }, m, a).then(function(result) {
       cb(null, result);
@@ -50,7 +53,9 @@
       _osjs.init({
         LOGLEVEL: 0,
         PORT: 8008,
-        DIST: 'dist-dev'
+        DIST: 'dist-dev',
+        AUTH: 'test',
+        STORAGE: 'test'
       }).then(function(i) {
         instance = i;
         done();
@@ -60,8 +65,8 @@
     });
 
     it('should have correct environment', function() {
-      assert.equal('demo', instance.CONFIG.http.authenticator);
-      assert.equal('demo', instance.CONFIG.http.storage);
+      //assert.equal('test', instance.CONFIG.http.authenticator);
+      //assert.equal('test', instance.CONFIG.http.storage);
       assert.equal('http', instance.CONFIG.http.connection);
     });
 
@@ -96,6 +101,66 @@
   /////////////////////////////////////////////////////////////////////////////
 
   describe('API', function() {
+
+    describe('Authentication API', function() {
+      describe('#login', function() {
+        it('should trigger error on invalid attempt', function(done) {
+          _callAPI('login', {
+            username: 'invalid',
+            password: 'test'
+          }, function(error, result) {
+            assert.equal('Invalid credentials', error);
+            done();
+          })
+        });
+
+        it('should successfully log in', function(done) {
+          _callAPI('login', {
+            username: 'normal',
+            password: 'test'
+          }, function(error, result) {
+            assert.equal(null, error);
+            done();
+          })
+        });
+      });
+
+      describe('#logout', function() {
+        it('should successfully log out', function(done) {
+          _callAPI('logout', {
+          }, function(error, result) {
+            assert.equal(null, error);
+            done();
+          })
+        });
+      });
+
+      describe('#login', function() {
+        it('should successfully log in, again', function(done) {
+          _callAPI('login', {
+            username: 'demo',
+            password: 'test'
+          }, function(error, result) {
+            assert.equal(null, error);
+            done();
+          })
+        });
+      });
+    });
+
+    describe('Storage API', function() {
+      describe('#settings', function() {
+        it('should successfully save settings', function(done) {
+          _callAPI('settings', {
+            pool: null,
+            settings: {}
+          }, function(error, result) {
+            assert.equal(null, error);
+            done();
+          })
+        });
+      });
+    });
 
     describe('Application API', function() {
       describe('#call', function() {
@@ -316,12 +381,15 @@
     var url;
     var cookie;
 
-    function post(uurl, data, cb) {
+    function mrequest(method, data, uurl, cb) {
       var opts = {
         url: uurl,
-        method: 'POST',
-        json: data
+        method: method
       };
+
+      if ( data !== null ) {
+        opts.json = data;
+      }
 
       if ( cookie ) {
         var j = _req.jar();
@@ -330,7 +398,15 @@
         opts.jar = j;
       }
 
-      _req(opts, function(error, response, body) {
+      _req(opts, cb);
+    }
+
+    function get(uurl, cb) {
+      mrequest('GET', null, uurl, cb);
+    }
+
+    function post(uurl, data, cb) {
+      mrequest('POST', data, uurl, function(error, response, body) {
         cb((error || false), response, (error ? false : body));
       });
     }
@@ -353,21 +429,24 @@
     });
 
     describe('#login', function() {
-      it('should return 200 with proper json result', function(done) {
+      it('should return 200 with error', function(done) {
         var data = {
-          username: 'demo',
+          username: 'xxx',
           password: 'demo'
         };
 
-        var exp = {
-          userData: {
-            id: 0,
-            username: 'demo',
-            name: 'Demo User',
-            groups: [ 'admin' ]
-          },
-          userSettings: {},
-          blacklistedPackages: []
+        post(url + '/API/login', data, function(err, res, body) {
+          assert.equal(200, res.statusCode);
+          assert.notEqual(null, body.error);
+
+          done();
+        });
+      });
+
+      it('should return 200 with success', function(done) {
+        var data = {
+          username: 'demo',
+          password: 'demo'
         };
 
         post(url + '/API/login', data, function(err, res, body) {
@@ -375,33 +454,89 @@
           assert.equal(200, res.statusCode);
           assert.equal(null, body.error);
 
-          var expc = {
-            userData: body.result.userData,
-            userSettings: body.result.userSettings,
-            blacklistedPackages: []
-          };
+          cookie = res.headers['set-cookie'][0];
 
-          assert.equal(JSON.stringify(exp), JSON.stringify(expc));
+          var data = body.result.userData;
+          assert.equal('demo', data.username);
+
+          done();
+        });
+      });
+    });
+
+    describe('#logout', function() {
+      it('should return 200 with success', function(done) {
+        post(url + '/API/logout', {}, function(err, res, body) {
+          assert.equal(false, err);
+          assert.equal(200, res.statusCode);
+          assert.equal(null, body.error);
+          cookie = done();
+        });
+      });
+    });
+
+    describe('#login', function() {
+      it('should return 200 with success', function(done) {
+        var data = {
+          username: 'restricted',
+          password: 'demo'
+        };
+
+        post(url + '/API/login', data, function(err, res, body) {
+          assert.equal(false, err);
+          assert.equal(200, res.statusCode);
+          assert.equal(null, body.error);
 
           cookie = res.headers['set-cookie'][0];
+
+          var data = body.result.userData;
+          assert.equal('restricted', data.username);
+
           done();
         });
       });
     });
 
     describe('#api', function() {
-      it('w/session - should return 200 with proper response', function(done) {
-        var data = {
-          path: 'default/Settings',
-          method: 'test'
-        };
+      describe('#application', function() {
+        it('should return test data', function(done) {
+          var data = {
+            path: 'default/Settings',
+            method: 'test'
+          };
 
-        post(url + '/API/application', data, function(err, res, body) {
-          assert.equal(false, err);
-          assert.equal(200, res.statusCode);
-          assert.equal(null, body.error);
-          assert.equal('test', body.result);
-          done();
+          post(url + '/API/application', data, function(err, res, body) {
+            assert.equal(false, err);
+            assert.equal(200, res.statusCode);
+            assert.equal(null, body.error);
+            assert.equal('test', body.result);
+            done();
+          });
+        });
+      });
+
+      describe('#curl', function() {
+        it('should fail due to missing group permission', function(done) {
+          var data = {
+          };
+
+          post(url + '/API/curl', data, function(err, res, body) {
+            assert.equal(false, err);
+            assert.equal(200, res.statusCode);
+            assert.equal('Access denied!', body.error);
+            done();
+          });
+        });
+      });
+    });
+
+    describe('#static', function() {
+      describe('#packages', function() {
+        it('should fail due to blacklisting', function(done) {
+          get(url + '/packages/default/CoreWM/main.js', function(err, res, body) {
+            assert.equal(403, res.statusCode);
+            done();
+          });
         });
       });
     });

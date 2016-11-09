@@ -46,7 +46,7 @@ const _instance = require('./../../core/instance.js');
 module.exports.login = function(http, data) {
   function _login(resolve, reject) {
     function _fail(e) {
-      http.session.set('username', null);
+      http.session.set('username', '');
       reject(e);
     }
 

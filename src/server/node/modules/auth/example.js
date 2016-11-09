@@ -39,8 +39,7 @@ module.exports.login = function(http, data) {
     resolve({
       id: 0,
       username: 'Username',
-      name: 'Full User Name',
-      groups: ['admin']
+      name: 'Full User Name'
     });
   });
 };

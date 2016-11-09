@@ -58,7 +58,6 @@ module.exports.initSession = function(http) {
  * @memberof core.auth
  */
 module.exports.checkPermission = function(http, type, options) {
-  const instance = _instance.getInstance();
   const config = _instance.getConfig();
   const groups = config.api.groups;
   const username = http.session.get('username');

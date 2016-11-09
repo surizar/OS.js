@@ -140,7 +140,7 @@ function loadConfiguration(opts) {
         instance.LOGGER.lognt('INFO', 'Using:', instance.LOGGER.colored('Proxy', 'bold'), k);
       });
 
-      resolve();
+      resolve(opts);
     });
   }
 
@@ -150,7 +150,7 @@ function loadConfiguration(opts) {
 /*
  * Loads and registers all API methods
  */
-function loadAPI() {
+function loadAPI(opts) {
   const dirname = _path.join(instance.DIRS.modules, 'api');
 
   function _load(resolve, reject) {
@@ -170,7 +170,9 @@ function loadAPI() {
           });
         }
         next();
-      }, resolve);
+      }, function() {
+        resolve(opts);
+      });
     });
   }
 
@@ -180,8 +182,8 @@ function loadAPI() {
 /*
  * Loads and registers Authentication module(s)
  */
-function loadAuth() {
-  const name = instance.CONFIG.http.authenticator || 'demo';
+function loadAuth(opts) {
+  const name = opts.AUTH || (instance.CONFIG.http.authenticator || 'demo');
 
   function _load(resolve, reject) {
     const path = _path.join(instance.DIRS.modules, 'auth/' + name + '.js');
@@ -191,7 +193,7 @@ function loadAuth() {
     const c = instance.CONFIG.modules.auth[name] || {};
     a.register(c);
     instance.AUTH = a;
-    resolve();
+    resolve(opts);
   }
 
   return new Promise(_load);
@@ -200,8 +202,8 @@ function loadAuth() {
 /*
  * Loads and registers Storage module(s)
  */
-function loadStorage() {
-  const name = instance.CONFIG.http.storage || 'demo';
+function loadStorage(opts) {
+  const name = opts.STORAGE || (instance.CONFIG.http.storage || 'demo');
 
   function _load(resolve, reject) {
     const path = _path.join(instance.DIRS.modules, 'storage/' + name + '.js');

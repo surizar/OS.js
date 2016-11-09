@@ -28,52 +28,47 @@
  * @licence Simplified BSD License
  */
 
-// TODO: Fix proxies according to specced docs (htaccess is broken atm)
-
-const _instance = require('./core/instance.js');
-const _minimist = require('minimist');
-
-///////////////////////////////////////////////////////////////////////////////
-// MAIN
-///////////////////////////////////////////////////////////////////////////////
-
-const argv = _minimist(process.argv.slice(2));
-const opts = {
-  DIST: argv._[0],
-  ROOT: argv.r || argv.root,
-  PORT: argv.p || argv.port,
-  LOGLEVEL: argv.l || argv.loglevel,
-  AUTH: argv.authenticator,
-  STORAGE: argv.storage
+module.exports.setSettings = function(username, data) {
+  return new Promise(function(resolve) {
+    resolve(true);
+  });
 };
 
-_instance.init(opts).then(function(instance) {
-  const logger = _instance.getLogger();
-  const config = _instance.getConfig();
-
-  const httpConfig = config.http || {};
-  if ( config.tz ) {
-    process.env.TZ = config.tz;
-  }
-
-  process.on('exit', function() {
-    _instance.destroy();
+module.exports.getSettings = function(username) {
+  return new Promise(function(resolve) {
+    resolve({});
   });
+};
 
-  logger.log('INFO', logger.colored('Starting OS.js server', 'green'));
-  logger.log('INFO', logger.colored(['Using', httpConfig.mode, 'on port', instance.PORT, 'in', instance.DIST].join(' '), 'green'));
-  if ( httpConfig.connection === 'ws' ) {
-    logger.log('INFO', logger.colored('Using WebSocket', 'green'));
-  }
-
-  _instance.run();
-
-  process.on('uncaughtException', function(error) {
-    console.log('UNCAUGHT EXCEPTION', error, error.stack);
+module.exports.getGroups = function(username) {
+  return new Promise(function(resolve) {
+    var groups = ({
+      normal: ['admin'],
+      demo: ['admin'],
+      restricted: ['application']
+    })[username] || [];
+    resolve(groups);
   });
+};
 
-  logger.log('INFO', logger.colored('Ready...', 'green'));
-}).catch(function(error) {
-  console.log(error);
-  process.exit(1);
-});
+module.exports.getBlacklist = function(username) {
+  return new Promise(function(resolve) {
+    if ( username === 'restricted' ) {
+      resolve(['default/CoreWM']);
+    } else {
+      resolve([]);
+    }
+  });
+};
+
+module.exports.setBlacklist = function(username, list) {
+  return new Promise(function(resolve) {
+    resolve(true);
+  });
+};
+
+module.exports.register = function(config) {
+};
+
+module.exports.destroy = function() {
+};

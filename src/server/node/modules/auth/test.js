@@ -28,52 +28,68 @@
  * @licence Simplified BSD License
  */
 
-// TODO: Fix proxies according to specced docs (htaccess is broken atm)
-
-const _instance = require('./core/instance.js');
-const _minimist = require('minimist');
-
-///////////////////////////////////////////////////////////////////////////////
-// MAIN
-///////////////////////////////////////////////////////////////////////////////
-
-const argv = _minimist(process.argv.slice(2));
-const opts = {
-  DIST: argv._[0],
-  ROOT: argv.r || argv.root,
-  PORT: argv.p || argv.port,
-  LOGLEVEL: argv.l || argv.loglevel,
-  AUTH: argv.authenticator,
-  STORAGE: argv.storage
+module.exports.login = function(http, data) {
+  return new Promise(function(resolve, reject) {
+    if ( data.username === 'normal' ) {
+      resolve({
+        id: 0,
+        username: 'normal',
+        name: 'Normal User'
+      });
+    } else if ( data.username === 'demo' ) {
+      resolve({
+        id: 1,
+        username: 'demo',
+        name: 'Admin User'
+      });
+    } else if ( data.username === 'restricted' ) {
+      resolve({
+        id: 1,
+        username: 'restricted',
+        name: 'Restricted User'
+      });
+    } else {
+      reject('Invalid credentials');
+    }
+  });
 };
 
-_instance.init(opts).then(function(instance) {
-  const logger = _instance.getLogger();
-  const config = _instance.getConfig();
-
-  const httpConfig = config.http || {};
-  if ( config.tz ) {
-    process.env.TZ = config.tz;
-  }
-
-  process.on('exit', function() {
-    _instance.destroy();
+module.exports.logout = function(http) {
+  return new Promise(function(resolve) {
+    resolve(true);
   });
+};
 
-  logger.log('INFO', logger.colored('Starting OS.js server', 'green'));
-  logger.log('INFO', logger.colored(['Using', httpConfig.mode, 'on port', instance.PORT, 'in', instance.DIST].join(' '), 'green'));
-  if ( httpConfig.connection === 'ws' ) {
-    logger.log('INFO', logger.colored('Using WebSocket', 'green'));
-  }
-
-  _instance.run();
-
-  process.on('uncaughtException', function(error) {
-    console.log('UNCAUGHT EXCEPTION', error, error.stack);
+module.exports.manage = function(http) {
+  return new Promise(function(resolve, reject) {
+    reject('Not available');
   });
+};
 
-  logger.log('INFO', logger.colored('Ready...', 'green'));
-}).catch(function(error) {
-  console.log(error);
-  process.exit(1);
-});
+module.exports.initSession = function(http, resolve, reject) {
+  return new Promise(function(resolve) {
+    resolve(true);
+  });
+};
+
+module.exports.checkPermission = function(http, resolve, reject, type, options) {
+  return new Promise(function(resolve) {
+    resolve(true); // Return false to ignore internal group checking
+  });
+};
+
+module.exports.checkSession = function(http) {
+  return new Promise(function(resolve, reject) {
+    if ( http.session.get('username') ) {
+      resolve();
+    } else {
+      reject('You have no OS.js Session, please log in!');
+    }
+  });
+};
+
+module.exports.register = function(config) {
+};
+
+module.exports.destroy = function() {
+};
