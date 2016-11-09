@@ -105,18 +105,27 @@ class Authenticator
 
     if ( $type === 'fs' ) {
       $checks = ['fs'];
-      $protocol = VFS::GetProtocol($options['arguments']);
+      $sproto = VFS::GetProtocol($options['arguments']);
+      $dproto = isset($options['arguments']['dest']) ? VFS::GetProtocol($options['arguments'], true) : null;
 
       if ( $fsgroups = (array)$config->vfs->groups ) {
-        if ( isset($fsgroups[$protocol]) ) {
-          $g = $fsgroups[$protocol];
+        if ( isset($fsgroups[$sproto]) ) {
+          $g = $fsgroups[$sproto];
           $checks[] += is_array($g) ? $g : [$g];
         }
       }
 
       $mounts = (array) $config->vfs->mounts;
-      if ( isset($mounts[$protocol]) && is_array($mounts[$protocol]) && isset($mounts[$protocol]['ro']) ) {
-        if ( $mounts[$protocol]['ro'] && VFS::IsWritableEndpoint($request->endpoint) ) {
+      if ( isset($mounts[$sproto]) && is_array($mounts[$sproto]) && isset($mounts[$sproto]['ro']) ) {
+        $map = ['upload', 'write', 'delete', 'mkdir'];
+        if ( $mounts[$sproto]['ro'] && in_array($request->endpoint, $map) ) {
+          return false;
+        }
+      }
+
+      if ( $dproto !== null && isset($mounts[$dproto]) && is_array($mounts[$dproto]) && isset($mounts[$dproto]['ro']) ) {
+        $map = ['upload', 'write', 'delete', 'copy', 'move', 'mkdir'];
+        if ( $mounts[$dproto]['ro'] && in_array($request->endpoint, $map) ) {
           return false;
         }
       }

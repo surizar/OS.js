@@ -33,7 +33,6 @@ use OSjs\Core\Instance;
 
 abstract class VFS
 {
-  protected static $WRITEABLE = ['upload', 'write', 'delete', 'copy', 'move', 'mkdir'];
 
   final public static function IsWritableEndpoint($endpoint) {
     return in_array($endpoint, self::$WRITEABLE);
@@ -84,11 +83,11 @@ abstract class VFS
     return !$unipath ? '/'.$path : $path;
   }
 
-  public static function GetProtocol($args) {
+  public static function GetProtocol($args, $dest = false) {
     $path = is_string($args) ? $args : null;
 
     if ( is_array($args) ) {
-      $checks = ['path', 'src'];
+      $checks = $dest ? ['dest'] : ['path', 'src', 'root'];
       foreach ( $checks as $c ) {
         if ( isset($args[$c]) ) {
           $path = $args[$c];
