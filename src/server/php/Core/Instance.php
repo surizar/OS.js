@@ -164,7 +164,9 @@ class Instance
       (new Responder())->error('Failed to initialize');
     }
 
-    define('DIR_DIST', DIR_ROOT . '/' . self::$DIST);
+    if ( !defined('DIR_DIST') ) {
+      define('DIR_DIST', DIR_ROOT . '/' . self::$DIST);
+    }
     define('DIR_PACKAGES', DIR_ROOT . '/src/packages');
 
     session_start();
