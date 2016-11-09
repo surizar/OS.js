@@ -71,27 +71,25 @@
     });
 
     it('should have correct permissions', function() {
-      describe('#vfs', function() {
-        const testPath = _path.join(instance.DIRS.root, 'vfs/home/demo');
-        it('read access to demo area', function() {
-          if ( _fs.accessSync ) {
-            assert.doesNotThrow(function() {
-              _fs.accessSync(testPath, _fs.R_OK);
-            }, Error);
-          } else {
-            assert.equal(true, true);
-          }
-        });
+      const testPath = _path.join(instance.DIRS.root, 'vfs/home/demo');
+      it('read access to demo area', function() {
+        if ( _fs.accessSync ) {
+          assert.doesNotThrow(function() {
+            _fs.accessSync(testPath, _fs.R_OK);
+          }, Error);
+        } else {
+          assert.equal(true, true);
+        }
+      });
 
-        it('write access to demo area', function() {
-          if ( _fs.accessSync ) {
-            assert.doesNotThrow(function() {
-              _fs.accessSync(testPath, _fs.W_OK);
-            }, Error);
-          } else {
-            assert.equal(true, true);
-          }
-        });
+      it('write access to demo area', function() {
+        if ( _fs.accessSync ) {
+          assert.doesNotThrow(function() {
+            _fs.accessSync(testPath, _fs.W_OK);
+          }, Error);
+        } else {
+          assert.equal(true, true);
+        }
       });
     });
   });
@@ -428,71 +426,73 @@
       });
     });
 
-    describe('#login', function() {
-      it('should return 200 with error', function(done) {
-        var data = {
-          username: 'xxx',
-          password: 'demo'
-        };
+    describe('#auth', function() {
+      describe('#login', function() {
+        it('should return 200 with error', function(done) {
+          var data = {
+            username: 'xxx',
+            password: 'demo'
+          };
 
-        post(url + '/API/login', data, function(err, res, body) {
-          assert.equal(200, res.statusCode);
-          assert.notEqual(null, body.error);
+          post(url + '/API/login', data, function(err, res, body) {
+            assert.equal(200, res.statusCode);
+            assert.notEqual(null, body.error);
 
-          done();
+            done();
+          });
+        });
+
+        it('should return 200 with success', function(done) {
+          var data = {
+            username: 'demo',
+            password: 'demo'
+          };
+
+          post(url + '/API/login', data, function(err, res, body) {
+            assert.equal(false, err);
+            assert.equal(200, res.statusCode);
+            assert.equal(null, body.error);
+
+            cookie = res.headers['set-cookie'][0];
+
+            var data = body.result.userData;
+            assert.equal('demo', data.username);
+
+            done();
+          });
         });
       });
 
-      it('should return 200 with success', function(done) {
-        var data = {
-          username: 'demo',
-          password: 'demo'
-        };
-
-        post(url + '/API/login', data, function(err, res, body) {
-          assert.equal(false, err);
-          assert.equal(200, res.statusCode);
-          assert.equal(null, body.error);
-
-          cookie = res.headers['set-cookie'][0];
-
-          var data = body.result.userData;
-          assert.equal('demo', data.username);
-
-          done();
+      describe('#logout', function() {
+        it('should return 200 with success', function(done) {
+          post(url + '/API/logout', {}, function(err, res, body) {
+            assert.equal(false, err);
+            assert.equal(200, res.statusCode);
+            assert.equal(null, body.error);
+            cookie = done();
+          });
         });
       });
-    });
 
-    describe('#logout', function() {
-      it('should return 200 with success', function(done) {
-        post(url + '/API/logout', {}, function(err, res, body) {
-          assert.equal(false, err);
-          assert.equal(200, res.statusCode);
-          assert.equal(null, body.error);
-          cookie = done();
-        });
-      });
-    });
+      describe('#login', function() {
+        it('should return 200 with success', function(done) {
+          var data = {
+            username: 'restricted',
+            password: 'demo'
+          };
 
-    describe('#login', function() {
-      it('should return 200 with success', function(done) {
-        var data = {
-          username: 'restricted',
-          password: 'demo'
-        };
+          post(url + '/API/login', data, function(err, res, body) {
+            assert.equal(false, err);
+            assert.equal(200, res.statusCode);
+            assert.equal(null, body.error);
 
-        post(url + '/API/login', data, function(err, res, body) {
-          assert.equal(false, err);
-          assert.equal(200, res.statusCode);
-          assert.equal(null, body.error);
+            cookie = res.headers['set-cookie'][0];
 
-          cookie = res.headers['set-cookie'][0];
+            var data = body.result.userData;
+            assert.equal('restricted', data.username);
 
-          var data = body.result.userData;
-          assert.equal('restricted', data.username);
-
-          done();
+            done();
+          });
         });
       });
     });
@@ -523,7 +523,7 @@
           post(url + '/API/curl', data, function(err, res, body) {
             assert.equal(false, err);
             assert.equal(200, res.statusCode);
-            assert.equal('Access denied!', body.error);
+            assert.equal('access denied!', String(body.error).toLowerCase());
             done();
           });
         });
@@ -532,11 +532,122 @@
 
     describe('#static', function() {
       describe('#packages', function() {
-        it('should fail due to blacklisting', function(done) {
+        it('should return 403 on blacklist', function(done) {
           get(url + '/packages/default/CoreWM/main.js', function(err, res, body) {
             assert.equal(403, res.statusCode);
             done();
           });
+        });
+
+        it('should return 200 on success', function(done) {
+          get(url + '/packages/default/Calculator/main.js', function(err, res, body) {
+            assert.equal(200, res.statusCode);
+            done();
+          });
+        });
+
+        it('should return 404 on failure', function(done) {
+          get(url + '/packages/default/XXX/main.js', function(err, res, body) {
+            assert.equal(404, res.statusCode);
+            done();
+          });
+        });
+      });
+    });
+
+    describe('#vfs', function() {
+      it('should give write error due to read-only', function(done) {
+        post(url + '/FS/write', {path: 'osjs:///foo', data: 'mocha'}, function(err, res, body) {
+          assert.equal(200, res.statusCode);
+          assert.equal('access denied!', String(body.error).toLowerCase());
+          done();
+        });
+      });
+      it('should give copy error due to read-only', function(done) {
+        post(url + '/FS/copy', {src: 'home:///foo', dest: 'osjs:///foo'}, function(err, res, body) {
+          assert.equal(200, res.statusCode);
+          assert.equal('access denied!', String(body.error).toLowerCase());
+          done();
+        });
+      });
+      it('should not be able to read file', function(done) {
+        post(url + '/FS/read', {path: 'osjs:///index.html'}, function(err, res, body) {
+          assert.equal(200, res.statusCode);
+          assert.equal('access denied!', String(body.error).toLowerCase());
+          done();
+        });
+      });
+    });
+
+    describe('#auth', function() {
+      describe('#logout', function() {
+        it('should return 200 with success', function(done) {
+          post(url + '/API/logout', {}, function(err, res, body) {
+            assert.equal(false, err);
+            assert.equal(200, res.statusCode);
+            assert.equal(null, body.error);
+            cookie = done();
+          });
+        });
+      });
+
+      describe('#login', function() {
+        it('should return 200 with success', function(done) {
+          var data = {
+            username: 'demo',
+            password: 'demo'
+          };
+
+          post(url + '/API/login', data, function(err, res, body) {
+            assert.equal(false, err);
+            assert.equal(200, res.statusCode);
+            assert.equal(null, body.error);
+
+            cookie = res.headers['set-cookie'][0];
+
+            var data = body.result.userData;
+            assert.equal('demo', data.username);
+
+            done();
+          });
+        });
+      });
+    });
+
+    describe('#vfs', function() {
+      it('should give write error due to read-only', function(done) {
+        post(url + '/FS/write', {path: 'osjs:///foo', data: 'mocha'}, function(err, res, body) {
+          assert.equal(200, res.statusCode);
+          assert.equal('access denied!', String(body.error).toLowerCase());
+          done();
+        });
+      });
+      it('should give write success', function(done) {
+        post(url + '/FS/write', {path: 'home:///foo', data: 'mocha'}, function(err, res, body) {
+          assert.equal(200, res.statusCode);
+          assert.equal(true, body.result);
+          done();
+        });
+      });
+      it('should give copy error due to read-only', function(done) {
+        post(url + '/FS/copy', {src: 'home:///foo', dest: 'osjs:///foo'}, function(err, res, body) {
+          assert.equal(200, res.statusCode);
+          assert.equal('access denied!', String(body.error).toLowerCase());
+          done();
+        });
+      });
+      it('should successfully read file', function(done) {
+        post(url + '/FS/read', {path: 'osjs:///index.html'}, function(err, res, body) {
+          assert.equal(200, res.statusCode);
+          assert.notEqual(null, body);
+          done();
+        });
+      });
+      it('should successfully remove file', function(done) {
+        post(url + '/FS/delete', {path: 'home:///foo'}, function(err, res, body) {
+          assert.equal(200, res.statusCode);
+          assert.equal(true, body.result);
+          done();
         });
       });
     });
