@@ -82,12 +82,13 @@ module.exports.checkPermission = function(http, type, options) {
   }
 
   function checkMountPermission(userGroups) {
-    function _check() {
-      const parsed = _vfs.parseVirtualPath(options.args, http);
-      const mountpoints = config.vfs.mounts || {};
+    const mountpoints = config.vfs.mounts || {};
+    const writeableMap = ['upload', 'write', 'delete', 'copy', 'move', 'mkdir'];
+    const groups = config.vfs.groups || {};
+
+    function _checkMount(p) {
+      const parsed = _vfs.parseVirtualPath(p, http);
       const mount = mountpoints[parsed.protocol];
-      const writeableMap = ['upload', 'write', 'delete', 'copy', 'move', 'mkdir'];
-      const groups = config.vfs.groups || {};
 
       if ( typeof mount === 'object' ) {
         if ( mount.enabled === false || (mount.ro === true && writeableMap.indexOf(options.method) !== -1) ) {
@@ -102,6 +103,20 @@ module.exports.checkPermission = function(http, type, options) {
       }
 
       return true;
+    }
+
+    function _check() {
+      const args = options.args;
+      const src = args.path || args.root || args.src || '';
+
+      if ( _checkMount(src) ) {
+        if ( typeof args.dest !== 'undefined' ) {
+          return _checkMount(args.dest);
+        }
+        return true;
+      }
+
+      return false;
     }
 
     return new Promise(function(resolve, reject) {

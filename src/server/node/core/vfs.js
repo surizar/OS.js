@@ -243,10 +243,6 @@ module.exports.getTransport = function(transportName) {
 module.exports.parseVirtualPath = function(query, options) {
   var realPath = '';
 
-  if ( typeof query !== 'string' ) {
-    query = query.path || query.root || query.src || '';
-  }
-
   const config = _instance.getConfig();
   const mountpoints = config.vfs.mounts || {};
 
