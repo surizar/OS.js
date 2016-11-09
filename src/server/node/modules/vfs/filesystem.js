@@ -142,7 +142,7 @@ function existsWrapper(checkFound, real, resolve, reject) {
       if ( exists ) {
         resolve(true);
       } else {
-        reject('No such file or directory'); // TODO 404 ?
+        reject('No such file or directory');
       }
     }
   });

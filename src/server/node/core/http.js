@@ -102,7 +102,7 @@ function proxyCall(instance, proxy, request, response) {
   function _getMatcher(k) {
     var matcher = k;
 
-    const isRegexp = k.match(/^regexp\/(.*)\/([a-z]+)?$/);
+    const isRegexp = k.match(/\/(.*)\/([a-z]+)?/);
     if ( isRegexp && isRegexp.length === 3 ) {
       matcher = new RegExp(isRegexp[1], isRegexp[2] || '');
     } else {
