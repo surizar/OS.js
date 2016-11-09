@@ -71,7 +71,7 @@ class Responder
   public function file($path, $mime = Null) {
     session_write_close();
 
-    if ( !file_exists($path) ) {
+    if ( !file_exists($path) || is_dir($path) ) {
       return $this->error('File not found', 404);
     }
 

@@ -49,10 +49,12 @@ class Request
    */
   public function __construct() {
     $requestURI = isset($_SERVER['REQUEST_URI']) ? $_SERVER['REQUEST_URI'] : '/';
-    $phpSelf = isset($_SERVER['PHP_SELF']) ? dirname($_SERVER['PHP_SELF']) : '/';
+    $phpSelf = isset($_SERVER['PHP_SELF']) ? $_SERVER['PHP_SELF'] : '/';
 
-    if ( $phpSelf !== '/' ) {
-      $requestURI = substr($requestURI, strlen($phpSelf));
+    header('Content-type: text/plain');
+
+    if ( substr($phpSelf, -7) == 'api.php' ) {
+      $requestURI = substr($requestURI, strlen(dirname($phpSelf)), strlen($requestURI)) ?: '/';
     }
 
     $this->method = empty($_SERVER['REQUEST_METHOD']) ? 'GET' : $_SERVER['REQUEST_METHOD'];

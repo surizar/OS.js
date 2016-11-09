@@ -94,6 +94,38 @@ class Authenticator
     return isset($_SESSION['username']);
   }
 
+  protected function _checkFsPermission(Array &$checks, $config, $options, $dest = false) {
+    if ( $dest && empty($options['arguments']['dest']) ) {
+      return true;
+    }
+
+    $proto = VFS::GetProtocol($options['arguments'], $dest);
+    if ( $fsgroups = (array)$config->vfs->groups ) {
+      if ( isset($fsgroups[$proto]) ) {
+        $g = $fsgroups[$proto];
+
+        foreach ( is_array($g) ? $g : [$g] as $i ) {
+          $checks[] = $i;
+        }
+      }
+    }
+
+    $mounts = (array) $config->vfs->mounts;
+    if ( isset($mounts[$proto]) && is_array($mounts[$proto]) && isset($mounts[$proto]['ro']) ) {
+      if ( $dest ) {
+        $map = ['upload', 'write', 'delete', 'copy', 'move', 'mkdir'];
+      } else {
+        $map = ['upload', 'write', 'delete', 'mkdir'];
+      }
+
+      if ( $mounts[$proto]['ro'] && in_array($request->endpoint, $map) ) {
+        return false;
+      }
+    }
+
+    return true;
+  }
+
   public function checkPermission(Request $request, $type, Array $options = []) {
     if ( $type === 'package' ) {
       $blacklist = Storage::getInstance()->getBlacklist($request);
@@ -105,31 +137,10 @@ class Authenticator
 
     if ( $type === 'fs' ) {
       $checks = ['fs'];
-      $sproto = VFS::GetProtocol($options['arguments']);
-      $dproto = isset($options['arguments']['dest']) ? VFS::GetProtocol($options['arguments'], true) : null;
 
-      if ( $fsgroups = (array)$config->vfs->groups ) {
-        if ( isset($fsgroups[$sproto]) ) {
-          $g = $fsgroups[$sproto];
-          $checks[] += is_array($g) ? $g : [$g];
-        }
+      if ( !$this->_checkFsPermission($checks, $config, $options) || !$this->_checkFsPermission($checks, $config, $options, true) ) {
+        return false;
       }
-
-      $mounts = (array) $config->vfs->mounts;
-      if ( isset($mounts[$sproto]) && is_array($mounts[$sproto]) && isset($mounts[$sproto]['ro']) ) {
-        $map = ['upload', 'write', 'delete', 'mkdir'];
-        if ( $mounts[$sproto]['ro'] && in_array($request->endpoint, $map) ) {
-          return false;
-        }
-      }
-
-      if ( $dproto !== null && isset($mounts[$dproto]) && is_array($mounts[$dproto]) && isset($mounts[$dproto]['ro']) ) {
-        $map = ['upload', 'write', 'delete', 'copy', 'move', 'mkdir'];
-        if ( $mounts[$dproto]['ro'] && in_array($request->endpoint, $map) ) {
-          return false;
-        }
-      }
-
     } else if ( $type === 'api' ) {
       $apigroups = (array)$config->api->groups;
       if ( isset($apigroups[$request->endpoint]) ) {

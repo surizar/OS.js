@@ -34,10 +34,6 @@ use OSjs\Core\Instance;
 abstract class VFS
 {
 
-  final public static function IsWritableEndpoint($endpoint) {
-    return in_array($endpoint, self::$WRITEABLE);
-  }
-
   /**
    * Get Transport VFS module from given path
    */
