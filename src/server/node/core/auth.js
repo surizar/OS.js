@@ -83,15 +83,14 @@ module.exports.checkPermission = function(http, type, options) {
 
   function checkMountPermission(userGroups) {
     const mountpoints = config.vfs.mounts || {};
-    const writeableMap = ['upload', 'write', 'delete', 'copy', 'move', 'mkdir'];
     const groups = config.vfs.groups || {};
-
-    function _checkMount(p) {
+    function _checkMount(p, d) {
       const parsed = _vfs.parseVirtualPath(p, http);
       const mount = mountpoints[parsed.protocol];
+      const map = d ? ['upload', 'write', 'delete', 'copy', 'move', 'mkdir'] : ['upload', 'write', 'delete', 'mkdir'];
 
       if ( typeof mount === 'object' ) {
-        if ( mount.enabled === false || (mount.ro === true && writeableMap.indexOf(options.method) !== -1) ) {
+        if ( mount.enabled === false || (mount.ro === true && map.indexOf(options.method) !== -1) ) {
           return false;
         }
       }
@@ -111,7 +110,7 @@ module.exports.checkPermission = function(http, type, options) {
 
       if ( _checkMount(src) ) {
         if ( typeof args.dest !== 'undefined' ) {
-          return _checkMount(args.dest);
+          return _checkMount(args.dest, true);
         }
         return true;
       }
