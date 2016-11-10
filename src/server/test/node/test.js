@@ -9,7 +9,9 @@
   const _osjs = require('../../node/core/instance.js');
   const _vfs = require('../../node/core/vfs.js');
 
-  var instance;
+  var ENV;
+  var CONF;
+
   var session = (function() {
     var _cache = {};
     return {
@@ -23,7 +25,7 @@
   })();
 
   function _callAPI(m, a, cb) {
-    instance.API[m]({
+    _osjs.getAPI()[m]({
       session: session,
       data: a
     }, a).then(function(result) {
@@ -57,7 +59,8 @@
         AUTH: 'test',
         STORAGE: 'test'
       }).then(function(i) {
-        instance = i;
+        ENV = i;
+        CONF = _osjs.getConfig();
         done();
       }).catch(function(error) {
         assert.equal(null, error);
@@ -65,13 +68,13 @@
     });
 
     it('should have correct environment', function() {
-      //assert.equal('test', instance.CONFIG.http.authenticator);
-      //assert.equal('test', instance.CONFIG.http.storage);
-      assert.equal('http', instance.CONFIG.http.connection);
+      //assert.equal('test', CONF.http.authenticator);
+      //assert.equal('test', CONF.http.storage);
+      assert.equal('http', CONF.http.connection);
     });
 
     it('should have correct permissions', function() {
-      const testPath = _path.join(instance.DIRS.root, 'vfs/home/demo');
+      const testPath = _path.join(ENV.ROOTDIR, 'vfs/home/demo');
       it('read access to demo area', function() {
         if ( _fs.accessSync ) {
           assert.doesNotThrow(function() {
@@ -410,7 +413,7 @@
     }
 
     before(function() {
-      url = 'http://localhost:' + String(instance.PORT);
+      url = 'http://localhost:' + String(ENV.PORT);
       _osjs.run();
     });
 

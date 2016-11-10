@@ -31,12 +31,12 @@
   'use strict';
 
   module.exports.api = {
-    test: function(instance, http, resolve, reject, args) {
+    test: function(env, http, resolve, reject, args) {
       resolve('test');
     }
   };
 
-  module.exports.register = function(instance, metadata, servers) {
+  module.exports.register = function(env, metadata, servers) {
   };
 
 })();

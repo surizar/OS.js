@@ -49,7 +49,7 @@ const _instance = require('./../../core/instance.js');
  * @memberof modules.api
  */
 module.exports.application = function(http, data) {
-  const instance = _instance.getInstance();
+  const env = _instance.getEnvironment();
   const logger = _instance.getLogger();
 
   /*eslint dot-notation: "off"*/
@@ -57,10 +57,10 @@ module.exports.application = function(http, data) {
   const ameth = data.method || null;
   const aargs = data.args || {};
 
-  const manifest = instance.PACKAGES[apath] || {};
+  const manifest = _instance.getMetadata(apath) || {};
   const filename = manifest && manifest._indexFile ? manifest._indexFile : 'api.js';
 
-  const aroot = _path.join(instance.DIRS.packages, apath);
+  const aroot = _path.join(env.PKGDIR, apath);
   const fpath = _path.join(aroot, filename);
 
   return new Promise(function(resolve, reject) {
@@ -71,7 +71,7 @@ module.exports.application = function(http, data) {
       if ( typeof module.api === 'object' ) {
         if ( typeof module.api[ameth] === 'function' ) {
           found = function applicationApiCall() {
-            module.api[ameth](instance, http, resolve, reject, aargs);
+            module.api[ameth](env, http, resolve, reject, aargs);
           };
         }
       } else {

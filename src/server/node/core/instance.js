@@ -36,21 +36,21 @@
  * An object with information about the current environment
  * @property  {String}      [dist=dist]     Which dist to use
  * @property  {Number}      [port=AUTO]     Which port to start on
+ * @property  {String}      [AUTH]          Authentication module name
+ * @property  {String}      [STORAGE]       Storage module name
  * @typedef ServerOptions
  */
 
 /**
  * An object with information about the current environment
- * @property  {api.logger}    LOGGER      The logger instance
  * @property  {String}        DIST        The dist environment name
- * @property  {Object}        CONFIG      The configuration tree
- * @property  {Object}        API         API methods dictionary
- * @property  {Array}         VFS         VFS Transport module list
- * @property  {Object}        AUTH        The Authentication module
- * @property  {Object}        STORAGE     The Storage module
- * @property  {Object}        DIRS        Directories tuple
- * @property  {Object}        PACKAGES    The package list
- * @typedef ServerInstance
+ * @property  {Number}        PORT        Current port
+ * @property  {Number}        LOGLEVEL    Current loglevel
+ * @property  {String}        ROOTDIR     Root directory of OS.js
+ * @property  {String}        MODULEDIR   Directory of server modules
+ * @property  {String}        SERVERDIR   Directory of the server
+ * @property  {String}        PKGDIR      Directory of packages
+ * @typedef ServerEnvironment
  */
 
 const _child = require('child_process');
@@ -69,30 +69,27 @@ const _osjs = {
 // GLOBALS
 ///////////////////////////////////////////////////////////////////////////////
 
-var children = [];
+var CHILDREN = [];
+var CONFIG = {};
+var LOGGER;
 
-const instance = {
-  LOGGER: null,
+const MODULES = {
+  API: {},
+  VFS: [],
+  AUTH: null,
+  STORAGE: null,
+  LOGGER: null
+};
+
+const ENV = {
   PORT: 8000,
   DIST: 'dist',
   LOGLEVEL: -2,
-  CONFIG: {},
-  API: {},
-  VFS: [],
-  PACKAGES: {},
-  AUTH: null,
-  STORAGE: null,
-  DIRS: {
-    root: _path.resolve(__dirname + '/../../../../'),
-    modules: _path.resolve(__dirname + '/../modules'),
-    server: _path.resolve(__dirname + '/../../'),
-    packages: _path.resolve(__dirname, '/../../../../src/packages')
-  }
+  ROOTDIR: _path.resolve(__dirname + '/../../../../'),
+  MODULEDIR: _path.resolve(__dirname + '/../modules'),
+  SERVERDIR: _path.resolve(__dirname + '/../../'),
+  PKGDIR: _path.resolve(__dirname, '/../../../../src/packages')
 };
-
-function logger() {
-  return instance.LOGGER;
-}
 
 ///////////////////////////////////////////////////////////////////////////////
 // LOADERS
@@ -102,7 +99,7 @@ function logger() {
  * Loads generated configuration file
  */
 function loadConfiguration(opts) {
-  const path = _path.join(instance.DIRS.server, 'settings.json');
+  const path = _path.join(ENV.SERVERDIR, 'settings.json');
 
   function _load(resolve, reject) {
     _fs.readFile(path, function(err, file) {
@@ -112,32 +109,32 @@ function loadConfiguration(opts) {
 
       const config = JSON.parse(file);
 
-      instance.CONFIG = config;
+      CONFIG = config;
       if ( config.http.port ) {
-        instance.PORT = config.http.port;
+        ENV.PORT = config.http.port;
       }
 
       Object.keys(opts).forEach(function(k) {
-        if ( typeof instance[k] !== 'undefined' && typeof opts[k] !== 'undefined' ) {
-          instance[k] = opts[k];
+        if ( typeof ENV[k] !== 'undefined' && typeof opts[k] !== 'undefined' ) {
+          ENV[k] = opts[k];
         }
       });
 
       if ( opts.ROOT ) {
-        instance.DIRS.root = opts.ROOT;
+        ENV.ROOTDIR = opts.ROOT;
       }
 
       if ( typeof opts.LOGLEVEL === 'number' ) {
-        instance.LOGLEVEL = opts.LOGLEVEL;
+        ENV.LOGLEVEL = opts.LOGLEVEL;
       } else if ( typeof config.logging === 'number' ) {
-        instance.LOGLEVEL = config.logging;
+        ENV.LOGLEVEL = config.logging;
       }
 
-      instance.DIRS.packages = _path.join(instance.DIRS.root, 'src/packages');
-      instance.LOGGER = _osjs.logger.create(instance.LOGLEVEL);
+      ENV.PKGDIR = _path.join(ENV.ROOTDIR, 'src/packages');
+      LOGGER = _osjs.logger.create(ENV.LOGLEVEL);
 
       Object.keys(config.proxies).forEach(function(k) {
-        instance.LOGGER.lognt('INFO', 'Using:', instance.LOGGER.colored('Proxy', 'bold'), k);
+        LOGGER.lognt('INFO', 'Using:', LOGGER.colored('Proxy', 'bold'), k);
       });
 
       resolve(opts);
@@ -151,7 +148,7 @@ function loadConfiguration(opts) {
  * Loads and registers all API methods
  */
 function loadAPI(opts) {
-  const dirname = _path.join(instance.DIRS.modules, 'api');
+  const dirname = _path.join(ENV.MODULEDIR, 'api');
 
   function _load(resolve, reject) {
     _fs.readdir(dirname, function(err, list) {
@@ -162,11 +159,11 @@ function loadAPI(opts) {
       _osjs.utils.iterate(list, function(filename, index, next) {
         if ( filename.substr(0, 1) !== '.' ) {
           const path = _path.join(dirname, filename);
-          logger().lognt('INFO', 'Loading:', logger().colored('API', 'bold'), path.replace(instance.DIRS.root, ''));
+          LOGGER.lognt('INFO', 'Loading:', LOGGER.colored('API', 'bold'), path.replace(ENV.ROOTDIR, ''));
 
           const methods = require(path);
           Object.keys(methods).forEach(function(k) {
-            instance.API[k] = methods[k];
+            MODULES.API[k] = methods[k];
           });
         }
         next();
@@ -183,16 +180,16 @@ function loadAPI(opts) {
  * Loads and registers Authentication module(s)
  */
 function loadAuth(opts) {
-  const name = opts.AUTH || (instance.CONFIG.http.authenticator || 'demo');
+  const name = opts.AUTH || (CONFIG.http.authenticator || 'demo');
 
   function _load(resolve, reject) {
-    const path = _path.join(instance.DIRS.modules, 'auth/' + name + '.js');
-    logger().lognt('INFO', 'Loading:', logger().colored('Authenticator', 'bold'), path.replace(instance.DIRS.root, ''));
+    const path = _path.join(ENV.MODULEDIR, 'auth/' + name + '.js');
+    LOGGER.lognt('INFO', 'Loading:', LOGGER.colored('Authenticator', 'bold'), path.replace(ENV.ROOTDIR, ''));
 
     const a = require(path);
-    const c = instance.CONFIG.modules.auth[name] || {};
+    const c = CONFIG.modules.auth[name] || {};
     a.register(c);
-    instance.AUTH = a;
+    MODULES.AUTH = a;
     resolve(opts);
   }
 
@@ -203,16 +200,16 @@ function loadAuth(opts) {
  * Loads and registers Storage module(s)
  */
 function loadStorage(opts) {
-  const name = opts.STORAGE || (instance.CONFIG.http.storage || 'demo');
+  const name = opts.STORAGE || (CONFIG.http.storage || 'demo');
 
   function _load(resolve, reject) {
-    const path = _path.join(instance.DIRS.modules, 'storage/' + name + '.js');
-    logger().lognt('INFO', 'Loading:', logger().colored('Storage', 'bold'), path.replace(instance.DIRS.root, ''));
+    const path = _path.join(ENV.MODULEDIR, 'storage/' + name + '.js');
+    LOGGER.lognt('INFO', 'Loading:', LOGGER.colored('Storage', 'bold'), path.replace(ENV.ROOTDIR, ''));
 
     const a = require(path);
-    const c = instance.CONFIG.modules.storage[name] || {};
+    const c = CONFIG.modules.storage[name] || {};
     a.register(c);
-    instance.STORAGE = a;
+    MODULES.STORAGE = a;
     resolve();
   }
 
@@ -223,7 +220,7 @@ function loadStorage(opts) {
  * Loads and registers VFS module(s)
  */
 function loadVFS() {
-  const dirname = _path.join(instance.DIRS.modules, 'vfs');
+  const dirname = _path.join(ENV.MODULEDIR, 'vfs');
 
   function _load(resolve, reject) {
     _fs.readdir(dirname, function(err, list) {
@@ -234,8 +231,8 @@ function loadVFS() {
       _osjs.utils.iterate(list, function(filename, index, next) {
         if ( ['.', '_'].indexOf(filename.substr(0, 1)) === -1 ) {
           const path = _path.join(dirname, filename);
-          logger().lognt('INFO', 'Loading:', logger().colored('VFS Transport', 'bold'), path.replace(instance.DIRS.root, ''));
-          instance.VFS.push(require(path));
+          LOGGER.lognt('INFO', 'Loading:', LOGGER.colored('VFS Transport', 'bold'), path.replace(ENV.ROOTDIR, ''));
+          MODULES.VFS.push(require(path));
         }
         next();
       }, resolve);
@@ -249,23 +246,23 @@ function loadVFS() {
  * Loads generated package manifest
  */
 function registerPackages(servers) {
-  const path = _path.join(instance.DIRS.server, 'packages.json');
-  logger().lognt('INFO', 'Loading:', logger().colored('Configuration', 'bold'), path.replace(instance.DIRS.root, ''));
+  const path = _path.join(ENV.SERVERDIR, 'packages.json');
+  LOGGER.lognt('INFO', 'Loading:', LOGGER.colored('Configuration', 'bold'), path.replace(ENV.ROOTDIR, ''));
 
-  function _createOldInstance(instance) {
+  function _createOldInstance(env) {
     return {
       request: null,
       response: null,
-      config: instance.CONFIG,
+      config: CONFIG,
       handler: null,
-      logger: logger()
+      logger: LOGGER
     };
   }
 
   function _registerApplication(packages, module) {
     if ( typeof module.api === 'object' ) {
       if ( typeof module.register === 'function' ) {
-        module.register(instance, packages[path], {
+        module.register(ENV, packages[path], {
           http: servers.httpServer,
           ws: servers.websocketServer,
           proxy: servers.proxyServer
@@ -274,7 +271,7 @@ function registerPackages(servers) {
       return false;
     } else if ( typeof module._onServerStart === 'function' ) {
       // Backward compatible with old API
-      module._onServerStart(servers.httpServer, _createOldInstance(instance), packages[path]);
+      module._onServerStart(servers.httpServer, _createOldInstance(ENV), packages[path]);
       return true;
     }
 
@@ -284,18 +281,18 @@ function registerPackages(servers) {
   function _registerExtension(module) {
     if ( typeof module.api === 'object' ) {
       Object.keys(module.api).forEach(function(k) {
-        instance.API[k] = module.api[k];
+        MODULES.API[k] = module.api[k];
       });
 
       return false;
     } else if ( typeof module.register === 'function' ) {
       // Backward compatible with old API
       var backAPI = {};
-      module.register(backAPI, {}, _createOldInstance(instance));
+      module.register(backAPI, {}, _createOldInstance());
 
       Object.keys(backAPI).forEach(function(k) {
-        instance.API[k] = function(http, resolve, reject, args) {
-          backAPI[k](_createOldInstance(instance), args, function(err, res) {
+        MODULES.API[k] = function(http, resolve, reject, args) {
+          backAPI[k](_createOldInstance(), args, function(err, res) {
             if ( err ) {
               reject(err);
             } else {
@@ -310,9 +307,9 @@ function registerPackages(servers) {
 
   function _launchSpawners(pn, module, metadata) {
     if ( metadata.spawn && metadata.spawn.enabled ) {
-      const spawner = _path.join(instance.DIRS.packages, pn, metadata.spawn.exec);
-      logger().lognt('INFO', 'Launching', logger().colored('Spawner', 'bold'), spawner.replace(instance.DIRS.root, ''));
-      children.push(_child.fork(spawner, [], {
+      const spawner = _path.join(ENV.PKGDIR, pn, metadata.spawn.exec);
+      LOGGER.lognt('INFO', 'Launching', LOGGER.colored('Spawner', 'bold'), spawner.replace(ENV.ROOTDIR, ''));
+      CHILDREN.push(_child.fork(spawner, [], {
         stdio: 'pipe'
       }));
     }
@@ -325,7 +322,7 @@ function registerPackages(servers) {
       }
 
       const manifest = JSON.parse(file);
-      const packages = manifest[instance.DIST];
+      const packages = manifest[ENV.DIST];
 
       Object.keys(packages).forEach(function(path) {
         const metadata = packages[path];
@@ -337,26 +334,25 @@ function registerPackages(servers) {
 
         metadata._indexFile = filename;
 
-        const check = _path.join(instance.DIRS.packages, path, filename);
+        const check = _path.join(ENV.PKGDIR, path, filename);
         if ( metadata.enabled !== false && _fs.existsSync(check) ) {
           var deprecated = false;
-          var loaded;
           if ( metadata.type === 'extension' ) {
-            logger().lognt('INFO', 'Loading:', logger().colored('Application', 'bold'), check.replace(instance.DIRS.root, ''));
+            LOGGER.lognt('INFO', 'Loading:', LOGGER.colored('Application', 'bold'), check.replace(ENV.ROOTDIR, ''));
             deprecated = _registerExtension(require(check));
             _launchSpawners(path, module, metadata);
           } else {
-            logger().lognt('INFO', 'Loading:', logger().colored('Extension', 'bold'), check.replace(instance.DIRS.root, ''));
+            LOGGER.lognt('INFO', 'Loading:', LOGGER.colored('Extension', 'bold'), check.replace(ENV.ROOTDIR, ''));
             deprecated = _registerApplication(packages, require(check));
           }
 
           if ( deprecated ) {
-            logger().lognt('WARN', logger().colored('Warning:', 'yellow'), path, logger().colored('is using the deprecated Application API(s)', 'bold'));
+            LOGGER.lognt('WARN', LOGGER.colored('Warning:', 'yellow'), path, LOGGER.colored('is using the deprecated Application API(s)', 'bold'));
           }
         }
       });
 
-      instance.PACKAGES = Object.freeze(packages);
+      PACKAGES = Object.freeze(packages);
 
       resolve(servers);
     });
@@ -372,7 +368,7 @@ function registerPackages(servers) {
 function request(http) {
   // We use JSON as default responses, no matter what
   function _rejectResponse(err) {
-    logger().log('ERROR', logger().colored(err, 'red'), err.stack || '<no stack trace>');
+    LOGGER.log('ERROR', LOGGER.colored(err, 'red'), err.stack || '<no stack trace>');
 
     if ( !http.isfs && !http.isapi ) {
       http.respond.error(err, 403);
@@ -428,13 +424,13 @@ function request(http) {
 
   function _apiCall() {
     _checkPermission('api', {method: http.endpoint}, http.data).then(function() {
-      instance.API[http.endpoint](http, http.data).then(_resolveResponse).catch(_rejectResponse);
+      MODULES.API[http.endpoint](http, http.data).then(_resolveResponse).catch(_rejectResponse);
     }).catch(_rejectResponse);
   }
 
   function _staticResponse() {
     function _serve() {
-      const path = _path.join(instance.DIRS.root, instance.DIST, http.path);
+      const path = _path.join(ENV.ROOTDIR, ENV.DIST, http.path);
       http.respond.file(path);
     }
 
@@ -465,7 +461,7 @@ function request(http) {
       if ( http.isfs ) {
         _vfsCall();
       } else {
-        if ( typeof instance.API[http.endpoint] === 'function' ) {
+        if ( typeof MODULES.API[http.endpoint] === 'function' ) {
           _apiCall();
         } else {
           http.respond.json({
@@ -501,11 +497,11 @@ module.exports.request = request;
  * @memberof core.instance
  */
 module.exports.destroy = function destroy() {
-  if ( instance.AUTH ) {
-    instance.AUTH.destroy();
+  if ( MODULES.AUTH ) {
+    MODULES.AUTH.destroy();
   }
 
-  children.forEach(function(c) {
+  CHILDREN.forEach(function(c) {
     c.kill();
   });
 
@@ -528,11 +524,11 @@ module.exports.init = function init(opts) {
       .then(loadStorage)
       .then(loadVFS)
       .then(function() {
-        return _osjs.http.init(instance);
+        return _osjs.http.init(ENV);
       })
       .then(registerPackages)
       .then(function(servers) {
-        resolve(Object.freeze(instance));
+        resolve(Object.freeze(ENV));
       })
       .catch(reject);
   });
@@ -545,18 +541,18 @@ module.exports.init = function init(opts) {
  * @memberof core.instance
  */
 module.exports.run = function run(port) {
-  return _osjs.http.run(instance.PORT);
+  return _osjs.http.run(ENV.PORT);
 };
 
 /**
- * Gets the `instance` object
+ * Gets the `ENV` object
  *
- * @function getInstance
+ * @function getEnvironment
  * @memberof core.instance
- * @return {ServerInstance}
+ * @return {ServerEnvironment}
  */
-module.exports.getInstance = function() {
-  return Object.freeze(instance);
+module.exports.getEnvironment = function() {
+  return Object.freeze(ENV);
 };
 
 /**
@@ -566,7 +562,7 @@ module.exports.getInstance = function() {
  * @memberof core.instance
  */
 module.exports.getAuth = function() {
-  return instance.AUTH;
+  return MODULES.AUTH;
 };
 
 /**
@@ -576,7 +572,7 @@ module.exports.getAuth = function() {
  * @memberof core.instance
  */
 module.exports.getStorage = function() {
-  return instance.STORAGE;
+  return MODULES.STORAGE;
 };
 
 /**
@@ -586,7 +582,7 @@ module.exports.getStorage = function() {
  * @memberof core.instance
  */
 module.exports.getConfig = function() {
-  return Object.freeze(instance.CONFIG);
+  return Object.freeze(CONFIG);
 };
 
 /**
@@ -596,6 +592,35 @@ module.exports.getConfig = function() {
  * @memberof core.instance
  */
 module.exports.getLogger = function() {
-  return instance.LOGGER;
+  return LOGGER;
 };
 
+/**
+ * Gets all the registered VFS modules
+ *
+ * @function getVFS
+ * @memberof core.instance
+ */
+module.exports.getVFS = function() {
+  return MODULES.VFS;
+};
+
+/**
+ * Gets all the registered API methods
+ *
+ * @function getAPI
+ * @memberof core.instance
+ */
+module.exports.getAPI = function() {
+  return MODULES.API;
+};
+
+/**
+ * Gets metadata for package(s)
+ *
+ * @function getMetadata
+ * @memberof core.instance
+ */
+module.exports.getMetadata = function(packageName) {
+  return packageName ? PACKAGES[packageName] : PACKAGES;
+};

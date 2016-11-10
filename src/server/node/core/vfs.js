@@ -220,8 +220,7 @@ module.exports.getMime = function getMime(iter) {
  * @memberof core.vfs
  */
 module.exports.getTransport = function(transportName) {
-  const instance = _instance.getInstance();
-  return transport = instance.VFS.find(function(module) {
+  return _instance.getVFS().find(function(module) {
     return module.name === transportName;
   });
 };
@@ -293,10 +292,10 @@ module.exports.parseVirtualPath = function(query, options) {
 module.exports.resolvePathArguments = function(path, options) {
   options = options || {};
 
-  const instance = _instance.getInstance();
+  const env = _instance.getEnvironment();
   const rmap = {
     '%DIST%': function() {
-      return instance.DIST;
+      return env.DIST;
     },
     '%UID%': function() {
       return options.username;
@@ -305,7 +304,7 @@ module.exports.resolvePathArguments = function(path, options) {
       return options.username;
     },
     '%DROOT%': function() {
-      return instance.DIRS.root;
+      return env.ROOTDIR;
     },
     '%MOUNTPOINT%': function() {
       return options.protocol;

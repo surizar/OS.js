@@ -96,7 +96,7 @@ var proxyServer = null;
  * address. If it was found, the normal server procedure is interrupted and
  * will perform a proxy request.
  */
-function proxyCall(instance, proxy, request, response) {
+function proxyCall(env, proxy, request, response) {
   const logger = _instance.getLogger();
 
   function _getMatcher(k) {
@@ -156,7 +156,7 @@ function proxyCall(instance, proxy, request, response) {
  * Creates a `ServerResponder` object for HTTP connections.
  * This allows you to respond with data in a certain format.
  */
-function createHttpResponder(instance, response) {
+function createHttpResponder(env, response) {
   function _raw(data, code, headers) {
     code = code || 200;
     headers = headers || {};
@@ -294,7 +294,7 @@ function createHttpObject(request, response, path, data, responder, session_id, 
 /*
  * Creates the HTTP, WebSocket and Proxy servers for OS.js
  */
-function createServer(instance, resolve, reject) {
+function createServer(env, resolve, reject) {
   const config = _instance.getConfig();
   const httpConfig = config.http || {};
   const logger = _instance.getLogger();
@@ -306,14 +306,14 @@ function createServer(instance, resolve, reject) {
     const session_id = _session.init(request, response);
     const contentType = request.headers['content-type'] || '';
 
-    if ( proxyCall(instance, proxyServer, request, response) ) {
+    if ( proxyCall(env, proxyServer, request, response) ) {
       logger.log('VERBOSE', logger.colored('PROXY', 'bold'), path);
       return;
     }
 
     logger.log('VERBOSE', logger.colored(request.method, 'bold'), path);
 
-    const respond = createHttpResponder(instance, response);
+    const respond = createHttpResponder(env, response);
     if ( request.method === 'POST' ) {
       if ( contentType.indexOf('application/json') !== -1 ) {
         var body = [];
@@ -349,7 +349,7 @@ function createServer(instance, resolve, reject) {
 
   // HTTP servers
   if ( httpConfig.mode === 'http2' || httpConfig.mode === 'https' ) {
-    const rdir = httpConfig.cert.path || instance.DIRS.server;
+    const rdir = httpConfig.cert.path || env.SERVERDIR;
     const cname = httpConfig.cert.name || 'localhost';
     const copts = httpConfig.cert.options || {};
 
@@ -419,9 +419,9 @@ function destroyServer() {
  * @function init
  * @memberof core.http
  */
-module.exports.init = function init(instance) {
+module.exports.init = function init(env) {
   return new Promise(function(resolve, reject) {
-    createServer(instance, resolve, reject);
+    createServer(env, resolve, reject);
   });
 };
 

@@ -44,13 +44,13 @@ const _instance = require('./instance.js');
 /////////////////////////////////////////////////////////////////////////////
 
 function getSystemMetadata(http, resolve, reject, args) {
-  const instance = _instance.getInstance();
-  const path = _path.join(instance.DIRS.server, 'packages.json');
+  const env = _instance.getEnvironment();
+  const path = _path.join(env.SERVERDIR, 'packages.json');
   _fs.readFile(path, function(e, data) {
     if ( e ) {
       reject(e);
     } else {
-      var meta = JSON.parse(data)[instance.DIST];
+      var meta = JSON.parse(data)[env.DIST];
       Object.keys(meta).forEach(function(k) {
         meta[k].scope = 'system';
       });

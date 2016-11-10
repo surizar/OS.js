@@ -45,7 +45,7 @@ const opts = {
   STORAGE: argv.storage
 };
 
-_instance.init(opts).then(function(instance) {
+_instance.init(opts).then(function(env) {
   const logger = _instance.getLogger();
   const config = _instance.getConfig();
 
@@ -59,7 +59,7 @@ _instance.init(opts).then(function(instance) {
   });
 
   logger.log('INFO', logger.colored('Starting OS.js server', 'green'));
-  logger.log('INFO', logger.colored(['Using', httpConfig.mode, 'on port', instance.PORT, 'in', instance.DIST].join(' '), 'green'));
+  logger.log('INFO', logger.colored(['Using', httpConfig.mode, 'on port', env.PORT, 'in', env.DIST].join(' '), 'green'));
   if ( httpConfig.connection === 'ws' ) {
     logger.log('INFO', logger.colored('Using WebSocket', 'green'));
   }

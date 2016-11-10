@@ -35,7 +35,7 @@
    * Registers your Extension API methods
    */
   module.exports.api = {
-    test: function(instance, http, resolve, reject, args) {
+    test: function(env, http, resolve, reject, args) {
       resolve('This is a response from your extension');
     }
   };
