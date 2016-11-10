@@ -76,9 +76,12 @@ module.exports.application = function(http, data) {
         }
       } else {
         // Backward compatible with old API
-        if ( typeof module[ameth] === 'function' ) {
+        var imported = {};
+        module.register(imported, {}, {});
+
+        if ( typeof imported[ameth] === 'function' ) {
           found = function backwardCompatibleApplicationApiCall() {
-            module[ameth](aargs, function(error, result) {
+            imported[ameth](aargs, function(error, result) {
               if ( error ) {
                 reject(error);
               } else {

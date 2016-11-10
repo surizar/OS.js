@@ -262,21 +262,23 @@ function registerPackages(servers) {
     };
   }
 
-  function _registerApplication() {
-    if ( typeof module.register === 'function' ) {
-      module.register(instance, packages[path], {
-        http: servers.httpServer,
-        ws: servers.websocketServer,
-        proxy: servers.proxyServer
-      });
-
+  function _registerApplication(packages, module) {
+    if ( typeof module.api === 'object' ) {
+      if ( typeof module.register === 'function' ) {
+        module.register(instance, packages[path], {
+          http: servers.httpServer,
+          ws: servers.websocketServer,
+          proxy: servers.proxyServer
+        });
+      }
       return false;
     } else if ( typeof module._onServerStart === 'function' ) {
       // Backward compatible with old API
-      module._onServerStart(server.httpServer, _createOldInstance(instance), packages[path]);
+      module._onServerStart(servers.httpServer, _createOldInstance(instance), packages[path]);
+      return true;
     }
 
-    return true;
+    return typeof module.api === 'undefined';
   }
 
   function _registerExtension(module) {
@@ -303,7 +305,6 @@ function registerPackages(servers) {
         };
       });
     }
-
     return true;
   }
 
@@ -339,17 +340,14 @@ function registerPackages(servers) {
         const check = _path.join(instance.DIRS.packages, path, filename);
         if ( metadata.enabled !== false && _fs.existsSync(check) ) {
           var deprecated = false;
+          var loaded;
           if ( metadata.type === 'extension' ) {
             logger().lognt('INFO', 'Loading:', logger().colored('Application', 'bold'), check.replace(instance.DIRS.root, ''));
             deprecated = _registerExtension(require(check));
             _launchSpawners(path, module, metadata);
           } else {
             logger().lognt('INFO', 'Loading:', logger().colored('Extension', 'bold'), check.replace(instance.DIRS.root, ''));
-            deprecated = _registerApplication(require(check));
-          }
-
-          if ( typeof module.api === 'undefined' ) {
-            deprecated = true;
+            deprecated = _registerApplication(packages, require(check));
           }
 
           if ( deprecated ) {

@@ -30,10 +30,6 @@
 (function() {
   'use strict';
 
-  /*
-   * See http://os.js.org/doc/tutorials/application-with-server-api.html
-   */
-
   /**
    * Registers your package when OS.js server starts.
    */
