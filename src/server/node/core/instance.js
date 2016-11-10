@@ -48,7 +48,8 @@
  * @property  {Number}        LOGLEVEL    Current loglevel
  * @property  {String}        ROOTDIR     Root directory of OS.js
  * @property  {String}        MODULEDIR   Directory of server modules
- * @property  {String}        SERVERDIR   Directory of the server
+ * @property  {String}        SERVERDIR   Directory of the server root
+ * @property  {String}        NODEDIR     Directory of the node server
  * @property  {String}        PKGDIR      Directory of packages
  * @typedef ServerEnvironment
  */
@@ -85,6 +86,7 @@ const ENV = {
   PORT: 8000,
   DIST: 'dist',
   LOGLEVEL: -2,
+  NODEDIR: _path.resolve(__dirname + '/../'),
   ROOTDIR: _path.resolve(__dirname + '/../../../../'),
   MODULEDIR: _path.resolve(__dirname + '/../modules'),
   SERVERDIR: _path.resolve(__dirname + '/../../'),

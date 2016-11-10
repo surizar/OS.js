@@ -41,26 +41,33 @@ const _fstream = require('fstream');
 ///////////////////////////////////////////////////////////////////////////////
 
 function createRequest(http, method, args) {
-  function _nullResponder(arg) {
-    resolve(arg);
-  }
+  return new Promise(function(resolve, reject) {
+    function _nullResponder(arg) {
+      resolve(arg);
+    }
 
-  var newHttp = Object.assign({}, http);
-  newHttp._virtual = true;
-  newHttp.endpoint = method;
-  newHttp.data = args;
-  newHttp.request.method = 'POST';
-  newHttp.respond = {
-    raw: _nullResponder,
-    error: _nullResponder,
-    file: _nullResponder,
-    stream: _nullResponder,
-    json: _nullResponder
-  };
-  return module.exports.request(newHttp, method, args);
+    var newHttp = Object.assign({}, http);
+    newHttp._virtual = true;
+    newHttp.endpoint = method;
+    newHttp.data = args;
+    newHttp.request.method = 'POST';
+    newHttp.respond = {
+      raw: _nullResponder,
+      error: _nullResponder,
+      file: _nullResponder,
+      stream: _nullResponder,
+      json: _nullResponder
+    };
+
+    module.exports.request(newHttp, method, args).then(resolve).catch(reject);
+  });
 }
 
 function getTransportName(query, mount) {
+  if ( typeof query === 'undefined' ) {
+    return '__default__';
+  }
+
   if ( typeof query !== 'string' ) {
     query = query.path || query.root || query.src || '';
   }
