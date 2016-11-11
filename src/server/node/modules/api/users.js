@@ -40,12 +40,9 @@ const _instance = require('./../../core/instance.js');
  * @param   {ServerRequest}    http          OS.js Server Request
  * @param   {Object}           data          Request data
  *
- * @param   {String}    data.command    Command name
- * @param   {Object}    data.args       Command arguments
- *
  * @function users
  * @memberof modules.api
  */
 module.exports.users = function(http, data) {
-  return _instance.getAuth().manage(http, data);
+  return _instance.getAuth().manage(http, data.command, data.user || {});
 };

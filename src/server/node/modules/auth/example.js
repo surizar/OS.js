@@ -58,13 +58,11 @@ module.exports.logout = function(http) {
 /**
  * Handler user management
  *
- * http.data.commands = [list, add, remove, edit, passwd]
- * http.data.args = arguments
- * http.data.args.user = username
- *
  * @param   {ServerRequest}    http          OS.js Server Request
+ * @param   {String}           command       Management command
+ * @param   {Object}           args          Command arguments
  */
-module.exports.manage = function(http) {
+module.exports.manage = function(http, command, args) {
   return new Promise(function(resolve, reject) {
     reject('Not available');
   });
@@ -88,7 +86,7 @@ module.exports.initSession = function(http, resolve, reject) {
  * @param   {String}           type          Permission type (vfs, api, package)
  * @param   {Object}           options       Permission options/arguments
  */
-module.exports.checkPermission = function(http, resolve, reject, type, options) {
+module.exports.checkPermission = function(http, type, options) {
   return new Promise(function(resolve) {
     resolve(true); // Return false to ignore internal group checking
   });

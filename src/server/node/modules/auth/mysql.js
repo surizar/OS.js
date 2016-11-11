@@ -33,6 +33,59 @@ const _utils = require('./../../core/utils.js');
 
 var pool;
 
+const manager = {
+
+  add: function(user, callback) {
+    var q = 'INSERT INTO `users` (`username`, `name`, `groups`, `password`) VALUES(?, ?, ?, ?);';
+    var a = [user.username, user.name, user.groups.join(','), '']
+    _utils.mysqlQuery(pool, q, a, function(err, rows, fields) {
+      callback(err, !err);
+    });
+  },
+
+  remove: function(user, callback) {
+    var q = 'DELETE FROM `users` WHERE `id` = ?;';
+    var a = [user.id]
+    _utils.mysqlQuery(pool, q, a, function(err, rows, fields) {
+      callback(err, !err);
+    });
+  },
+
+  edit: function(user, callback) {
+    var q = 'UPDATE `users` SET `username` = ?, `name` = ?, `groups` = ? WHERE `id` = ?;';
+    var a = [user.username, user.name, user.groups.join(','), user.id]
+    _utils.mysqlQuery(pool, q, a, function(err, rows, fields) {
+      callback(err, !err);
+    });
+  },
+
+  passwd: function(user, callback) {
+    _bcrypt.genSalt(10, function(err, salt) {
+      _bcrypt.hash(user.password, salt, function(err, hash) {
+        var q = 'UPDATE `users` SET `password` = ? WHERE `id` = ?;';
+        var a = [hash, user.id]
+        _utils.mysqlQuery(pool, q, a, function(err, rows, fields) {
+          callback(err, !err);
+        });
+      });
+    });
+  },
+
+  list: function(user, callback) {
+    var q = 'SELECT `id`, `username`, `name`, `groups` FROM `users`;';
+    _utils.mysqlQuery(pool, q, [], function(err, rows, fields) {
+      callback(err, (rows || []).map(function(iter) {
+        try {
+          iter.groups = JSON.parse(iter.groups) || [];
+        } catch ( e ) {
+          iter.groups = [];
+        }
+        return iter;
+      }));
+    });
+  }
+};
+
 module.exports.login = function(http, data) {
   const q = 'SELECT `id`, `username`, `name`, `password` FROM `users` WHERE `username` = ? LIMIT 1;';
   const a = [data.username];
@@ -77,9 +130,19 @@ module.exports.logout = function(http) {
   });
 };
 
-module.exports.manage = function(http) {
+module.exports.manage = function(http, command, args) {
   return new Promise(function(resolve, reject) {
-    reject('Not available');
+    if ( manager[command] ) {
+      manager[command](args, function(err, res) {
+        if ( err ) {
+          reject(err);
+        } else {
+          resolve(res);
+        }
+      });
+    } else {
+      reject('Not available');
+    }
   });
 };
 
