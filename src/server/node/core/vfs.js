@@ -254,7 +254,7 @@ module.exports.parseVirtualPath = function(query, options) {
 
   const parts = query.split(/([A-z0-9\-_]+)\:\/\/(.*)/);
   const protocol = parts[1];
-  const path = _path.resolve(String(parts[2]).replace(/^\/+?/, '/').replace(/^\/?/, '/'));
+  const path = _path.normalize(String(parts[2]).replace(/^\/+?/, '/').replace(/^\/?/, '/'));
 
   const mount = mountpoints[protocol];
   if ( !options._virtual && protocol === '$' ) {
