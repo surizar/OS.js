@@ -101,54 +101,6 @@
   /**
    * Base UIElement Class
    *
-   * <pre><code>
-   * Available Elements:
-   *
-   * - gui-color-box
-   * - gui-color-swatch
-   * - gui-iframe
-   * - gui-progress-bar
-   * - gui-statusbar
-   * - gui-menu-entry
-   * - gui-menu
-   * - gui-menu-bar
-   * - gui-tabs
-   * - gui-label
-   * - gui-textarea
-   * - gui-text
-   * - gui-password
-   * - gui-file-upload
-   * - gui-radio
-   * - gui-checkbox
-   * - gui-switch
-   * - gui-button
-   * - gui-select
-   * - gui-select-list
-   * - gui-slider
-   * - gui-input-modal
-   * - gui-audio
-   * - gui-video
-   * - gui-image
-   * - gui-canvas
-   * - gui-file-view
-   * - gui-tree-view
-   * - gui-list-view
-   * - gui-icon-view
-   * - gui-richtext
-   * - gui-paned-view
-   * - gui-paned-view-container
-   * - gui-button-bar
-   * - gui-toolbar
-   * - gui-grid
-   * - gui-grid-row
-   * - gui-grid-entry
-   * - gui-vbox
-   * - gui-vbox-container
-   * - gui-hbox
-   * - gui-hbox-container
-   * - gui-expander
-   * </code></pre>
-   *
    * @summary The Class used for all UI Elements.
    *
    * @param {Node}      el      DOM Node
@@ -450,20 +402,19 @@
    * @memberof OSjs.GUI.Element#
    *
    * @param   {String}              html        HTML code
-   * @param   {OSjs.GUI.Scheme}     [scheme]    Reference to the Scheme
    * @param   {OSjs.Core.Window}    [win]       Reference to the Window
    * @param   {Object}              [args]      List of arguments to send to the parser
    *
    * @return {OSjs.GUI.Element} The current instance (this)
    */
-  UIElement.prototype.appendHTML = function(html, scheme, win, args) {
+  UIElement.prototype.appendHTML = function(html, win, args) {
     var el = document.createElement('div');
     el.innerHTML = html;
 
-    return this._append(el, scheme, win, args);
+    return this._append(el, win, args);
   };
 
-  UIElement.prototype._append = function(el, scheme, win, args) {
+  UIElement.prototype._append = function(el, win, args) {
     if ( el instanceof Element ) {
       UIElement.parseNode(win, el, null, args);
     }
@@ -492,7 +443,7 @@
   UIElement.prototype.querySelector = function(q, rui) {
     var el = this.$element.querySelector(q);
     if ( rui ) {
-      return GUI.Scheme.getElementInstance(el, q);
+      return GUI.Element.createInstance(el, q);
     }
     return el;
   };
@@ -512,7 +463,7 @@
     var el = this.$element.querySelectorAll(q);
     if ( rui ) {
       el = el.map(function(i) {
-        return GUI.Scheme.getElementInstance(i, q);
+        return GUI.Element.createInstance(i, q);
       });
     }
     return el;
@@ -555,7 +506,7 @@
    * @param   {OSjs.Core.Window}      [win]           OS.js Window
    *
    * @return  {OSjs.GUI.Element}
-   * @function createInstance
+   * @function create
    * @memberof OSjs.GUI.Element
    */
   UIElement.create = function createGUIElement(tagName, params, applyArgs, win) {

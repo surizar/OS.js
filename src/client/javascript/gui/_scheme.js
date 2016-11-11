@@ -209,6 +209,9 @@
     this.triggers[f].push(fn);
   };
 
+  /**
+   * Trigger event
+   */
   UIScheme.prototype._trigger = function(f, args) {
     args = args || [];
 
@@ -220,6 +223,9 @@
     }
   };
 
+  /**
+   * Content loading wrapper
+   */
   UIScheme.prototype._load = function(html) {
     var doc = document.createDocumentFragment();
     var wrapper = document.createElement('div');
@@ -504,6 +510,9 @@
     return this._findDOM(win, id, root).el;
   };
 
+  /**
+   * Find Root Element
+   */
   UIScheme.prototype._findRoot = function(win, root) {
     if ( !(win instanceof OSjs.Core.Window) ) {
       throw new Error('UIScheme::_findDOM() expects a instance of Window');
@@ -511,6 +520,9 @@
     return root || win._getRoot();
   };
 
+  /**
+   * Find DOM element
+   */
   UIScheme.prototype._findDOM = function(win, id, root) {
     var q = '[data-id="' + id + '"]';
     return {
