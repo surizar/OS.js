@@ -252,7 +252,7 @@ module.exports.parseVirtualPath = function(query, options) {
   const config = _instance.getConfig();
   const mountpoints = config.vfs.mounts || {};
 
-  const parts = query.split(/(.*)\:\/\/(.*)/);
+  const parts = query.split(/([A-z0-9\-_]+)\:\/\/(.*)/);
   const protocol = parts[1];
   const path = _path.resolve(String(parts[2]).replace(/^\/+?/, '/').replace(/^\/?/, '/'));
 
