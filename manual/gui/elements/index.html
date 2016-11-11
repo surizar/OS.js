@@ -241,11 +241,25 @@
 <span class="token punctuation">.</span><span class="token function">patch</span><span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token string">&apos;entry&apos;</span><span class="token punctuation">,</span> <span class="token string">&apos;entry&apos;</span><span class="token punctuation">]</span><span class="token punctuation">)</span>
 </code></pre>
 <h2 id="creating-elements-programatically">Creating elements programatically</h2>
-<pre class="language-js"><code class="language-js">scheme<span class="token punctuation">.</span><span class="token function">create</span><span class="token punctuation">(</span>win<span class="token punctuation">,</span> <span class="token string">&apos;gui-element-name&apos;</span><span class="token punctuation">,</span> <span class="token punctuation">{</span>
+<pre class="language-js"><code class="language-js"><span class="token comment" spellcheck="true">//</span>
+<span class="token comment" spellcheck="true">// Normal</span>
+<span class="token comment" spellcheck="true">//</span>
+<span class="token keyword">var</span> el <span class="token operator">=</span> GUI<span class="token punctuation">.</span>Element<span class="token punctuation">.</span><span class="token function">create</span><span class="token punctuation">(</span><span class="token string">&apos;gui-element-name&apos;</span><span class="token punctuation">,</span> <span class="token punctuation">{</span>
+  parameter<span class="token punctuation">:</span> <span class="token string">&apos;value&apos;</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+parentElement<span class="token punctuation">.</span><span class="token function">append</span><span class="token punctuation">(</span>el<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token comment" spellcheck="true">//</span>
+<span class="token comment" spellcheck="true">// Via Scheme</span>
+<span class="token comment" spellcheck="true">//</span>
+scheme<span class="token punctuation">.</span><span class="token function">create</span><span class="token punctuation">(</span>win<span class="token punctuation">,</span> <span class="token string">&apos;gui-element-name&apos;</span><span class="token punctuation">,</span> <span class="token punctuation">{</span>
   parameter<span class="token punctuation">:</span> <span class="token string">&apos;value&apos;</span>
 <span class="token punctuation">}</span><span class="token punctuation">,</span> parentElement<span class="token punctuation">)</span><span class="token punctuation">;</span>
 
-parentElement<span class="token punctuation">.</span><span class="token function">appendHTML</span><span class="token punctuation">(</span><span class="token string">&apos;&lt;gui-element-name&gt;&lt;/gui-element-name&gt;&apos;</span><span class="token punctuation">,</span> optionalSchemeReference<span class="token punctuation">,</span> optionalWinReference<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token comment" spellcheck="true">//</span>
+<span class="token comment" spellcheck="true">// Using HTML</span>
+<span class="token comment" spellcheck="true">//</span>
+parentElement<span class="token punctuation">.</span><span class="token function">appendHTML</span><span class="token punctuation">(</span><span class="token string">&apos;&lt;gui-element-name&gt;&lt;/gui-element-name&gt;&apos;</span><span class="token punctuation">,</span> optionalWinReference<span class="token punctuation">)</span><span class="token punctuation">;</span>
 </code></pre>
 <h2 id="creating-your-own-gui-elements">Creating your own GUI elements</h2>
 <p>If you want to make a GUI element that handles lists (like TreeView, IconView etc.) you&apos;ll have to use the &quot;DataView&quot; composition. Look at the actual source for these elements to see how it is done, or come back later when I&apos;m done writing example code for it.</p>
