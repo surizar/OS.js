@@ -27,6 +27,8 @@
  * @author  Anders Evenrud <andersevenrud@gmail.com>
  * @licence Simplified BSD License
  */
+/*eslint strict:["error", "global"]*/
+'use strict';
 
 /*
  * You can reach these methods via `instance.logger`

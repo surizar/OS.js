@@ -27,6 +27,9 @@
  * @author  Anders Evenrud <andersevenrud@gmail.com>
  * @licence Simplified BSD License
  */
+/*eslint strict:["error", "global"]*/
+'use strict';
+
 const _passwd = require('passwd-linux');
 const _userid = require('userid');
 
@@ -85,7 +88,6 @@ module.exports.checkSession = function(http) {
 };
 
 module.exports.register = function(config) {
-  _config = config;
 };
 
 module.exports.destroy = function() {

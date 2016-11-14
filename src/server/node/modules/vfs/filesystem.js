@@ -1,3 +1,6 @@
+/*eslint strict:["error", "global"]*/
+'use strict';
+
 /*!
  * OS.js - JavaScript Cloud/Web Desktop Platform
  *
@@ -307,7 +310,7 @@ const VFS = {
       existsWrapper(true, dresolved.real, function() {
         _fs.access(_path.dirname(dresolved.real), _nfs.W_OK, function(err) {
           if ( err ) {
-            callback('Cannot write to destination');
+            reject('Cannot write to destination');
           } else {
             _fs.copy(sresolved.real, dresolved.real, function(error, data) {
               if ( error ) {
@@ -353,7 +356,7 @@ const VFS = {
     existsWrapper(true, resolved.real, function() {
       _fs.mkdir(resolved.real, function(err) {
         if ( err ) {
-          reject('Error creating directory: ' + error);
+          reject('Error creating directory: ' + err);
         } else {
           resolve(true);
         }

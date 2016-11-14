@@ -1,3 +1,6 @@
+/*eslint strict:["error", "global"]*/
+'use strict';
+
 const _fs = require('node-fs-extra');
 const _nfs = require('fs');
 const _path = require('path');

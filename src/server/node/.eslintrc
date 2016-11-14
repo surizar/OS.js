@@ -1,4 +1,7 @@
 {
+  "extends": [
+    "../../../.eslintrc"
+  ],
   "parserOptions": {
     "ecmaVersion": 6
   },
@@ -8,7 +11,7 @@
     "mocha": true
   },
   "strict": [
-    0,
-    "function"
+    1,
+    "global"
   ]
 }

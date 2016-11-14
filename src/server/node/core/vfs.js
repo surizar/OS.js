@@ -27,6 +27,8 @@
  * @author  Anders Evenrud <andersevenrud@gmail.com>
  * @licence Simplified BSD License
  */
+/*eslint strict:["error", "global"]*/
+'use strict';
 
 /**
  * @namespace core.vfs
@@ -109,11 +111,11 @@ module.exports.request = function(http, method, args) {
   const transportName = getTransportName(args);
   const transport = module.exports.getTransport(transportName);
 
-  if ( !transport ) {
-    return reject('Cannot find VFS module for: ' + parsed.query);
-  }
-
   return new Promise(function(resolve, reject) {
+    if ( !transport ) {
+      return reject('Could not find any supported VFS module');
+    }
+
     transport.request(http, method, args).then(function(data) {
       if ( method === 'read' && data instanceof _fstream.Reader ) {
         return http.respond.stream(data.path, data);
@@ -181,8 +183,9 @@ module.exports._vrequest = function(method, args, options) {
  * @memberof core.vfs
  */
 module.exports.createReadStream = function(http, path) {
-  const found = findTransport(http, 'read', {path: path});
-  return found.transport.createReadStream(http, path);
+  const transportName = getTransportName(path);
+  const transport = module.exports.getTransport(transportName);
+  return transport.createReadStream(http, path);
 };
 
 /**
@@ -197,8 +200,9 @@ module.exports.createReadStream = function(http, path) {
  * @memberof core.vfs
  */
 module.exports.createWriteStream = function(http, path) {
-  const found = findTransport(http, 'read', {path: path});
-  return found.transport.createWriteStream(http, path);
+  const transportName = getTransportName(path);
+  const transport = module.exports.getTransport(transportName);
+  return transport.createWriteStream(http, path);
 };
 
 /**

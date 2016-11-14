@@ -27,6 +27,8 @@
  * @author  Anders Evenrud <andersevenrud@gmail.com>
  * @licence Simplified BSD License
  */
+/*eslint strict:["error", "global"]*/
+'use strict';
 
 const _instance = require('./core/instance.js');
 const _minimist = require('minimist');

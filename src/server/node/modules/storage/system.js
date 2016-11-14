@@ -27,6 +27,9 @@
  * @author  Anders Evenrud <andersevenrud@gmail.com>
  * @licence Simplified BSD License
  */
+/*eslint strict:["error", "global"]*/
+'use strict';
+
 const _fs = require('node-fs-extra');
 const _vfs = require('./../../core/vfs.js');
 const _instance = require('./../../core/instance.js');

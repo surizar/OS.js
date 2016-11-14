@@ -27,6 +27,9 @@
  * @author  Anders Evenrud <andersevenrud@gmail.com>
  * @licence Simplified BSD License
  */
+/*eslint strict:["error", "global"]*/
+'use strict';
+
 const _mysql = require('mysql');
 const _utils = require('./../../core/utils.js');
 

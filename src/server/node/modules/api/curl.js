@@ -27,6 +27,8 @@
  * @author  Anders Evenrud <andersevenrud@gmail.com>
  * @licence Simplified BSD License
  */
+/*eslint strict:["error", "global"]*/
+'use strict';
 
 /**
  * @namespace modules.api
@@ -56,10 +58,6 @@ const _instance = require('./../../core/instance.js');
 module.exports.curl = function(http, args) {
   const logger = _instance.getLogger();
   const url = args.url;
-
-  if ( !url ) {
-    return reject('cURL expects an \'url\'');
-  }
 
   var curlRequest = (function parseRequestParameters() {
     const query = args.body || args.query || {}; // 'query' was the old name, but kept for compability
@@ -123,6 +121,10 @@ module.exports.curl = function(http, args) {
   })();
 
   return new Promise(function(resolve, reject) {
+    if ( !url ) {
+      return reject('cURL expects an \'url\'');
+    }
+
     require('request')(curlRequest.opts, function(error, response, body) {
       if ( error ) {
         return reject(error);

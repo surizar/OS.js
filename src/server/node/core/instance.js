@@ -27,6 +27,8 @@
  * @author  Anders Evenrud <andersevenrud@gmail.com>
  * @licence Simplified BSD License
  */
+/*eslint strict:["error", "global"]*/
+'use strict';
 
 /**
  * @namespace core.instance
@@ -72,6 +74,7 @@ const _osjs = {
 
 var CHILDREN = [];
 var CONFIG = {};
+var PACKAGES = {};
 var LOGGER;
 
 const MODULES = {
