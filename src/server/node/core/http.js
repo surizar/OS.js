@@ -78,6 +78,7 @@
 
 const _vfs = require('./vfs.js');
 const _instance = require('./instance.js');
+const _auth = require('./auth.js');
 
 const _url = require('url');
 const _fs = require('node-fs-extra');
@@ -152,6 +153,121 @@ function proxyCall(env, proxy, request, response) {
   }
 
   return false;
+}
+
+/*
+ * Handles a HTTP request
+ */
+function handleRequest(http) {
+  const logger = _instance.getLogger();
+  const env = _instance.getEnvironment();
+  const api = _instance.getAPI();
+
+  // We use JSON as default responses, no matter what
+  function _rejectResponse(err) {
+    logger.log('ERROR', logger.colored(err, 'red'), err.stack || '<no stack trace>');
+
+    if ( !http.isfs && !http.isapi ) {
+      http.respond.error(err, 403);
+    } else {
+      http.respond.json({
+        error: String(err),
+        result: false
+      }, 403);
+    }
+  }
+  function _resolveResponse(result) {
+    http.respond.json({
+      error: null,
+      result: result
+    });
+  }
+
+  // Wrapper for checking permissions
+  function _checkPermission(type, options) {
+    const skip = type === 'api' && ['login'].indexOf(options.method) !== -1;
+
+    return new Promise(function(resolve, reject) {
+      if ( skip ) {
+        resolve();
+      } else {
+        _auth.checkSession(http).then(resolve).catch(_rejectResponse);
+      }
+    }).then(function() {
+      return new Promise(function(resolve, reject) {
+        if ( skip ) {
+          resolve();
+        } else {
+          _auth.checkPermission(http, type, options).then(resolve).catch(_rejectResponse);
+        }
+      });
+    }).catch(_rejectResponse);
+  }
+
+  // Wrappers for performing API calls
+  function _vfsCall() {
+    var method = http.endpoint.replace(/(^get\/)?/, '');
+    var args = http.data;
+
+    if ( http.endpoint.match(/^get\//) ) {
+      method = 'read';
+      args = {path: http.endpoint.replace(/(^get\/)?/, '')};
+    }
+
+    _checkPermission('fs', {method: method, args: args}).then(function() {
+      _vfs.request(http, method, args).then(_resolveResponse).catch(_rejectResponse);
+    }).catch(_rejectResponse);
+  }
+
+  function _apiCall() {
+    _checkPermission('api', {method: http.endpoint}, http.data).then(function() {
+      api[http.endpoint](http, http.data).then(_resolveResponse).catch(_rejectResponse);
+    }).catch(_rejectResponse);
+  }
+
+  function _staticResponse() {
+    function _serve() {
+      const path = _path.join(env.ROOTDIR, env.DIST, http.path);
+      http.respond.file(path);
+    }
+
+    function _deny() {
+      http.respond.error('Access denied', 403);
+    }
+
+    const pmatch = http.path.match(/^\/?packages\/(.*\/.*)\/(.*)/);
+    if ( pmatch && pmatch.length === 3 ) {
+      _checkPermission('package', {path: pmatch[1]}).then(function() {
+        _auth.checkSession(http)
+          .then(_serve).catch(_deny);
+      }).catch(_deny);
+    } else {
+      _serve();
+    }
+  }
+
+  // Take on the HTTP request
+  _auth.initSession(http).then(function() {
+    if ( http.request.method === 'GET' ) {
+      if ( http.isfs ) {
+        _vfsCall();
+      } else {
+        _staticResponse();
+      }
+    } else {
+      if ( http.isfs ) {
+        _vfsCall();
+      } else {
+        if ( typeof api[http.endpoint] === 'function' ) {
+          _apiCall();
+        } else {
+          http.respond.json({
+            error: 'No such API method'
+          }, 500);
+        }
+      }
+    }
+  });
 }
 
 /*
@@ -325,19 +441,19 @@ function createServer(env, resolve, reject) {
 
         request.on('end', function() {
           const data = JSON.parse(Buffer.concat(body));
-          _instance.request(createHttpObject(request, response, path, data, respond, session_id));
+          handleRequest(createHttpObject(request, response, path, data, respond, session_id));
         });
       } else if ( contentType.indexOf('multipart/form-data') !== -1 ) {
         const form = new _formidable.IncomingForm({
           uploadDir: config.tmpdir
         });
 
-        form.parse(request, function(err, fields, files) {
-          _instance.request(createHttpObject(request, response, path, fields, respond, session_id, files));
+        eorm.parse(request, function(err, fields, files) {
+          handleRequest(createHttpObject(request, response, path, fields, respond, session_id, files));
         });
       }
     } else {
-      _instance.request(createHttpObject(request, response, path, {}, respond, session_id));
+      handleRequest(createHttpObject(request, response, path, {}, respond, session_id));
     }
   }
 
@@ -375,7 +491,7 @@ function createServer(env, resolve, reject) {
         const path = message.path;
         const respond = createWebsocketResponder(ws, message._index);
 
-        _instance.request(createHttpObject({
+        handleRequest(createHttpObject({
           method: 'POST',
           url: path
         }, null, path, message.args, respond, message.sid));
@@ -446,3 +562,4 @@ module.exports.run = function run(port) {
  * @memberof core.http
  */
 module.exports.destroy = destroyServer;
+

@@ -48,5 +48,5 @@ const _instance = require('./../../core/instance.js');
 module.exports.settings = function(http, data) {
   const username = http.session.get('username');
   const settings = data.settings;
-  return _instance.getStorage().setSettings(username, settings);
+  return _instance.getStorage().setSettings(username, settings, http);
 };
