@@ -30,31 +30,31 @@
 /*eslint strict:["error", "global"]*/
 'use strict';
 
-module.exports.setSettings = function(username, data, http) {
+module.exports.setSettings = function(http, username, data) {
   return new Promise(function(resolve) {
     resolve(true);
   });
 };
 
-module.exports.getSettings = function(username, http) {
+module.exports.getSettings = function(http, username) {
   return new Promise(function(resolve) {
     resolve({});
   });
 };
 
-module.exports.getGroups = function(username, http) {
+module.exports.getGroups = function(http, username) {
   return new Promise(function(resolve) {
     resolve(['admin']);
   });
 };
 
-module.exports.getBlacklist = function(username, http) {
+module.exports.getBlacklist = function(http, username) {
   return new Promise(function(resolve) {
     resolve([]);
   });
 };
 
-module.exports.setBlacklist = function(username, list, http) {
+module.exports.setBlacklist = function(http, username, list) {
   return new Promise(function(resolve) {
     resolve(true);
   });

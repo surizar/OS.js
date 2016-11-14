@@ -55,8 +55,8 @@ module.exports.login = function(http, data) {
     function _proceed(userData) {
       http.session.set('username', userData.username);
 
-      _instance.getStorage().getSettings(userData.username, http).then(function(userSettings) {
-        _instance.getStorage().getBlacklist(userData.username, http).then(function(blacklist) {
+      _instance.getStorage().getSettings(http, userData.username).then(function(userSettings) {
+        _instance.getStorage().getBlacklist(http, userData.username).then(function(blacklist) {
           http.session.set('username', userData.username);
 
           resolve({
@@ -71,7 +71,7 @@ module.exports.login = function(http, data) {
 
     _instance.getAuth().login(http, data).then(function(userData) {
       if ( typeof userData.groups === 'undefined' ) {
-        _instance.getStorage().getGroups(userData.username, http).then(function(groups) {
+        _instance.getStorage().getGroups(http, userData.username).then(function(groups) {
           userData.groups = groups;
           _proceed(userData);
         }).catch(_fail);

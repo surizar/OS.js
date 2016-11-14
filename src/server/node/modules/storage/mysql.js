@@ -35,7 +35,7 @@ const _utils = require('./../../core/utils.js');
 
 var pool;
 
-module.exports.setSettings = function(username, settings) {
+module.exports.setSettings = function(http, username, settings) {
   return new Promise(function(resolve, reject) {
     _utils.mysqlQuery(pool, 'UPDATE `users` SET `settings` = ? WHERE `username` = ? LIMIT 1;', [JSON.stringify(settings), username], function(err, row) {
       if ( err ) {
@@ -47,7 +47,7 @@ module.exports.setSettings = function(username, settings) {
   });
 };
 
-module.exports.getSettings = function(username) {
+module.exports.getSettings = function(http, username) {
   return new Promise(function(resolve, reject) {
     _utils.mysqlQuery(pool, 'SELECT `settings` FROM `users` WHERE `username` = ? LIMIT 1;', [username], function(err, row) {
       row = row || {};
@@ -64,7 +64,7 @@ module.exports.getSettings = function(username) {
   });
 };
 
-module.exports.getGroups = function(username) {
+module.exports.getGroups = function(http, username) {
   return new Promise(function(resolve, reject) {
     _utils.mysqlQuery(pool, 'SELECT `groups` FROM `users` WHERE `username` = ? LIMIT 1;', [username], function(err, row) {
       row = row || {};
@@ -81,13 +81,13 @@ module.exports.getGroups = function(username) {
   });
 };
 
-module.exports.getBlacklist = function(username) {
+module.exports.getBlacklist = function(http, username) {
   return new Promise(function(resolve) {
     resolve([]);
   });
 };
 
-module.exports.setBlacklist = function(username, list) {
+module.exports.setBlacklist = function(http, username, list) {
   return new Promise(function(resolve) {
     resolve(true);
   });

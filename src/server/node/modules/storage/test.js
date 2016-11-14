@@ -30,19 +30,19 @@
 /*eslint strict:["error", "global"]*/
 'use strict';
 
-module.exports.setSettings = function(username, data) {
+module.exports.setSettings = function(http, username, data) {
   return new Promise(function(resolve) {
     resolve(true);
   });
 };
 
-module.exports.getSettings = function(username) {
+module.exports.getSettings = function(http, username) {
   return new Promise(function(resolve) {
     resolve({});
   });
 };
 
-module.exports.getGroups = function(username) {
+module.exports.getGroups = function(http, username) {
   return new Promise(function(resolve) {
     var groups = ({
       normal: ['admin'],
@@ -53,7 +53,7 @@ module.exports.getGroups = function(username) {
   });
 };
 
-module.exports.getBlacklist = function(username) {
+module.exports.getBlacklist = function(http, username) {
   return new Promise(function(resolve) {
     if ( username === 'restricted' ) {
       resolve(['default/CoreWM']);
@@ -63,7 +63,7 @@ module.exports.getBlacklist = function(username) {
   });
 };
 
-module.exports.setBlacklist = function(username, list) {
+module.exports.setBlacklist = function(http, username, list) {
   return new Promise(function(resolve) {
     resolve(true);
   });

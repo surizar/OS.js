@@ -49,7 +49,7 @@ function _readFile(username, path, resolve) {
   });
 }
 
-module.exports.setSettings = function(username, settings) {
+module.exports.setSettings = function(http, username, settings) {
   const config = _instance.getConfig();
   const path = _vfs.resolvePathArguments(config.modules.storage.system.settings, {
     username: username
@@ -66,7 +66,7 @@ module.exports.setSettings = function(username, settings) {
   });
 };
 
-module.exports.getSettings = function(username) {
+module.exports.getSettings = function(http, username) {
   const config = _instance.getConfig();
   const path = _vfs.resolvePathArguments(config.modules.storage.system.settings, {
     username: username
@@ -76,7 +76,7 @@ module.exports.getSettings = function(username) {
   });
 };
 
-module.exports.getGroups = function(username) {
+module.exports.getGroups = function(http, username) {
   const config = _instance.getConfig();
   const path = config.modules.storage.system.groups;
   return new Promise(function(resolve) {
@@ -84,7 +84,7 @@ module.exports.getGroups = function(username) {
   });
 };
 
-module.exports.getBlacklist = function(username) {
+module.exports.getBlacklist = function(http, username) {
   const config = _instance.getConfig();
   const path = config.modules.storage.system.blacklist;
   return new Promise(function(resolve) {
@@ -92,7 +92,7 @@ module.exports.getBlacklist = function(username) {
   });
 };
 
-module.exports.setBlacklist = function(username, list) {
+module.exports.setBlacklist = function(http, username, list) {
   return new Promise(function(resolve) {
     resolve(true);
   });

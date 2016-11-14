@@ -136,7 +136,7 @@ module.exports.checkPermission = function(http, type, options) {
   function checkPackagePermission(userGroups) {
     return new Promise(function(resolve, reject) {
       if ( type === 'package' ) {
-        _instance.getStorage().getBlacklist(username, http).then(function(blacklist) {
+        _instance.getStorage().getBlacklist(http, username).then(function(blacklist) {
           if ( blacklist && blacklist.indexOf(options.path) !== -1 ) {
             reject('Access Denied!');
           } else {
@@ -158,7 +158,7 @@ module.exports.checkPermission = function(http, type, options) {
       }
 
       if ( checkGroups ) {
-        _instance.getStorage().getGroups(username, http).then(function(userGroups) {
+        _instance.getStorage().getGroups(http, username).then(function(userGroups) {
           checkApiPermission(userGroups).then(function() {
             checkMountPermission(userGroups).then(function() {
               checkPackagePermission(userGroups).then(resolve).catch(reject);
