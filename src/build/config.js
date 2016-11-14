@@ -411,9 +411,12 @@
       _utils.iterate(list, function(iter, idx, next) {
         var file = _path.join(path, iter);
         _utils.readJSON(file, function(err, cfg) {
-          if ( !err && cfg ) {
+          if ( err ) {
+            console.warn('Failed to read JSON file', _path.basename(file), 'Syntax error ?', err);
+          } else if ( cfg ) {
             _utils.mergeObject(data, cfg);
           }
+
           next();
         });
       }, function() {
