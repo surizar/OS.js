@@ -106,9 +106,10 @@
   /**
    * Create a 'index.html' file
    */
-  function _createIndex(opts, dist, fn) {
+  function _createIndex(opts, dist, fn, test) {
     var tpldir = _path.join(ROOT, 'src', 'templates', 'dist', opts.build.dist.template);
     var outdir = _path.join(ROOT, dist || 'dist-dev');
+    var fileName = test ? 'test.html' : 'index.html';
     var scripts = [];
     var styles = [];
 
@@ -122,13 +123,13 @@
         _utils.log('-', i);
       }
       scripts.push('    <script type="text/javascript" charset="utf-8" src="' + i + '"></script>');
-    });
+    }, test);
 
-    var tpl = _fs.readFileSync(_path.join(tpldir, 'index.html')).toString();
+    var tpl = _fs.readFileSync(_path.join(tpldir, fileName)).toString();
     tpl = _utils.replaceAll(tpl, '%STYLES%', styles.join('\n'));
     tpl = _utils.replaceAll(tpl, '%SCRIPTS%', scripts.join('\n'));
 
-    _fs.writeFileSync(_path.join(outdir, 'index.html'), tpl);
+    _fs.writeFileSync(_path.join(outdir, fileName), tpl);
   }
 
   function getBuildFiles(opts) {
@@ -242,10 +243,12 @@
     },
 
     'dist-dev': function(opts, done) {
-      _createIndex(opts, 'dist-dev', function(addStyle, addScript) {
+      function adder(addStyle, addScript, test) {
         var build = getBuildFiles(opts.build);
+        var jss = (test ? ['vendor/mocha.js', 'vendor/chai.js', 'client/test/test.js'] : []).concat(build.javascript);
+        var csss = (test ? ['vendor/mocha.css'] : []).concat(build.stylesheets);
 
-        build.javascript.forEach(function(i) {
+        jss.forEach(function(i) {
           addScript(i.replace(/src\/client\/(.*)/, 'client/$1'));
         });
 
@@ -253,12 +256,15 @@
           addScript(i.replace(/src\/client\/(.*)/, 'client/$1'));
         });
 
-        build.stylesheets.forEach(function(i) {
+        csss.forEach(function(i) {
           if ( _filter(i, {target: 'dist-dev'}) ) {
             addStyle(i.replace(/^(dev|prod):/, '').replace(/src\/client\/(.*)/, 'client/$1'));
           }
         });
-      });
+      };
+
+      _createIndex(opts, 'dist-dev', adder);
+      _createIndex(opts, 'dist-dev', adder, true);
 
       done();
     }

@@ -57,8 +57,7 @@
         userData: {
           id: 0,
           username: 'demo',
-          name: 'Demo User',
-          groups: groups
+          name: 'Demo User'
         },
         userSettings: settings,
         blacklistedPackages: []

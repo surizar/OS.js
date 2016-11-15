@@ -1651,11 +1651,17 @@
   /**
    * Gets the browser window path
    *
+   * @param {String}    [app]     Append this path
+   *
    * @function getBrowserPath
    * @memberof OSjs.API
    */
-  API.getBrowserPath = function _apiGetBrowserPath() {
-    return (window.location.pathname || '/').replace(/index\.(.*)$/, '');
+  API.getBrowserPath = function _apiGetBrowserPath(app) {
+    var str = API.getConfig('Connection.RootURI');
+    if ( typeof app === 'string' ) {
+      str = str.replace(/\/?$/, app.replace(/^\/?/, '/'));
+    }
+    return str;
   }
 
   /**

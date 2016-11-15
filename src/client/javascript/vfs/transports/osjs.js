@@ -46,11 +46,7 @@
    */
   var Transport = {
     url: function(item, callback) {
-      var root = window.location.pathname || '/';
-      if ( root === '/' || window.location.protocol === 'file:' ) {
-        root = '';
-      }
-
+      var root = API.getBrowserPath();
       var mm = OSjs.Core.getMountManager();
       var module = mm.getModuleFromPath(item.path, false, true);
       var url = item.path.replace(module.match, root);

@@ -413,7 +413,9 @@
           item = {src: item};
         }
 
-        item._src = item.src;
+        var src = OSjs.API.getBrowserPath(item.src);
+        item._src = src;
+        item.src = src;
         item.type = item.type ? getTypeCorrected(item.type) : getType(item.src);
 
         return item;

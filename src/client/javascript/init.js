@@ -49,6 +49,7 @@
   var loaded     = false;
   var inited     = false;
   var signingOut = false;
+  var isMocha    = false;
 
   // Make sure these namespaces exist
   (['Utils', 'API', 'GUI', 'Core', 'Dialogs', 'Helpers', 'Applications', 'Locales', 'VFS', 'Extensions', 'Auth', 'Storage', 'Connections']).forEach(function(ns) {
@@ -445,6 +446,11 @@
    * Loads all extensions
    */
   function initExtensions(config, callback) {
+    if ( isMocha ) {
+      callback();
+      return;
+    }
+
     var exts = Object.keys(OSjs.Extensions);
     var manifest =  OSjs.Core.getMetadata();
 
@@ -604,50 +610,12 @@
   }
 
   /**
-   * Client-side unit-testing
-   */
-  function initTestEnvironment(config, callback) {
-    OSjs.Utils.preload([
-      '/vendor/mocha/mocha.js',
-      '/vendor/mocha/mocha.css',
-      '/vendor/chai/chai.js'
-    ], function() {
-      // Add basic layout
-      var h1 = document.createElement('h1');
-      h1.style.margin = '20px';
-      h1.appendChild(document.createTextNode('OS.js Mocha Client Test Suite'));
-      document.body.appendChild(h1);
-
-      var el = document.createElement('div');
-      el.id = 'mocha';
-      document.body.appendChild(el);
-
-      // Reset certain styles
-      document.body.style.background = '#fff';
-      document.body.style.overflow = 'auto';
-
-      // Init mocha interfaces
-      window.mocha.ui('bdd');
-      window.mocha.reporter('html');
-
-      // Create mock Window Manager
-      (new OSjs.Core.WindowManager('MochaWM', null, {}, {}, {})).init();
-
-      // Load default themes
-      OSjs.Utils.$createCSS(OSjs.API.getThemeCSS('default'));
-
-      // Load and run tests
-      OSjs.Utils.preload(['/client/test/test.js'], callback);
-    });
-
-    return true;
-  }
-
-  /**
    * Wrapper for initializing OS.js
    */
   function init() {
     console.group('init()');
+
+    isMocha = document.body.getAttribute('data-mocha') === 'true' || window.location.hash === '#mocha';
 
     var config = OSjs.Core.getConfig();
     var splash = document.getElementById('LoadingScreen');
@@ -692,9 +660,8 @@
         }
       });
 
-      if ( config.MOCHAMODE ) {
+      if ( isMocha ) {
         _inited();
-        window.mocha.run();
       } else {
         initWindowManager(config, function() {
           initEvents();
@@ -709,10 +676,6 @@
     }
 
     initLayout();
-
-    if ( config.MOCHAMODE ) {
-      queue.push(initTestEnvironment);
-    }
 
     OSjs.Utils.asyncs(queue, function(entry, index, next) {
       if ( index < 1 ) {

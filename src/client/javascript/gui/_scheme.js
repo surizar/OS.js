@@ -272,7 +272,7 @@
     var self = this;
     var src = this.url;
     if ( src.substr(0, 1) !== '/' && !src.match(/^(https?|ftp)/) ) {
-      src = window.location.pathname + src;
+      src = API.getBrowserPath(src);
     }
 
     var root = Utils.dirname(src);
