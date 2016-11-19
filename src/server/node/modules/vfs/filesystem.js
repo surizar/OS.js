@@ -70,6 +70,8 @@ function createWriteStream(http, path) {
  * Reads EXIF data
  */
 function readExif(path, mime) {
+  mime = mime || '';
+
   var _read = function defaultRead(resolve, reject) {
     resolve(null);
   };

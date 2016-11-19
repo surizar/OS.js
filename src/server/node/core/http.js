@@ -295,23 +295,22 @@ function createHttpResponder(env, response) {
       mime = _vfs.getMime(path);
     }
 
-    var failed = false;
-
     stream.pipe(response);
 
     stream.on('error', function() {
-      failed = true;
       _error('File not found', 404);
     });
 
     stream.on('end', function() {
-      if ( !failed ) {
+      try {
         response.writeHead(code || 200, {
           'Content-Type': mime
         });
-
-        response.end();
+      } catch ( e ) {
+        // NOTE: For unknown reasons it always sais headers are already sent on first requst ?!
       }
+
+      response.end();
     });
   }
 
@@ -338,16 +337,10 @@ function createHttpResponder(env, response) {
     file: function(path, options, code) {
       options = options || {};
 
-      _fs.exists(path, function(exists) {
-        if ( !exists ) {
-          _error('File not found', 404);
-        } else {
-          const stream = _fs.createReadStream(path, {
-            bufferSize: 64 * 1024
-          });
-          _stream(path, stream, code);
-        }
+      const stream = _fs.createReadStream(path, {
+        bufferSize: 64 * 1024
       });
+      _stream(path, stream, code);
     }
   });
 }
