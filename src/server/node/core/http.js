@@ -295,15 +295,24 @@ function createHttpResponder(env, response) {
       mime = _vfs.getMime(path);
     }
 
-    stream.on('end', function() {
-      response.end();
-    });
-
-    response.writeHead(code || 200, {
-      'Content-Type': mime
-    });
+    var failed = false;
 
     stream.pipe(response);
+
+    stream.on('error', function() {
+      failed = true;
+      _error('File not found', 404);
+    });
+
+    stream.on('end', function() {
+      if ( !failed ) {
+        response.writeHead(code || 200, {
+          'Content-Type': mime
+        });
+
+        response.end();
+      }
+    });
   }
 
   return Object.freeze({
