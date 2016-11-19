@@ -917,7 +917,7 @@
     }, 10);
 
     if ( this._app ) {
-      this._app._onMessage('initedWindow', this, {});
+      this._app._emit('initedWindow', [this]);
     }
 
     console.debug('Window::_inited()', this._name);
