@@ -251,19 +251,31 @@
   OSjs.Utils.pathJoin = function() {
     var parts = [];
     var prefix = '';
-    var i, s;
-    for ( i = 0; i < arguments.length; i++ ) {
-      s = String(arguments[i]);
+
+    function getPart(s) {
       if ( s.match(/^([A-z0-9\-_]+)\:\//) ) {
-        prefix = s.replace(/\/+$/, '//');
-        continue;
+        var spl = s.split(':/');
+        if ( !prefix ) {
+          prefix = spl[0] + '://';
+        }
+        s = spl[1] || '';
       }
 
-      s = s.replace(/^\/+/, '').replace(/\/+$/, '');
-      parts.push(s);
+      s = s.replace(/^\/+/, '').replace(/\/+$/, '')
+
+      return s.split('/').filter(function(i) {
+        return ['', '.', '..'].indexOf(i) === -1;
+      }).join('/');
     }
 
-    return prefix + '/' + parts.join('/');
+    for ( var i = 0; i < arguments.length; i++ ) {
+      var str = getPart(String(arguments[i]));
+      if ( str ) {
+        parts.push(str);
+      }
+    }
+
+    return prefix + parts.join('/').replace(/^\/?/, '/');
   };
 
   /**
