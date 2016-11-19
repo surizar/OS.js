@@ -46,12 +46,12 @@
     }
 
     // Make sure we only load required modules (ignore warnings)
-    var checks = ['test', 'eslint', 'csslint', 'validate_xml', 'mochaTest'];
+    var checks = ['test', 'eslint', 'csslint', 'validate_xml', 'mochaTest', 'mocha'];
     checks.forEach(function(k) {
       if ( grunt.cli.tasks.indexOf(k) >= 0 ) {
         grunt.loadNpmTasks('grunt-eslint');
         grunt.loadNpmTasks('grunt-mocha-test');
-        //grunt.loadNpmTasks('grunt-mocha');
+        grunt.loadNpmTasks('grunt-mocha');
         grunt.loadNpmTasks('grunt-contrib-csslint');
         grunt.loadNpmTasks('grunt-contrib-validate-xml');
         return false;
@@ -113,6 +113,15 @@
       mochaTest: {
         test: {
           src: ['src/server/test/node/*.js']
+        }
+      },
+      mocha: {
+        test: {
+          options: {
+            urls: [
+              'http://localhost:8000/test.html'
+            ]
+          }
         }
       },
       watch: {

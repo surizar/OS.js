@@ -47,6 +47,7 @@
     "grunt-contrib-validate-xml": ">=0.0.1",
     "grunt-contrib-watch": ">=1.0.0",
     "grunt-eslint": ">=19.0.0",
+    "grunt-mocha": "^1.0.2",
     "grunt-mocha-test": ">=0.12.7",
     "uglify-js": ">=2.7.3"
   }
