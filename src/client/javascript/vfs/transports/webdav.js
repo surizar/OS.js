@@ -55,8 +55,7 @@
 
   function getCORSAllowed(item) {
     var module = getModule(item);
-    var val = module.options.cors;
-    return typeof val === 'undefined' ? false : val === true;
+    return module.options.cors === true;
   }
 
   function getURL(item) {

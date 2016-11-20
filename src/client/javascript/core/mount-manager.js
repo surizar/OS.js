@@ -57,17 +57,6 @@
   var DefaultModule = 'User';
 
   /////////////////////////////////////////////////////////////////////////////
-  // HELPERS
-  /////////////////////////////////////////////////////////////////////////////
-
-  /**
-   * Creates a regexp matcher for a VFS module (from string)
-   */
-  function createMatch(name) {
-    return new RegExp('^' + name.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, '\\$&'));
-  }
-
-  /////////////////////////////////////////////////////////////////////////////
   // MOUNT MANAGER
   /////////////////////////////////////////////////////////////////////////////
 
@@ -92,90 +81,103 @@
     var _inited = false;
     var _modules = {};
 
-    return Object.seal({
+    /**
+     * Checks if given transport mount is read-only
+     */
+    function isReadOnly(name, params, args) {
+      if ( params.readOnly ) {
+        var restricted = ['upload', 'unlink', 'write', 'mkdir', 'move', 'trash', 'untrash', 'emptyTrash'];
 
-      /**
-       * Creates a valid Mountpoint object from given data
-       *
-       * @function _create
-       * @memberof OSjs.Core.MountManager#
-       *
-       * @param {Mountpoint}  opts                Mounpoint options
-       * @return {Mountpoint} With corrections and/or necesarry modifications
-       */
-      _create: function(params) {
-        var target = VFS.Transports[params.transport];
-        if ( target && typeof target.defaults === 'function' ) {
-          target.defaults(params);
+        if ( name === 'copy' ) {
+          var dest = MountManager.getModuleFromPath(args[1].path, false, true);
+          return dest.internal !== params.internal;
         }
 
-        function _checkReadOnly(name, params, args) {
-          if ( params.readOnly ) {
-            var restricted = ['upload', 'unlink', 'write', 'mkdir', 'move', 'trash', 'untrash', 'emptyTrash'];
+        if ( restricted.indexOf(name) !== -1 ) {
+          return true;
+        }
+      }
+      return false;
+    }
 
-            if ( name === 'copy' ) {
-              var dest = MountManager.getModuleFromPath(args[1].path, false, true);
-              return dest.internal !== params.internal;
-            }
+    /**
+     * Creates a new mount object
+     */
+    function createMountPoint(name, args, dynamic) {
+      if ( name === null ) {
+        name = args.name;
+      }
 
-            if ( restricted.indexOf(name) !== -1 ) {
-              return true;
-            }
+      var sname = name.replace(/\s/g, '-').toLowerCase();
+      if ( _modules[name] ) {
+        throw new Error(API._('ERR_VFSMODULE_ALREADY_MOUNTED_FMT', name));
+      }
+
+      var match = new RegExp('^' + (sname + '://').replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, '\\$&'));
+
+      var mount = Utils.argumentDefaults(args, {
+        searchable: true,
+        readOnly: false,
+        visible: true,
+        dynamic: dynamic === true,
+        options: {},
+
+        transport: 'Internal',
+        root: sname + ':///',
+        name: name,
+        description: name,
+        icon: 'devices/harddrive.png',
+        match: match,
+
+        request: function _request(n, a, callback, options) {
+          MountManager._request(mount, n, a, callback, options);
+        },
+        unmount: function(cb) {
+          (cb || function() {})(API._('ERR_VFS_UNAVAILABLE'), false);
+        },
+        mounted: function() {
+          return true;
+        },
+        enabled: function() {
+          return true;
+        }
+      }, true);
+
+      // TODO: Make sure aliases inherit correct transport
+      var internals = ['Internal'];
+      if ( typeof mount.internal === 'undefined' ) {
+        mount.internal = internals.indexOf(mount.transport) !== -1;
+      }
+
+      if ( mount.transport.toLowerCase() === 'owndrive' ) {
+        mount.transport = 'WebDAV';
+      }
+
+      var target = VFS.Transports[mount.transport];
+      if ( target && typeof target.defaults === 'function' ) {
+        target.defaults(mount);
+      }
+
+      if ( dynamic ) {
+        var validModule = (function() {
+          if ( Object.keys(VFS.Transports).indexOf(mount.transport) < 0 ) {
+            return 'No such transport \'' + mount.transport + '\'';
           }
-          return false;
-        }
-
-        var mparams = (function() {
-          var o = {};
-          Object.keys(params).forEach(function(k) {
-            if ( typeof params[k] !== 'function' ) {
-              o[k] = params[k];
-            }
-          });
-          return Object.freeze(o);
+          if ( mount.transport === 'WebDAV' && !mount.options.username ) {
+            return 'Connection requires username (authorization)';
+          }
+          return true;
         })();
 
-        var cfg = Utils.argumentDefaults(params, {
-          request: function(name, args, callback, options) {
-            callback = callback || function() {
-              console.warn('NO CALLBACK FUNCTION WAS ASSIGNED IN VFS REQUEST');
-            };
+        if ( validModule !== true ) {
+          throw new Error(API._('ERR_VFSMODULE_INVALID_CONFIG_FMT', validModule));
+        }
+      }
 
-            if ( !target ) {
-              callback(API._('ERR_VFSMODULE_INVALID_TYPE_FMT', params.transport));
-              return;
-            }
+      return Object.freeze(mount);
+    }
 
-            if ( _checkReadOnly(name, params, args) ) {
-              callback(API._('ERR_VFSMODULE_READONLY'));
-              return;
-            }
-
-            var module = target.module || {};
-            if ( !module[name] ) {
-              callback(API._('ERR_VFS_UNAVAILABLE'));
-              return;
-            }
-
-            var fargs = args || [];
-            fargs.push(callback);
-            fargs.push(options);
-            fargs.push(mparams);
-            module[name].apply(module, fargs);
-          },
-          unmount: function(cb) {
-            (cb || function() {})(API._('ERR_VFS_UNAVAILABLE'), false);
-          },
-          mounted: function() {
-            return true;
-          },
-          enabled: function() {
-            return true;
-          }
-        });
-
-        return cfg;
-      },
+    return Object.seal({
 
       /**
        * Method for adding pre-defined modules like Dropbox and GoogleDrive
@@ -215,36 +217,77 @@
 
         _inited = true;
 
-        _queue.forEach(function(i) {
-          var add = MountManager._create.apply(MountManager, i);
-          MountManager._add(add, false);
+        var config = API.getConfig('VFS.Mountpoints', {});
+
+        _queue.forEach(function(args) {
+          var mount = createMountPoint(null, args[0]);
+          MountManager._add(mount, args[1]);
         });
 
-        var config = API.getConfig('VFS.Mountpoints', {});
         Object.keys(config).forEach(function(key) {
-          var iter = config[key];
-          if ( iter.enabled !== false ) {
-            var mp = MountManager._create({
-              readOnly: (typeof iter.readOnly === 'undefined') ? false : (iter.readOnly === true),
-              name: key,
-              transport: iter.transport || 'Internal',
-              description: iter.description || key,
-              icon: iter.icon || 'devices/harddrive.png',
-              root: key + ':///',
-              options: iter.options,
-              visible: iter.visible !== false,
-              internal: true,
-              searchable: true,
-              match: createMatch(key + '://')
-            });
+          var m = config[key];
+          if ( m.enabled !== false ) {
+            m.name = key;
+            delete m.enabled;
 
-            MountManager._add(mp, false);
+            var mount = createMountPoint(null, m);
+            MountManager._add(mount, false);
           }
         });
 
         _queue = [];
 
         callback();
+      },
+
+      /**
+       * Makes a VFS request via a Transport module from mountpoint
+       *
+       * @function _request
+       * @memberof OSjs.Core.MountManager#
+       *
+       * @param {Object}   mount      Mountpoint
+       * @param {String}   method     VFS method
+       * @param {Object}   args       VFS arguments
+       * @param {Function} callback   Callback when done
+       * @param {Object}   [options]  VFS options
+       */
+      _request: function(mount, method, args, callback, options) {
+        callback = callback || function() {
+          console.warn('NO CALLBACK FUNCTION WAS ASSIGNED IN VFS REQUEST');
+        };
+
+        var target = VFS.Transports[mount.transport];
+        if ( !target ) {
+          callback(API._('ERR_VFSMODULE_INVALID_TYPE_FMT', mount.transport));
+          return;
+        }
+
+        if ( isReadOnly(method, mount, args) ) {
+          callback(API._('ERR_VFSMODULE_READONLY'));
+          return;
+        }
+
+        var mparams = (function() {
+          var o = {};
+          Object.keys(mount).forEach(function(k) {
+            if ( typeof mount[k] !== 'function' ) {
+              o[k] = mount[k];
+            }
+          });
+          return Object.freeze(o);
+        })();
+
+        var module = target.module || {};
+        if ( !module[method] ) {
+          callback(API._('ERR_VFS_UNAVAILABLE'));
+        } else {
+          var fargs = args || [];
+          fargs.push(callback);
+          fargs.push(options);
+          fargs.push(mparams);
+          module[method].apply(module, fargs);
+        }
       },
 
       /**
@@ -286,69 +329,24 @@
        * @link  https://os.js.org/doc/manuals/man-mountpoints.html
        */
       add: function(opts, cb) {
-        opts = Utils.argumentDefaults(opts, {
-          description: 'My VFS Module',
-          transport: 'Internal',
-          name: 'MyModule',
-          icon: 'places/server.png',
-          searchable: false,
-          visible: true,
-          readOnly: false
-        });
-
-        if ( _modules[opts.name] ) {
-          throw new Error(API._('ERR_VFSMODULE_ALREADY_MOUNTED_FMT', opts.name));
-        }
-
-        if ( opts.transport.toLowerCase() === 'owndrive' ) {
-          opts.transport = 'WebDAV';
-        }
-
-        var modulePath = opts.name.replace(/\s/g, '-').toLowerCase() + '://';
-        var moduleRoot = modulePath + '/';
-        var moduleMatch = createMatch(modulePath);
-        var moduleOptions = opts.options || {};
-
-        var module = (function createMountpointModule() {
+        opts = (function() {
           var isMounted = true;
 
-          return MountManager._create({
-            readOnly: opts.readOnly,
-            transport: opts.transport,
-            name: opts.name,
-            description: opts.description,
-            visible: opts.visible,
-            dynamic: true,
-            unmount: function(cb) {
+          return Utils.argumentDefaults(opts, {
+            icon: 'places/server.png',
+            searchable: false,
+            unmount: function(done) {
               isMounted = false;
-
               API.message('vfs:unmount', opts.name, {source: null});
-              (cb || function() {})(false, true);
+              (done || function() {})(false, true);
             },
             mounted: function() {
               return isMounted;
-            },
-            root: moduleRoot,
-            icon: opts.icon,
-            match: moduleMatch,
-            options: moduleOptions
+            }
           });
         })();
 
-        var validModule = (function() {
-          if ( Object.keys(VFS.Transports).indexOf(opts.transport) < 0 ) {
-            return 'No such transport \'' + opts.transport + '\'';
-          }
-          if ( opts.transport === 'WebDAV' && !moduleOptions.username ) {
-            return 'Connection requires username (authorization)';
-          }
-          return true;
-        })();
-
-        if ( validModule !== true ) {
-          throw new Error(API._('ERR_VFSMODULE_INVALID_CONFIG_FMT', validModule));
-        }
-
+        var module = createMountPoint(null, opts, true);
         MountManager._add(module, true);
 
         (cb || function() {})(false, true);
@@ -356,8 +354,6 @@
 
       /**
        * Unmounts given mountpoint
-       *
-       * Only mountpoints mounted via `_create` is supported
        *
        * @function remove
        * @memberof OSjs.Core.MountManager#
