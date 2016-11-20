@@ -653,6 +653,15 @@
           done();
         });
       });
+      /*
+      it('should successfully read remote file', function(done) {
+        get(url + '/FS/get/https://os.js.org/images/logo-header.png', function(err, res, body) {
+          assert.equal(200, res.statusCode);
+          assert.equal('image/png', res.headers['content-type']);
+          done();
+        });
+      });
+      */
     });
 
     after(function() {

@@ -36,7 +36,6 @@
 
 const _path = require('path');
 const _instance = require('./instance.js');
-const _fstream = require('fstream');
 
 ///////////////////////////////////////////////////////////////////////////////
 // HELPERS
@@ -72,6 +71,10 @@ function getTransportName(query, mount) {
 
   if ( typeof query !== 'string' ) {
     query = query.path || query.root || query.src || '';
+  }
+
+  if ( query.match(/^(https?|ftp):/) ) {
+    return 'HTTP';
   }
 
   if ( !mount ) {
@@ -110,6 +113,7 @@ function getTransportName(query, mount) {
 module.exports.request = function(http, method, args) {
   const transportName = getTransportName(args);
   const transport = module.exports.getTransport(transportName);
+  const opts = args.options || {};
 
   return new Promise(function(resolve, reject) {
     if ( !transport ) {
@@ -117,7 +121,7 @@ module.exports.request = function(http, method, args) {
     }
 
     transport.request(http, method, args).then(function(data) {
-      if ( method === 'read' && data instanceof _fstream.Reader ) {
+      if ( method === 'read' && opts.stream !== false ) {
         return http.respond.stream(data.path, data);
       }
       resolve(data);
