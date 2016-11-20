@@ -30,6 +30,18 @@
 (function(Application, Window, Utils, API, VFS, GUI) {
   'use strict';
 
+  var TEMPLATES = {
+    WebDAV: {
+      MountName: 'owncloud',
+      MountDescription: 'OwnCloud',
+      MountHost: 'http://localhost/remote.php/webdav/',
+      MountNamespace: 'DAV:',
+      MountUsername: function() {
+        return OSjs.Core.getHandler().getUserData().username;
+      }
+    }
+  };
+
   function createMountWindow(win, scheme, selected, ondone) {
 
     var nwin = new Window('SettingsMountWindow', {
@@ -59,6 +71,19 @@
           return false;
         }
         return true;
+      }
+
+      function setTemplate(name) {
+        var tpl = TEMPLATES[name];
+        if ( tpl ) {
+          Object.keys(tpl).forEach(function(k) {
+            var val = tpl[k];
+            if ( typeof val === 'function' ) {
+              val = val();
+            }
+            scheme.find(self, k).set('value', val);
+          });
+        }
       }
 
       function done() {
@@ -103,6 +128,7 @@
         scheme.find(self, 'MountType').set('value', selected.transport);
         scheme.find(self, 'MountName').set('value', selected.name);
         scheme.find(self, 'MountDescription').set('value', selected.description);
+
         if ( selected.options ) {
           scheme.find(self, 'MountHost').set('value', selected.options.host);
           scheme.find(self, 'MountNamespace').set('value', selected.options.ns);
@@ -110,6 +136,11 @@
           scheme.find(self, 'MountPassword').set('value', selected.options.password);
           scheme.find(self, 'MountCORS').set('value', selected.options.cors);
         }
+      } else {
+        setTemplate(scheme.find(this, 'MountType').get('value'));
+        scheme.find(this, 'MountType').on('change', function(ev) {
+          setTemplate(ev.detail);
+        });
       }
 
       scheme.find(this, 'ButtonClose').on('click', function() {
