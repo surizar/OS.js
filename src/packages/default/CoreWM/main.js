@@ -242,15 +242,19 @@
 
     this.applySettings(this._settings.get());
 
-    VFS.watch(VFS.file(this.getSetting('desktopPath'), 'dir'), function(msg, obj) {
-      if ( !obj || msg.match(/^vfs:(un)?mount/) ) {
-        return;
-      }
+    try {
+      VFS.watch(VFS.file(this.getSetting('desktopPath'), 'dir'), function(msg, obj) {
+        if ( !obj || msg.match(/^vfs:(un)?mount/) ) {
+          return;
+        }
 
-      if ( self.iconView ) {
-        self.iconView._refresh();
-      }
-    });
+        if ( self.iconView ) {
+          self.iconView._refresh();
+        }
+      });
+    } catch ( e ) {
+      console.warn('Failed to apply CoreWM VFS watch', e, e.stack);
+    }
 
     this.initSwitcher();
     this.initDesktop();

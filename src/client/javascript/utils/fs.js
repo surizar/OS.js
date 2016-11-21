@@ -79,7 +79,6 @@
    */
   OSjs.Utils.checkdir = function(path) {
     if ( path && window.location.href.match(/^file\:\/\//) ) {
-      path = path.replace(/^\//, '');
     }
     return path;
   };

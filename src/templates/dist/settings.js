@@ -9,7 +9,7 @@
 
     var rootURI = window.location.pathname || '/';
     if ( window.location.protocol === 'file:' ) {
-      rootURI = '';
+      rootURI = window.location.href.replace(/[^\/]*$/, '');
     } else {
       if ( rootURI.substr(-1) !== '/' ) {
         rootURI = rootURI.replace(/[^\/]*$/, '');

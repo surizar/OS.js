@@ -50,6 +50,7 @@
       var mm = OSjs.Core.getMountManager();
       var module = mm.getModuleFromPath(item.path, false, true);
       var url = item.path.replace(module.match, root);
+
       callback(false, url);
     }
   };

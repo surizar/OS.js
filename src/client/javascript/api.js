@@ -1045,9 +1045,6 @@
     type = type || null;
 
     var root = API.getConfig('Connection.ThemeURI');
-    if ( !root.match(/^\//) ) {
-      root = API.getBrowserPath() + root;
-    }
 
     function getName(str, theme) {
       if ( !str.match(/^\//) ) {

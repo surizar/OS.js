@@ -117,7 +117,9 @@
      * @type {HandlerConnection}
      */
     var conf = API.getConfig('Connection');
-    this.connection = new OSjs.Connections[conf.Type](this);
+    var ctype = conf.Type === 'standalone' ? 'http' : conf.Type;
+
+    this.connection = new OSjs.Connections[ctype](this);
     this.authenticator = new OSjs.Auth[conf.Authenticator](this);
     this.storage = new OSjs.Storage[conf.Storage](this);
 
@@ -341,7 +343,12 @@
    * @return  {String}
    */
   Handler.prototype.getVFSPath = function(item) {
-    var base = API.getConfig('Connection.FSURI', '/');
+    var base = API.getConfig('Connection.RootURI', '/');
+    if ( window.location.protocol === 'file:' ) {
+      return base + item.path.replace(/^osjs:\/\/\//, '');
+    }
+
+    base = API.getConfig('Connection.FSURI', '/');
     if ( item ) {
       return base + '/get/' + item.path;
     }

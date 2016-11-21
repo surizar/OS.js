@@ -33,18 +33,21 @@
 
   function NWConnection() {
     Connection.apply(this, arguments);
-
-    this.nw = require('osjs').init({
-      root: process.cwd(),
-      settings: {
-        mimes: API.getConfig('MIME.mapping')
-      },
-      nw: true
-    });
+    this.nw = require('osjs');
   }
 
   NWConnection.prototype = Object.create(Connection.prototype);
   NWConnection.constructor = Connection;
+
+  NWConnection.prototype.init = function(callback) {
+    /* TODO
+    this.nw.init({
+      root: process.cwd()
+    }, callback);
+    */
+
+    callback('Sorry, but this is not working at the moment');
+  };
 
   NWConnection.prototype.destroy = function() {
     this.nw = null;
@@ -56,6 +59,10 @@
       console.warn('NWConnection::request()', 'error', arguments);
     };
 
+    onerror('Sorry, but this is not working at the moment');
+    return false;
+
+    /* TODO
     try {
       this.nw.request(method.match(/^FS\:/) !== null, method.replace(/^FS\:/, ''), args, function(err, res) {
         onsuccess({error: err, result: res});
@@ -65,8 +72,7 @@
       console.warn('NWConnection::request() Warning', e.stack, e);
       onerror(e);
     }
-
-    return false;
+    */
   };
 
   /////////////////////////////////////////////////////////////////////////////

@@ -53,11 +53,12 @@
     }
 
     if ( API.getConfig('Connection.Type') === 'standalone' || window.location.protocol === 'file:' ) {
-      return callback({
+      return callback(false, {
         userData: {
           id: 0,
           username: 'demo',
-          name: 'Demo User'
+          name: 'Demo User',
+          groups: ['admin']
         },
         userSettings: settings,
         blacklistedPackages: []

@@ -414,7 +414,7 @@
         }
 
         var src = item.src;
-        if ( !src.match(/^(\/|https?)/) ) {
+        if ( !src.match(/^(\/|file|https?)/) ) {
           src = OSjs.API.getBrowserPath(item.src);
         }
         item._src = src;
