@@ -125,9 +125,17 @@
       scripts.push('    <script type="text/javascript" charset="utf-8" src="' + i + '"></script>');
     }, test);
 
+    var loginHTML = '';
+    var loginName = opts.build.dist.login || 'default';
+    var loginFile = _path.join(ROOT, 'src', 'templates', 'dist', 'login', loginName + '.html');
+    if ( _fs.existsSync(loginFile) ) {
+      loginHTML = _fs.readFileSync(loginFile).toString();
+    }
+
     var tpl = _fs.readFileSync(_path.join(tpldir, fileName)).toString();
     tpl = _utils.replaceAll(tpl, '%STYLES%', styles.join('\n'));
     tpl = _utils.replaceAll(tpl, '%SCRIPTS%', scripts.join('\n'));
+    tpl = _utils.replaceAll(tpl, '%LOGIN%', loginHTML);
 
     _fs.writeFileSync(_path.join(outdir, fileName), tpl);
   }

@@ -1,7 +1,8 @@
 {
   "build": {
     "dist": {
-      "template": "default"
+      "template": "default",
+      "login": "default"
     },
     "statics": {
       "src/client/dialogs.html": "dist/dialogs.html",
