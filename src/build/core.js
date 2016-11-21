@@ -193,8 +193,12 @@
 
           // Install dependencies
           _fs.copySync(
-            _path.join(ROOT, 'src', 'server', 'node', 'node_modules'),
-            _path.join(dest, 'node_modules')
+            _path.join(ROOT, 'src', 'server', 'node'),
+            _path.join(dest, 'node_modules', 'osjs')
+          );
+          _fs.copySync(
+            _path.join(ROOT, 'src', 'templates', 'nw', 'index.js'),
+            _path.join(dest, 'node_modules', 'osjs', 'index.js')
           );
 
           var cmd = 'cd "' + dest + '" && npm install';
