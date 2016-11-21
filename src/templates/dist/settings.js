@@ -7,10 +7,12 @@
   var SETTINGS = Object.freeze((function() {
     var c = %CONFIG%;
 
-    var rootURI = (window.location.pathname || '').replace(/\/\w+\.\w+/, '/') || '/';
-    if ( rootURI !== '/test.html' ) {
-      if ( window.location.protocol === 'file:' ) {
-        rootURI = '';
+    var rootURI = window.location.pathname || '/';
+    if ( window.location.protocol === 'file:' ) {
+      rootURI = '';
+    } else {
+      if ( rootURI.substr(-1) !== '/' ) {
+        rootURI = rootURI.replace(/[^\/]*$/, '');
       }
     }
 
