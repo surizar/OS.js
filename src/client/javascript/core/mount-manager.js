@@ -54,7 +54,7 @@
    * @typedef Mountpoint
    */
 
-  var DefaultModule = 'User';
+  var DefaultModule = 'home';
 
   /////////////////////////////////////////////////////////////////////////////
   // MOUNT MANAGER
@@ -104,8 +104,6 @@
      * Creates a new mount object
      */
     function createMountPoint(name, args, dynamic) {
-      args = Utils.cloneObject(args, true);
-
       if ( name === null ) {
         name = args.name;
       }
@@ -117,7 +115,7 @@
 
       var match = new RegExp('^' + (sname + '://').replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, '\\$&'));
 
-      var mount = Utils.argumentDefaults(args, {
+      var mount = Utils.argumentDefaults(Utils.cloneObject(args, true), {
         searchable: true,
         readOnly: false,
         visible: true,
@@ -331,7 +329,7 @@
        * @link  https://os.js.org/doc/manuals/man-mountpoints.html
        */
       add: function(opts, cb) {
-        opts = (function() {
+        var mount = (function() {
           var isMounted = true;
 
           return Utils.argumentDefaults(Utils.cloneObject(opts, true), {
@@ -348,7 +346,7 @@
           });
         })();
 
-        var module = createMountPoint(null, opts, true);
+        var module = createMountPoint(null, mount, true);
         MountManager._add(module, true);
 
         (cb || function() {})(false, true);
@@ -485,7 +483,7 @@
           Object.keys(_modules).forEach(function(name) {
             if ( d === null ) {
               var i = _modules[name];
-              if ( i.enabled() === true && i.match && test.match(i.match) ) {
+              if ( i.enabled() === true && i.match instanceof RegExp && test.match(i.match) ) {
                 d = name;
               }
             }
