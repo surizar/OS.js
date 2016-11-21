@@ -413,7 +413,10 @@
           item = {src: item};
         }
 
-        var src = OSjs.API.getBrowserPath(item.src);
+        var src = item.src;
+        if ( !src.match(/^(\/|https?)/) ) {
+          src = OSjs.API.getBrowserPath(item.src);
+        }
         item._src = src;
         item.src = src;
         item.type = item.type ? getTypeCorrected(item.type) : getType(item.src);
