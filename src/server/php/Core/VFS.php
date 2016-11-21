@@ -43,7 +43,7 @@ abstract class VFS
     if ( $protocol = VFS::GetProtocol($args) ) {
       $transport = 'filesystem';
 
-      if ( preg_match('/^https?:/', $protocol) !== false ) {
+      if ( preg_match('/^(https?):/', $protocol) ) {
         return 'OSjs\Modules\VFS\Http';
       }
 
