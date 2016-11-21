@@ -104,6 +104,8 @@
      * Creates a new mount object
      */
     function createMountPoint(name, args, dynamic) {
+      args = Utils.cloneObject(args, true);
+
       if ( name === null ) {
         name = args.name;
       }
@@ -332,7 +334,7 @@
         opts = (function() {
           var isMounted = true;
 
-          return Utils.argumentDefaults(opts, {
+          return Utils.argumentDefaults(Utils.cloneObject(opts, true), {
             icon: 'places/server.png',
             searchable: false,
             unmount: function(done) {
