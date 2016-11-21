@@ -68,22 +68,6 @@
   };
 
   /**
-   * Check the directory and rewrite it if running on file://
-   *
-   * @function checkdir
-   * @memberof OSjs.Utils
-   *
-   * @param   {String}    path      Input path
-   *
-   * @return  {String}              Output path
-   */
-  OSjs.Utils.checkdir = function(path) {
-    if ( path && window.location.href.match(/^file\:\/\//) ) {
-    }
-    return path;
-  };
-
-  /**
    * Get file extension of filename/path
    *
    * @function filext

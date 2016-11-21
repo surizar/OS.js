@@ -900,8 +900,6 @@
     }
 
     function getResultPath(path, userpkg) {
-      path = Utils.checkdir(path);
-
       if ( vfspath ) {
         if ( userpkg ) {
           path = path.substr(API.getConfig('Connection.FSURI').length);
@@ -948,7 +946,7 @@
     }
 
     root = API.getConfig('Connection.ThemeURI');
-    return Utils.checkdir(root + '/' + name + '.css');
+    return root + '/' + name + '.css';
   };
 
   /**
@@ -1063,7 +1061,7 @@
       name = getName(name, theme);
     }
 
-    return Utils.checkdir(name);
+    return name;
   };
 
   /**
@@ -1091,7 +1089,7 @@
         name = root + '/' + theme + '/' + name + '.' + ext;
       }
     }
-    return Utils.checkdir(name);
+    return name;
   };
 
   /**
@@ -1142,7 +1140,7 @@
       }
     }
 
-    return Utils.checkdir(name);
+    return name;
   };
 
   /**

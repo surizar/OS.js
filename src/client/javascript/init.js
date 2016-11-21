@@ -419,11 +419,6 @@
         if ( i instanceof Array ) {
           flatten(i);
         } else {
-          if ( typeof i === 'string' ) {
-            i = OSjs.Utils.checkdir(i);
-          } else {
-            i.src = OSjs.Utils.checkdir(i.src);
-          }
           list.push(i);
         }
       });

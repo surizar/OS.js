@@ -952,7 +952,7 @@
 
     item = checkMetadataArgument(item);
     requestWrapper([item.path, 'url', [item]], 'ERR_VFSMODULE_URL_FMT', callback, function(error, response) {
-      return error ? false : Utils.checkdir(response);
+      return error ? false : response;
     });
   };
 
