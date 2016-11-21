@@ -97,6 +97,45 @@ class Responder
   }
 
   /**
+   * Responds with a buffered remote file (like Http)
+   */
+  public function remote($path, $base64 = false) {
+    if ( $base64 ) {
+      $mime = 'application/octet-stream';
+      if ( function_exists('curl_init') && ($ch = curl_init()) ) {
+        curl_setopt($ch, CURLOPT_URL, $path);
+        curl_setopt($ch, CURLOPT_HEADER, 1);
+        curl_setopt($ch, CURLOPT_NOBODY, 1);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        if ( $test = curl_getinfo($ch, CURLINFO_CONTENT_TYPE) ) {
+          $parts = explode(';', $test);
+          $mime = $parts[0];
+        }
+      }
+      print "data:{$mime};base64,";
+    }
+
+    if ( ($handle = fopen($path, 'rb')) !== false ) {
+      while ( !feof($handle) ) {
+        if ( $base64 ) {
+          $plain = fread($handle, 57 * 143);
+          $encoded = base64_encode($plain);
+          print chunk_split($encoded, 76, '');
+        } else {
+          print fread($handle, 1204*1024);
+        }
+
+        ob_flush();
+        flush();
+      }
+
+      fclose($handle);
+    } else {
+      $this->raw('File not found', 404);
+    }
+  }
+
+  /**
    * Respond with error
    */
   public function error($message, $code = 500) {

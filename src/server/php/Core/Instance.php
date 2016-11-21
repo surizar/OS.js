@@ -190,7 +190,8 @@ class Instance
 
         Authenticator::CheckPermissions($request, 'fs', ['method' => $endpoint, 'arguments' => $args]);
 
-        if ( is_callable($transport, $request->endpoint) ) {
+
+        if ( $transport && is_callable($transport, $endpoint) ) {
           $result = call_user_func_array([$transport, $endpoint], [$request, $args]);
           $request->respond()->json([
             'error' => null,
