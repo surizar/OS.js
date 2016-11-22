@@ -32,11 +32,6 @@
   'use strict';
 
   /**
-   * @namespace Handlers
-   * @memberof OSjs
-   */
-
-  /**
    * Callback for all Handler methods
    * @param {String} [error] Error from response (if any)
    * @param {Mixed} result Result from response (if any)

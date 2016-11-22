@@ -143,7 +143,7 @@
    * Get if connection is Online
    *
    * @function isOnline
-   * @memeberof OSjs.Core.Connection#
+   * @memberof OSjs.Core.Connection#
    * @return {Boolean}
    */
   Connection.prototype.isOnline = function() {
@@ -154,7 +154,7 @@
    * Get if connection is Offline
    *
    * @function isOffline
-   * @memeberof OSjs.Core.Connection#
+   * @memberof OSjs.Core.Connection#
    * @return {Boolean}
    */
   Connection.prototype.isOffline = function() {
