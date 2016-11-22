@@ -432,8 +432,8 @@
    * @param   {OSjs.Core.Window}      win           OS.js Window
    * @param   {String}                tagName       OS.js GUI Element name
    * @param   {Object}                params        Parameters
-   * @param   {Node}                  parentNode    Parent Node
-   * @param   {Object}                applyArgs     New element parameters
+   * @param   {Node}                  [parentNode]  Parent Node
+   * @param   {Object}                [applyArgs]   New element parameters
    *
    * @return  {OSjs.GUI.Element}
    */

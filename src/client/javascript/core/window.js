@@ -1071,6 +1071,26 @@
   };
 
   /**
+   * Creates a new GUI Element
+   *
+   * THIS IS JUST A SHORTCUT METHOD FROM THE UI SCHEME CLASS
+   *
+   * @function _create
+   * @memberof OSjs.Core.Window#
+   * @see OSjs.GUI.Scheme#create
+   *
+   * @param   {String}                tagName       OS.js GUI Element name
+   * @param   {Object}                params        Parameters
+   * @param   {Node}                  [parentNode]  Parent Node
+   * @param   {Object}                [applyArgs]   New element parameters
+   *
+   * @return {OSjs.GUI.Element}
+   */
+  Window.prototype._create = function(tagName, params, parentNode, applyArgs) {
+    return this._scheme ? this._scheme.create(this, tagName, params, parentNode, applyArgs) : null;
+  };
+
+  /**
    * Finds a GUI Element by ID from Scheme.
    *
    * THIS IS JUST A SHORTCUT METHOD FROM THE UI SCHEME CLASS
