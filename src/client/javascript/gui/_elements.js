@@ -106,7 +106,7 @@
    * @param {Node}      el      DOM Node
    * @param {String}    [q]     Query that element came from
    *
-   * @link https://os.js.org/doc/tutorials/gui.html
+   * @link https://os.js.org/manual/gui/elements/
    *
    * @constructor Element
    * @memberof OSjs.GUI

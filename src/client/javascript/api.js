@@ -269,8 +269,7 @@
    * @param   {Object}    args      cURL Arguments (see docs)
    * @param   {Function}  callback  Callback function => fn(error, response)
    *
-   * @link https://os.js.org/doc/tutorials/using-curl.html
-   * @link https://os.js.org/doc/server/srcservernodenode_modulesosjsapijs.html#api-curl
+   * @link https://os.js.org/manual/api/usage/curl/
    */
   API.curl = function _apiCurl(args, callback) {
     args = args || {};

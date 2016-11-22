@@ -326,7 +326,7 @@
        * @param {Mountpoint} opts                           Mountpoint options
        * @param {Function}   cb                             Callback function => fn(err, result)
        *
-       * @link  https://os.js.org/doc/manuals/man-mountpoints.html
+       * @link https://os.js.org/manual/vfs/#mountpoints
        */
       add: function(opts, cb) {
         var mount = (function() {
