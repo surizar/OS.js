@@ -43,6 +43,7 @@
   function Storage() {
     this.saveTimeout = null;
 
+    /*eslint consistent-this: "off"*/
     _storageInstance = this;
   }
 

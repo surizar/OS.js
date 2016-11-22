@@ -78,6 +78,7 @@
      */
     this.offline    = false;
 
+    /*eslint consistent-this: "off"*/
     _connectionInstance = this;
   }
 

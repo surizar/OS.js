@@ -69,6 +69,7 @@
      */
     this.loggedIn = false;
 
+    /*eslint consistent-this: "off"*/
     _authInstance = this;
   }
 
