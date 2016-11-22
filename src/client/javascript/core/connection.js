@@ -31,6 +31,8 @@
 (function(API, Utils) {
   'use strict';
 
+  var _connectionInstance;
+
   /**
    * Attaches options to a XHR call
    */
@@ -58,20 +60,25 @@
   }
 
   /**
-   * Default Handler Connection Implementation
-   *
-   * <pre><b>
-   * You only have access to this via the 'Handler' instance
-   * </b></pre>
+   * Default Connection Implementation
    *
    * @summary Wrappers for communicating over HTTP, WS and NW
    *
    * @constructor Connection
    * @memberof OSjs.Core
    */
-  function Connection(handler) {
+  function Connection() {
     this.index = 0;
-    this.handler = handler;
+
+    /**
+     * If browser is offline
+     * @name offline
+     * @memberof OSjs.Core.Connection#
+     * @type {Boolean}
+     */
+    this.offline    = false;
+
+    _connectionInstance = this;
   }
 
   /**
@@ -81,6 +88,17 @@
    * @memberof OSjs.Core.Connection#
    */
   Connection.prototype.init = function(callback) {
+    var self = this;
+
+    if ( typeof navigator.onLine !== 'undefined' ) {
+      Utils.$bind(window, 'offline', function(ev) {
+        self.onOffline();
+      });
+      Utils.$bind(window, 'online', function(ev) {
+        self.onOnline();
+      });
+    }
+
     callback();
   };
 
@@ -91,7 +109,219 @@
    * @memberof OSjs.Core.Connection#
    */
   Connection.prototype.destroy = function() {
-    this.handler = null;
+    Utils.$unbind(window, 'offline');
+    Utils.$unbind(window, 'online');
+  };
+
+  /**
+   * Default method to perform a resolve on a VFS File object.
+   *
+   * This should return the URL for given resource.
+   *
+   * @function getVFSPath
+   * @memberof OSjs.Core.Connection#
+   *
+   * @param   {OSjs.VFS.File}       item      The File Object
+   *
+   * @return  {String}
+   */
+  Connection.prototype.getVFSPath = function(item) {
+    var base = API.getConfig('Connection.RootURI', '/');
+    if ( window.location.protocol === 'file:' ) {
+      return base + item.path.replace(/^osjs:\/\/\//, '');
+    }
+
+    base = API.getConfig('Connection.FSURI', '/');
+    if ( item ) {
+      return base + '/get/' + item.path;
+    }
+    return base + '/upload';
+  };
+
+  /**
+   * Get if connection is Online
+   *
+   * @function isOnline
+   * @memeberof OSjs.Core.Connection#
+   * @return {Boolean}
+   */
+  Connection.prototype.isOnline = function() {
+    return !this.offline;
+  };
+
+  /**
+   * Get if connection is Offline
+   *
+   * @function isOffline
+   * @memeberof OSjs.Core.Connection#
+   * @return {Boolean}
+   */
+  Connection.prototype.isOffline = function() {
+    return this.offline;
+  };
+
+  /**
+   * Called upon a VFS request
+   *
+   * You can use this to interrupt/hijack operations.
+   *
+   * It is what gets called 'before' a VFS request takes place
+   *
+   * @function onVFSRequest
+   * @memberof OSjs.Core.Connection#
+   *
+   * @param   {String}    vfsModule     VFS Module Name
+   * @param   {String}    vfsMethod     VFS Method Name
+   * @param   {Object}    vfsArguments  VFS Method Arguments
+   * @param   {Function}  callback      Callback function
+   */
+  Connection.prototype.onVFSRequest = function(vfsModule, vfsMethod, vfsArguments, callback) {
+    // If you want to interrupt/hijack or modify somehow, just send the two arguments to the
+    // callback: (error, result)
+    callback(/* continue normal behaviour */);
+  };
+
+  /**
+   * Called upon a VFS request completion
+   *
+   * It is what gets called 'after' a VFS request has taken place
+   *
+   * @function onVFSRequestCompleted
+   * @memberof OSjs.Core.Connection#
+   *
+   * @param   {String}    vfsModule     VFS Module Name
+   * @param   {String}    vfsMethod     VFS Method Name
+   * @param   {Object}    vfsArguments  VFS Method Arguments
+   * @param   {String}    vfsError      VFS Response Error
+   * @param   {Mixed}     vfsResult     VFS Response Result
+   * @param   {Function}  callback      Callback function
+   */
+  Connection.prototype.onVFSRequestCompleted = function(vfsModule, vfsMethod, vfsArguments, vfsError, vfsResult, callback) {
+    // If you want to interrupt/hijack or modify somehow, just send the two arguments to the
+    // callback: (error, result)
+    callback(/* continue normal behaviour */);
+  };
+
+  /**
+   * When browser goes online
+   *
+   * @function onOnline
+   * @memberof OSjs.Core.Connection#
+   */
+  Connection.prototype.onOnline = function() {
+    console.warn('Connection::onOnline()', 'Going online...');
+    this.offline = false;
+
+    var wm = OSjs.Core.getWindowManager();
+    if ( wm ) {
+      wm.notification({title: 'Warning!', message: 'You are On-line!'});
+    }
+  };
+
+  /**
+   * When browser goes offline
+   *
+   * @function onOffline
+   * @memberof OSjs.Core.Connection#
+   */
+  Connection.prototype.onOffline = function() {
+    console.warn('Connection::onOffline()', 'Going offline...');
+    this.offline = true;
+
+    var wm = OSjs.Core.getWindowManager();
+    if ( wm ) {
+      wm.notification({title: 'Warning!', message: 'You are Off-line!'});
+    }
+  };
+
+  /**
+   * Default method to perform a call to the backend (API)
+   *
+   * Please note that this function is internal, and if you want to make
+   * a actual API call, use "API.call()" instead.
+   *
+   * @param {String}    method      API method name
+   * @param {Object}    args        API method arguments
+   * @param {Function}  cbSuccess   On success
+   * @param {Function}  cbError     On error
+   * @param {Object}    [options]   Options passed on to the connection request method (ex: Utils.ajax)
+   *
+   * @function callAPI
+   * @memberof OSjs.Core.Connection#
+   * @see OSjs.Core.API.call
+   */
+  Connection.prototype.callAPI = function(method, args, cbSuccess, cbError, options) {
+    args = args || {};
+    cbSuccess = cbSuccess || function() {};
+    cbError = cbError || function() {};
+
+    if ( this.offline ) {
+      cbError('You are currently off-line and cannot perform this operation!');
+    } else if ( (API.getConfig('Connection.Type') === 'standalone') ) {
+      cbError('You are currently running locally and cannot perform this operation!');
+    } else {
+      if ( method.match(/^FS/) ) {
+        return this._requestVFS(method, args, options, cbSuccess, cbError);
+      }
+      return this._requestAPI(method, args, options, cbSuccess, cbError);
+    }
+
+    return false;
+  };
+
+  /**
+   * Wrapper for server API XHR calls
+   *
+   * @function _requestAPI
+   * @memberof OSjs.Core.Connection#
+   * @see OSjs.Core.Connection.callAPI
+   *
+   * @return {Boolean}
+   */
+  Connection.prototype._requestAPI = function(method, args, options, cbSuccess, cbError) {
+    return this._request(false, method, args, options, cbSuccess, cbError);
+  };
+
+  /**
+   * Wrapper for server VFS XHR calls
+   *
+   * @function _requestVFS
+   * @memberof OSjs.Core.Connection#
+   * @see OSjs.Core.Connection.callAPI
+   *
+   * @return {Boolean}
+   */
+  Connection.prototype._requestVFS = function(method, args, options, cbSuccess, cbError) {
+    return this._request(true, method, args, options, cbSuccess, cbError);
+  };
+
+  /**
+   * Wrapper for OS.js API calls
+   *
+   * @function _request
+   * @memberof OSjs.Core.Connection#
+   *
+   * @return {Boolean}
+   */
+  Connection.prototype._request = function(isVfs, method, args, options, onsuccess, onerror) {
+    // Some methods can only be handled via HTTP
+    if ( isVfs ) {
+      if ( method === 'FS:get' ) {
+        return this.callGET(args, options, onsuccess, onerror);
+      } else if ( method === 'FS:upload' ) {
+        return this.callPOST(args, options, onsuccess, onerror);
+      }
+    }
+
+    // Use AJAX or WebSocket for everything else
+    var url = (function() {
+      if ( isVfs ) {
+        return API.getConfig('Connection.FSURI') + '/' + method.replace(/^FS\:/, '');
+      }
+      return API.getConfig('Connection.APIURI') + '/' + method;
+    })();
+
+    return this.callXHR(url, args, options, onsuccess, onerror);
   };
 
   /**
@@ -180,55 +410,14 @@
       json: true,
       body: args,
       onsuccess: function(/*response, request, url*/) {
-        onsuccess.apply(self.handler, arguments);
+        onsuccess.apply(self, arguments);
       },
       onerror: function(/*error, response, request, url*/) {
-        onerror.apply(self.handler, arguments);
+        onerror.apply(self, arguments);
       }
     }, options));
 
     return true;
-  };
-
-  /**
-   * Perform a HTTP Request
-   *
-   * @function request
-   * @memberof OSjs.Core.Connection#
-   *
-   * @return {Boolean}
-   */
-  Connection.prototype.request = function(url, args, options, onsuccess, onerror) {
-    return this.callXHR(url, args, options, onsuccess, onerror);
-  };
-
-  /**
-   * Wrapper for OS.js API calls
-   *
-   * @function _request
-   * @memberof OSjs.Core.Connection#
-   *
-   * @return {Boolean}
-   */
-  Connection.prototype._request = function(isVfs, method, args, options, onsuccess, onerror) {
-    // Some methods can only be handled via HTTP
-    if ( isVfs ) {
-      if ( method === 'FS:get' ) {
-        return this.callGET(args, options, onsuccess, onerror);
-      } else if ( method === 'FS:upload' ) {
-        return this.callPOST(args, options, onsuccess, onerror);
-      }
-    }
-
-    // Use AJAX or WebSocket for everything else
-    var url = (function() {
-      if ( isVfs ) {
-        return API.getConfig('Connection.FSURI') + '/' + method.replace(/^FS\:/, '');
-      }
-      return API.getConfig('Connection.APIURI') + '/' + method;
-    })();
-
-    return this.request(url, args, options, onsuccess, onerror);
   };
 
   /////////////////////////////////////////////////////////////////////////////
@@ -236,6 +425,18 @@
   /////////////////////////////////////////////////////////////////////////////
 
   OSjs.Core.Connection = Connection;
+
+  /**
+   * Get running 'Connection' instance
+   *
+   * @function getConnection
+   * @memberof OSjs.Core
+   *
+   * @return {OSjs.Core.Connection}
+   */
+  OSjs.Core.getConnection = function() {
+    return _connectionInstance;
+  };
 
 })(OSjs.API, OSjs.Utils);
 

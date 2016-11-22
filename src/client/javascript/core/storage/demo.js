@@ -48,7 +48,7 @@
     callback(null, true);
   };
 
-  DemoStorage.prototype.settings = function(pool, storage, callback) {
+  DemoStorage.prototype.saveSettings = function(pool, storage, callback) {
     Object.keys(storage).forEach(function(key) {
       if ( pool && key !== pool ) {
         return;

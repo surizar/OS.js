@@ -152,8 +152,8 @@
       callback = function() {};
     }
 
-    var handler = OSjs.Core.getHandler();
-    handler.saveSettings(pool, this.storage, callback);
+    var storage = OSjs.Core.getStorage();
+    storage.saveSettings(pool, this.storage, callback);
   };
 
   /**

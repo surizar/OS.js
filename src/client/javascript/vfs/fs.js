@@ -67,8 +67,8 @@
       throw new TypeError(API._('ERR_ARGUMENT_FMT', 'VFS::' + method, 'options', 'Object', typeof options));
     }
 
-    var h = Core.getHandler();
-    h.onVFSRequest(d, method, args, function vfsRequestCallback(err, response) {
+    var conn  = Core.getConnection();
+    conn.onVFSRequest(d, method, args, function vfsRequestCallback(err, response) {
       if ( arguments.length === 2 ) {
         console.warn('VFS::request()', 'Core::onVFSRequest hijacked the VFS request');
         callback(err, response);
@@ -77,7 +77,7 @@
 
       try {
         mm.getModule(d).request(method, args, function(err, res) {
-          h.onVFSRequestCompleted(d, method, args, err, res, function(e, r) {
+          conn.onVFSRequestCompleted(d, method, args, err, res, function(e, r) {
             if ( arguments.length === 2 ) {
               console.warn('VFS::request()', 'Core::onVFSRequestCompleted hijacked the VFS request');
               callback(e, r);

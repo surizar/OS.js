@@ -76,7 +76,7 @@
   };
 
   DemoAuthenticator.prototype.onCreateUI = function(callback) {
-    this.handler.login({
+    this.onLoginRequest({
       username: 'demo',
       password: 'demo'
     }, callback);

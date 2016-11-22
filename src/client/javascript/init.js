@@ -45,7 +45,6 @@
    * @memberof OSjs
    */
 
-  var handler    = null;
   var loaded     = false;
   var inited     = false;
   var signingOut = false;
@@ -346,12 +345,10 @@
   }
 
   /**
-   * Initializes handler
+   * Initializes handlers
    */
   function initHandler(config, callback) {
     console.debug('initHandler()');
-
-    handler = new OSjs.Core.Handler();
 
     function _done(error) {
       if ( error ) {
@@ -364,7 +361,26 @@
       callback();
     }
 
-    handler.init(_done);
+    var conf = OSjs.API.getConfig('Connection');
+    var ctype = conf.Type === 'standalone' ? 'http' : conf.Type;
+
+    var connection = new OSjs.Connections[ctype]();
+    var authenticator = new OSjs.Auth[conf.Authenticator]();
+    var storage = new OSjs.Storage[conf.Storage]();
+
+    OSjs.API.setLocale(OSjs.API.getConfig('Locale'));
+
+    connection.init(function(err) {
+      console.groupEnd();
+
+      if ( err ) {
+        callback(err);
+      } else {
+        storage.init(function() {
+          authenticator.init(_done);
+        });
+      }
+    });
   }
 
   /**
@@ -580,7 +596,8 @@
       }
     });
 
-    handler.getLastSession(function(err, adds) {
+    var stor = OSjs.Core.getStorage();
+    stor.getLastSession(function(err, adds) {
       if ( !err ) {
         adds.forEach(function(iter) {
           if ( typeof checkMap[iter.name] === 'undefined' ) {
@@ -725,11 +742,9 @@
       ring.destroy();
     }
 
-    var handler = OSjs.Core.getHandler();
-    if ( handler ) {
-      handler.destroy();
-      handler = null;
-    }
+    OSjs.Core.getAuthenticator().destroy();
+    OSjs.Core.getStorage().destroy();
+    OSjs.Core.getConnection().destroy();
 
     OSjs.API.triggerHook('onShutdown');
 

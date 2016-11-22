@@ -53,7 +53,7 @@
     if ( typeof item === 'string' ) {
       item = new VFS.File(item);
     }
-    return OSjs.Core.getHandler().getVFSPath(item);
+    return OSjs.Core.getConnection().getVFSPath(item);
   }
 
   /**
@@ -108,7 +108,7 @@
 
     VFS.Helpers.addFormFile(fd, 'upload', file);
 
-    OSjs.Core.getHandler().callAPI('FS:upload', fd, callback, null, options);
+    OSjs.Core.getConnection().callAPI('FS:upload', fd, callback, null, options);
   }
 
   /**
@@ -240,7 +240,7 @@
 
     read: function(item, callback, options) {
       if ( API.getConfig('Connection.Type') === 'nw' ) {
-        OSjs.Core.getHandler().nw.request(true, 'read', {
+        OSjs.Core.getConnection().nw.request(true, 'read', {
           path: item.path,
           options: {raw: true}
         }, function(err, res) {

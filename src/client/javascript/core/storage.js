@@ -31,6 +31,8 @@
 (function(API, Utils) {
   'use strict';
 
+  var _storageInstance;
+
   /**
    * Storage Base Class
    *
@@ -38,8 +40,10 @@
    * @constructor Storage
    * @memberof OSjs.Core
    */
-  function Storage(handler) {
-    this.handler = handler;
+  function Storage() {
+    this.saveTimeout = null;
+
+    _storageInstance = this;
   }
 
   /**
@@ -61,24 +65,108 @@
    * @memberof OSjs.Core.Storage#
    */
   Storage.prototype.destroy = function() {
-    this.handler = null;
   };
 
   /**
-   * Saves the settings
+   * Internal for saving settings
    *
-   * @function settings
+   * @function _settings
    * @memberof OSjs.Core.Storage#
    *
    * @param   {String}               [pool]          Settings pool
    * @param   {Object}               storage         Settings storage data
    * @param   {CallbackHandler}      callback        Callback function
    */
-  Storage.prototype.settings = function(pool, storage, callback) {
-    this.handler.callAPI('settings', {pool: pool, settings: Utils.cloneObject(storage)}, function(response) {
+  Storage.prototype._settings = function(pool, storage, callback) {
+    var conn = OSjs.Core.getConnection();
+
+    conn.callAPI('settings', {pool: pool, settings: Utils.cloneObject(storage)}, function(response) {
       callback(false, response.result);
     }, function(error) {
       callback(error);
+    });
+  };
+
+  /**
+   * Default method to save given settings pool
+   *
+   * @function saveSettings
+   * @memberof OSjs.Core.Storage#
+   *
+   * @param   {String}           [pool]        Pool Name
+   * @param   {Mixed}            storage       Storage data
+   * @param   {CallbackHandler}  callback      Callback function
+   */
+  Storage.prototype.saveSettings = function(pool, storage, callback) {
+    var self = this;
+    clearTimeout(this.saveTimeout);
+    this.saveTimeout = setTimeout(function() {
+      self._settings(pool, storage, callback);
+      clearTimeout(self.saveTimeout);
+    }, 250);
+  };
+
+  /**
+   * Default method for saving current sessions
+   *
+   * @function saveSession
+   * @memberof OSjs.Core.Storage#
+   *
+   * @param   {CallbackHandler}  callback      Callback function
+   */
+  Storage.prototype.saveSession = function(callback) {
+    var data = [];
+    API.getProcesses().forEach(function(proc, i) {
+      if ( proc && (proc instanceof OSjs.Core.Application) ) {
+        data.push(proc._getSessionData());
+      }
+    });
+    OSjs.Core.getSettingsManager().set('UserSession', null, data, callback);
+  };
+
+  /**
+   * Get last saved sessions
+   *
+   * @function getLastSession
+   * @memberof OSjs.Core.Storage#
+   *
+   * @param   {CallbackHandler}  callback      Callback function
+   */
+  Storage.prototype.getLastSession = function(callback) {
+    callback = callback || function() {};
+
+    var res = OSjs.Core.getSettingsManager().get('UserSession');
+    var list = [];
+    (res || []).forEach(function(iter, i) {
+      var args = iter.args;
+      args.__resume__ = true;
+      args.__windows__ = iter.windows || [];
+
+      list.push({name: iter.name, args: args});
+    });
+
+    callback(false, list);
+  };
+
+  /**
+   * Default method to restore last running session
+   *
+   * @function loadSession
+   * @memberof OSjs.Core.Storage#
+   *
+   * @param   {Function}  callback      Callback function => fn()
+   */
+  Storage.prototype.loadSession = function(callback) {
+    callback = callback || function() {};
+
+    console.info('Storage::loadSession()');
+
+    this.getLastSession(function(err, list) {
+      if ( err ) {
+        callback();
+      } else {
+        API.launchList(list, null, null, callback);
+      }
     });
   };
 
@@ -87,6 +175,18 @@
   /////////////////////////////////////////////////////////////////////////////
 
   OSjs.Core.Storage = Storage;
+
+  /**
+   * Get running 'Storage' instance
+   *
+   * @function getStorage
+   * @memberof OSjs.Core
+   *
+   * @return {OSjs.Core.Storage}
+   */
+  OSjs.Core.getStorage = function() {
+    return _storageInstance;
+  };
 
 })(OSjs.API, OSjs.Utils);
 

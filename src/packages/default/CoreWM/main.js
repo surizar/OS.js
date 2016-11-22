@@ -156,7 +156,7 @@
     var self = this;
 
     function initNotifications() {
-      var user = OSjs.Core.getHandler().getUserData();
+      var user = OSjs.Core.getAuthenticator().getUser();
 
       function displayMenu(ev) {
         OSjs.API.createMenu([{

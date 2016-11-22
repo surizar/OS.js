@@ -322,8 +322,8 @@
 
     _CALL_INDEX++;
 
-    var handler = OSjs.Core.getHandler();
-    return handler.callAPI(m, a, function(response) {
+    var conn = OSjs.Core.getConnection();
+    return conn.callAPI(m, a, function(response) {
       API.destroyLoading(lname);
       response = response || {};
       cb(response.error || false, response.result);
@@ -1325,7 +1325,7 @@
    * @param   {Mixed}     group         Either a string or array of groups
    */
   API.checkPermission = function _apiCheckPermission(group) {
-    var user = OSjs.Core.getHandler().getUserData();
+    var user = OSjs.Core.getAuthenticator().getUser();
     var userGroups = user.groups || [];
 
     if ( !(group instanceof Array) ) {
@@ -1666,19 +1666,28 @@
    * @memberof OSjs.API
    */
   API.signOut = function _apiSignOut() {
-    var handler = OSjs.Core.getHandler();
+    var auth = OSjs.Core.getAuthenticator();
+    var storage = OSjs.Core.getStorage();
     var wm = OSjs.Core.getWindowManager();
 
     function signOut(save) {
       API.playSound('LOGOUT');
 
-      handler.logout(save, function() {
-        API.shutdown();
-      });
+      if ( save ) {
+        storage.saveSession(function() {
+          auth.logout(function() {
+            API.shutdown();
+          });
+        });
+      } else {
+        auth.logout(function() {
+          API.shutdown();
+        });
+      }
     }
 
     if ( wm ) {
-      var user = handler.getUserData() || {name: API._('LBL_UNKNOWN')};
+      var user = auth.getUser() || {name: API._('LBL_UNKNOWN')};
       API.createDialog('Confirm', {
         title: API._('DIALOG_LOGOUT_TITLE'),
         message: API._('DIALOG_LOGOUT_MSG_FMT', user.name)

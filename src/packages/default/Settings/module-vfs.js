@@ -37,7 +37,7 @@
       MountHost: 'http://localhost/remote.php/webdav/',
       MountNamespace: 'DAV:',
       MountUsername: function() {
-        return OSjs.Core.getHandler().getUserData().username;
+        return OSjs.Core.getAuthenticator().getUser().username;
       }
     }
   };

@@ -31,6 +31,8 @@
 (function(API, Utils) {
   'use strict';
 
+  var _authInstance;
+
   /**
    * Authenticator Base Class
    *
@@ -38,8 +40,36 @@
    * @constructor Authenticator
    * @memberof OSjs.Core
    */
-  function Authenticator(handler) {
-    this.handler = handler;
+  function Authenticator() {
+
+    /**
+     * User data
+     * @name userData
+     * @memberof OSjs.Core.Authenticator#
+     * @type {Object}
+     * @example
+     * {
+     *  id: -1,
+     *  username: 'foo',
+     *  groups: []
+     * }
+     */
+    this.userData = {
+      id      : 0,
+      username: 'root',
+      name    : 'root user',
+      groups  : ['admin']
+    };
+
+    /**
+     * If user is logged in
+     * @name loggedId
+     * @memberof OSjs.Core.Authenticator#
+     * @type {Boolean}
+     */
+    this.loggedIn = false;
+
+    _authInstance = this;
   }
 
   /**
@@ -61,7 +91,30 @@
    * @memberof OSjs.Core.Authenticator#
    */
   Authenticator.prototype.destroy = function() {
-    this.handler = null;
+  };
+
+  /**
+   * Get data for logged in user
+   *
+   * @function getUser
+   * @memberof OSjs.Core.Authenticator#
+   *
+   * @return  {Object}      JSON With user data
+   */
+  Authenticator.prototype.getUser = function() {
+    return Utils.cloneObject(this.userData || {}, true);
+  };
+
+  /**
+   * Gets if there is a user logged in
+   *
+   * @function isLoggedIn
+   * @memberof OSjs.Core.Authenticator#
+   *
+   * @return {Boolean}
+   */
+  Authenticator.prototype.isLoggedIn = function() {
+    return this.isLoggedIn;
   };
 
   /**
@@ -74,7 +127,9 @@
    * @param   {CallbackHandler}      callback        Callback function
    */
   Authenticator.prototype.login = function(data, callback) {
-    this.handler.callAPI('login', data, function(response) {
+    var conn = OSjs.Core.getConnection();
+
+    conn.callAPI('login', data, function(response) {
       if ( response.result ) {
         callback(false, response.result);
       } else {
@@ -96,7 +151,9 @@
    */
   Authenticator.prototype.logout = function(callback) {
     var opts = {};
-    this.handler.callAPI('logout', opts, function(response) {
+    var conn = OSjs.Core.getConnection();
+
+    conn.callAPI('logout', opts, function(response) {
       if ( response.result ) {
         callback(false, true);
       } else {
@@ -108,15 +165,73 @@
   };
 
   /**
-   * When login has occured
+   * When login is requested
    *
-   * @function onLogin
+   * @function onLoginRequest
    * @memberof OSjs.Core.Authenticator#
    *
    * @param   {Object}               data            Login data
    * @param   {CallbackHandler}      callback        Callback function
    */
+  Authenticator.prototype.onLoginRequest = function(data, callback) {
+    var self = this;
+
+    this.login(data, function(err, result) {
+      if ( err ) {
+        callback(err);
+      } else {
+        self.onLogin(result, callback);
+      }
+    });
+  };
+
+  /**
+   * When login has occured
+   *
+   * @function onLogin
+   * @memberof OSjs.Core.Authenticator#
+   *
+   * @param   {Object}               data            User data
+   * @param   {CallbackHandler}      callback        Callback function
+   */
   Authenticator.prototype.onLogin = function(data, callback) {
+    var userSettings = data.userSettings;
+    if ( !userSettings || userSettings instanceof Array ) {
+      userSettings = {};
+    }
+
+    this.userData = data.userData;
+
+    // Ensure we get the user-selected locale configured from WM
+    function getUserLocale() {
+      var curLocale = API.getConfig('Locale');
+      var detectedLocale = Utils.getUserLocale();
+
+      if ( API.getConfig('LocaleOptions.AutoDetect', true) && detectedLocale ) {
+        console.info('Auto-detected user locale via browser', detectedLocale);
+        curLocale = detectedLocale;
+      }
+
+      var result = OSjs.Core.getSettingsManager().get('CoreWM');
+      if ( !result ) {
+        try {
+          result = userSettings.CoreWM;
+        } catch ( e )  {}
+      }
+      return result ? (result.language || curLocale) : curLocale;
+    }
+
+    document.getElementById('LoadingScreen').style.display = 'block';
+
+    API.setLocale(getUserLocale());
+    OSjs.Core.getSettingsManager().init(userSettings);
+
+    if ( data.blacklistedPackages ) {
+      OSjs.Core.getPackageManager().setBlacklist(data.blacklistedPackages);
+    }
+
+    this.loggedIn = true;
+
     callback(null, true);
   };
 
@@ -158,7 +273,7 @@
         ev.preventDefault();
       }
 
-      self.handler.login({
+      self.onLoginRequest({
         username: u.value,
         password: p.value
       }, function(err) {
@@ -182,6 +297,18 @@
   /////////////////////////////////////////////////////////////////////////////
 
   OSjs.Core.Authenticator = Authenticator;
+
+  /**
+   * Get running 'Authenticator' instance
+   *
+   * @function getAuthenticator
+   * @memberof OSjs.Core
+   *
+   * @return {OSjs.Core.Authenticator}
+   */
+  OSjs.Core.getAuthenticator = function() {
+    return _authInstance;
+  };
 
 })(OSjs.API, OSjs.Utils);
 
