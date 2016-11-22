@@ -48,10 +48,7 @@ const opts = {
 };
 
 _instance.init(opts).then(function(env) {
-  const logger = _instance.getLogger();
   const config = _instance.getConfig();
-
-  const httpConfig = config.http || {};
   if ( config.tz ) {
     process.env.TZ = config.tz;
   }
@@ -60,19 +57,11 @@ _instance.init(opts).then(function(env) {
     _instance.destroy();
   });
 
-  logger.log('INFO', logger.colored('Starting OS.js server', 'green'));
-  logger.log('INFO', logger.colored(['Using', httpConfig.mode, 'on port', env.PORT, 'in', env.DIST].join(' '), 'green'));
-  if ( httpConfig.connection === 'ws' ) {
-    logger.log('INFO', logger.colored('Using WebSocket', 'green'));
-  }
-
   _instance.run();
 
   process.on('uncaughtException', function(error) {
     console.log('UNCAUGHT EXCEPTION', error, error.stack);
   });
-
-  logger.log('INFO', logger.colored('Ready...', 'green'));
 }).catch(function(error) {
   console.log(error);
   process.exit(1);

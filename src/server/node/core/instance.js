@@ -423,7 +423,20 @@ module.exports.init = function init(opts) {
  * @memberof core.instance
  */
 module.exports.run = function run(port) {
-  return _osjs.http.run(ENV.PORT);
+  const httpConfig = CONFIG.http || {};
+
+  LOGGER.log('INFO', LOGGER.colored('Starting OS.js server', 'green'));
+  LOGGER.log('INFO', LOGGER.colored(['Using', httpConfig.mode, 'on port', ENV.PORT, 'in', ENV.DIST].join(' '), 'green'));
+
+  if ( httpConfig.connection === 'ws' ) {
+    LOGGER.log('INFO', LOGGER.colored('Using WebSocket', 'green'));
+  }
+
+  const result = _osjs.http.run(ENV.PORT);
+
+  LOGGER.log('INFO', LOGGER.colored('Ready...', 'green'));
+
+  return result;
 };
 
 /**

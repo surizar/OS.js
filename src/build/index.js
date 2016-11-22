@@ -329,25 +329,32 @@
    * cli run
    */
   module.exports.run = function run(cli, arg, done) {
-    var serverRoot = _path.join(ROOT, 'src', 'server', 'node');
-    var _server = require(_path.join(serverRoot, 'http.js'));
-    process.chdir(ROOT);
+    var instance = require(_path.join(ROOT, 'src/server/node/core/instance.js'));
 
-    process.on('exit', function() {
-      _server.close();
-    });
+    var opts = {
+      PORT: cli.option('port'),
+      LOGLEVEL: cli.option('loglevel'),
+      DIST: cli.option('target') || 'dist-dev'
+    };
 
-    process.on('uncaughtException', function(error) {
-      console.log('UNCAUGHT EXCEPTION', error, error.stack);
-    });
+    instance.init(opts).then(function(env) {
+      var config = instance.getConfig();
+      if ( config.tz ) {
+        process.env.TZ = config.tz;
+      }
 
-    _server.listen({
-      port: cli.option('port'),
-      dirname: serverRoot,
-      root: ROOT,
-      dist: cli.option('target') || 'dist-dev',
-      logging: !cli.option('silent'),
-      nw: false
+      process.on('exit', function() {
+        instance.destroy();
+      });
+
+      instance.run();
+
+      process.on('uncaughtException', function(error) {
+        console.log('UNCAUGHT EXCEPTION', error, error.stack);
+      });
+    }).catch(function(error) {
+      console.log(error);
+      process.exit(1);
     });
   };
 
