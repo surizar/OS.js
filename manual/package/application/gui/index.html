@@ -21,6 +21,9 @@
       if ( window.location.hostname === 'andersevenrud.github.io' ) {
         window.location = '//os.js.org' + window.location.pathname.replace(/\/OS\.js-v2/, '');
       }
+      if ( window.location.hostname === 'os.js.org' && window.location.protocol !== 'https:' ) {
+        window.location.protocol = 'https:';
+      }
     </script>
   </head>
   <body class="manual_package_application_gui">
@@ -55,6 +58,7 @@
               <ul>
                 <li><a href="/manual/build/cli">Commands</a></li>
                 <li><a href="/manual/build/grunt">Grunt</a></li>
+                <li><a href="/manual/build/customization">Customization</a></li>
               </ul>
             </li>
 
@@ -194,12 +198,11 @@
             <li>
               <a href="/manual/development">Development</a>
               <ul>
-                <li><a href="/manual/development/#intro">Introduction</a></li>
-                <li><a href="/manual/development/#style">Style guide</a></li>
-                <li><a href="/manual/development/#setup">Set up environment</a></li>
-                <li><a href="/manual/development/#tips">Tips and tricks</a></li>
-                <li><a href="/manual/development/#test">Testing</a></li>
-                <li><a href="/manual/development/#contribute">Contributing</a></li>
+                <li><a href="/manual/development/#style-guide">Style guide</a></li>
+                <li><a href="/manual/development/#set-up-environment">Set up environment</a></li>
+                <li><a href="/manual/development/#tips-and-tricks">Tips and tricks</a></li>
+                <li><a href="/manual/development/#testing">Testing</a></li>
+                <li><a href="/manual/development/#contributing">Contributing</a></li>
               </ul>
             </li>
 
@@ -266,9 +269,12 @@ scheme<span class="token punctuation">.</span><span class="token function">rende
 <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 
 <span class="token comment" spellcheck="true">// Create UI element programatically (chainable)</span>
-scheme<span class="token punctuation">.</span><span class="token function">create</span><span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">,</span> <span class="token string">&apos;gui-button&apos;</span><span class="token punctuation">,</span> <span class="token punctuation">{</span>disabled<span class="token punctuation">:</span> <span class="token boolean">true</span><span class="token punctuation">}</span><span class="token punctuation">,</span> root<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">on</span><span class="token punctuation">(</span><span class="token string">&apos;click&apos;</span><span class="token punctuation">,</span> <span class="token keyword">function</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span> <span class="token comment" spellcheck="true">// or `this._scheme`</span>
+<span class="token keyword">this</span><span class="token punctuation">.</span><span class="token function">_create</span><span class="token punctuation">(</span><span class="token string">&apos;gui-button&apos;</span><span class="token punctuation">,</span> <span class="token punctuation">{</span>disabled<span class="token punctuation">:</span> <span class="token boolean">true</span><span class="token punctuation">}</span><span class="token punctuation">,</span> root<span class="token punctuation">)</span><span class="token punctuation">;</span>
 
-<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token comment" spellcheck="true">// Alternate methods:</span>
+scheme<span class="token punctuation">.</span><span class="token function">create</span><span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">,</span> <span class="token string">&apos;gui-button&apos;</span><span class="token punctuation">,</span> <span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token punctuation">,</span> root<span class="token punctuation">)</span>
+scheme<span class="token punctuation">.</span><span class="token function">find</span><span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">,</span> <span class="token string">&apos;MyButtonOne&apos;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 </code></pre>
 <p>You can also bind events directly to your object instance:</p>
 <pre class="language-js"><code class="language-js"><span class="token punctuation">{</span>

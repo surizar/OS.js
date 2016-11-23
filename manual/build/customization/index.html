@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <title>Application Package | OS.js Manual</title>
+    <title>Customization | OS.js Manual</title>
     <meta name="description" content="OS.js Manual - OS.js" />
     <meta name="keywords" content="OS.js,Documentation,Client,Server,API,Tutorial,Tutorials,Manual,Manuals" />
 
@@ -26,7 +26,7 @@
       }
     </script>
   </head>
-  <body class="manual_package_application">
+  <body class="manual_build_customization">
     <header>
       <div id="Logo"></div>
       <nav>
@@ -213,26 +213,22 @@
       </aside>
 
       <content>
-        <h1 id="application-package">Application Package</h1>
-<p>Your standard package. Contains ready-to-go code to develop your own Applications with graphical interfaces and support for server-side API endpoints.</p>
-<h2 id="create-package">Create Package</h2>
-<pre class="language-bash"><code class="language-bash">$ grunt generate:package --name<span class="token operator">=</span>default/MyName
-
-<span class="token comment" spellcheck="true"># Simple type without prototypes</span>
-$ grunt generate:package --name<span class="token operator">=</span>default/MyName --type<span class="token operator">=</span>simple
+        <h1 id="customization">Customization</h1>
+<p>You can customize base settings using the built-in <a href="/manual/build/cli">commands</a>, but some things requires setting up template files etc.</p>
+<h2 id="general">General</h2>
+<p>To add your own styles (to also override) and files etc. simply use one of the methods <a href="manual/configuration/#assets">described here</a>.</p>
+<h2 id="base-template">Base Template</h2>
+<p>The base template contains the index HTML file and any assets it uses. Simply make a copy of the default and make any adjustments you want.</p>
+<pre class="language-bash"><code class="language-bash">$ <span class="token function">cp</span> -r src/templates/dist/default src/templates/dist/mytemplate
+$ grunt config:set --name<span class="token operator">=</span>build.dist.template --value<span class="token operator">=</span>mytemplate
+$ grunt build
 </code></pre>
-<hr>
-<h2 id="development">Development</h2>
-<ul>
-<li><code>main.js</code> - The application client code</li>
-<li><code>main.js</code> - The application client code</li>
-<li><code>main.css</code> - The application client stylesheet</li>
-<li><code>scheme.html</code> - The scheme GUI layout</li>
-<li><code>api.js</code> - The application server code</li>
-</ul>
-<hr>
-<h2 id="building-and-installation">Building and installation</h2>
-<pre class="language-bash"><code class="language-bash">$ grunt build:manifest buid:config build:package --name<span class="token operator">=</span>default/MyName
+<h2 id="login-screen">Login Screen</h2>
+<p>To customize the login screen markup, just make a copy of the default and make any adjustments you want.</p>
+<p>The actual interaction code is in the <em>Authenticator</em>.</p>
+<pre class="language-bash"><code class="language-bash">$ <span class="token function">cp</span> -r src/templates/dist/login/default.html src/templates/dist/login/mytemplate.html
+$ grunt config:set --name<span class="token operator">=</span>build.dist.layout --value<span class="token operator">=</span>mytemplate
+$ grunt build
 </code></pre>
 
 

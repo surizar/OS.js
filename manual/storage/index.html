@@ -21,6 +21,9 @@
       if ( window.location.hostname === 'andersevenrud.github.io' ) {
         window.location = '//os.js.org' + window.location.pathname.replace(/\/OS\.js-v2/, '');
       }
+      if ( window.location.hostname === 'os.js.org' && window.location.protocol !== 'https:' ) {
+        window.location.protocol = 'https:';
+      }
     </script>
   </head>
   <body class="manual_storage">
@@ -55,6 +58,7 @@
               <ul>
                 <li><a href="/manual/build/cli">Commands</a></li>
                 <li><a href="/manual/build/grunt">Grunt</a></li>
+                <li><a href="/manual/build/customization">Customization</a></li>
               </ul>
             </li>
 
@@ -194,12 +198,11 @@
             <li>
               <a href="/manual/development">Development</a>
               <ul>
-                <li><a href="/manual/development/#intro">Introduction</a></li>
-                <li><a href="/manual/development/#style">Style guide</a></li>
-                <li><a href="/manual/development/#setup">Set up environment</a></li>
-                <li><a href="/manual/development/#tips">Tips and tricks</a></li>
-                <li><a href="/manual/development/#test">Testing</a></li>
-                <li><a href="/manual/development/#contribute">Contributing</a></li>
+                <li><a href="/manual/development/#style-guide">Style guide</a></li>
+                <li><a href="/manual/development/#set-up-environment">Set up environment</a></li>
+                <li><a href="/manual/development/#tips-and-tricks">Tips and tricks</a></li>
+                <li><a href="/manual/development/#testing">Testing</a></li>
+                <li><a href="/manual/development/#contributing">Contributing</a></li>
               </ul>
             </li>
 

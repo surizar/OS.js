@@ -21,6 +21,9 @@
       if ( window.location.hostname === 'andersevenrud.github.io' ) {
         window.location = '//os.js.org' + window.location.pathname.replace(/\/OS\.js-v2/, '');
       }
+      if ( window.location.hostname === 'os.js.org' && window.location.protocol !== 'https:' ) {
+        window.location.protocol = 'https:';
+      }
     </script>
   </head>
   <body class="manual_server_node">
@@ -55,6 +58,7 @@
               <ul>
                 <li><a href="/manual/build/cli">Commands</a></li>
                 <li><a href="/manual/build/grunt">Grunt</a></li>
+                <li><a href="/manual/build/customization">Customization</a></li>
               </ul>
             </li>
 
@@ -194,12 +198,11 @@
             <li>
               <a href="/manual/development">Development</a>
               <ul>
-                <li><a href="/manual/development/#intro">Introduction</a></li>
-                <li><a href="/manual/development/#style">Style guide</a></li>
-                <li><a href="/manual/development/#setup">Set up environment</a></li>
-                <li><a href="/manual/development/#tips">Tips and tricks</a></li>
-                <li><a href="/manual/development/#test">Testing</a></li>
-                <li><a href="/manual/development/#contribute">Contributing</a></li>
+                <li><a href="/manual/development/#style-guide">Style guide</a></li>
+                <li><a href="/manual/development/#set-up-environment">Set up environment</a></li>
+                <li><a href="/manual/development/#tips-and-tricks">Tips and tricks</a></li>
+                <li><a href="/manual/development/#testing">Testing</a></li>
+                <li><a href="/manual/development/#contributing">Contributing</a></li>
               </ul>
             </li>
 
@@ -212,20 +215,18 @@
       <content>
         <h1 id="node-server">Node Server</h1>
 <p>You can install <a href="https://github.com/petruisfan/node-supervisor">node supervisor</a> and the development (dist-dev) server will automatically reload on change.</p>
-<h2 id="nix">NIX</h2>
-<pre class="language-bash"><code class="language-bash"><span class="token comment" spellcheck="true"># Start production server</span>
-$ ./bin/start-dist.sh
+<h2 id="starting">Starting</h2>
+<pre class="language-bash"><code class="language-bash"><span class="token comment" spellcheck="true"># All platforms</span>
+$ node osjs run --target<span class="token operator">=</span>dist      <span class="token comment" spellcheck="true"># Start production server</span>
+$ node osjs run --target<span class="token operator">=</span>dist-dev  <span class="token comment" spellcheck="true"># Start development server</span>
 
-<span class="token comment" spellcheck="true"># Start development server</span>
-$ ./bin/start-dev.sh
-</code></pre>
-<hr>
-<h2 id="windows">Windows</h2>
-<pre class="language-bash"><code class="language-bash"><span class="token comment" spellcheck="true"># Start production server</span>
-$ bin\win-start-dist
+<span class="token comment" spellcheck="true"># NIX</span>
+$ ./bin/start-dist.sh  <span class="token comment" spellcheck="true"># Start production server</span>
+$ ./bin/start-dev.sh   <span class="token comment" spellcheck="true"># Start development server</span>
 
-<span class="token comment" spellcheck="true"># Start development server</span>
-$ bin\win-start-dev
+<span class="token comment" spellcheck="true"># Windows</span>
+$ bin\win-start-dist   <span class="token comment" spellcheck="true"># Start production server</span>
+$ bin\win-start-dev    <span class="token comment" spellcheck="true"># Start development server</span>
 </code></pre>
 <hr>
 <h2 id="running-behind-a-webserver">Running behind a webserver</h2>
