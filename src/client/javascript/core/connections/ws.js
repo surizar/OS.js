@@ -91,7 +91,10 @@
   };
 
   WSConnection.prototype.message = function(data) {
-    console.error(data);
+    // Emit a VFS event when a change occures
+    if ( data.action === 'vfs:watch' ) {
+      VFS.Helpers.triggerWatch(data.action.split(':')[1], VFS.file(data.args));
+    }
   };
 
   WSConnection.prototype.request = function(path, args, options, onsuccess, onerror) {
