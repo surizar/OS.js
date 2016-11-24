@@ -29,6 +29,13 @@ function createWriteStream(http, path) {
   });
 }
 
+/*
+ * Creates a new filesystem watch
+ */
+function createWatch(name, mount, callback) {
+  // Do nothing by default
+}
+
 ///////////////////////////////////////////////////////////////////////////////
 // VFS METHODS
 ///////////////////////////////////////////////////////////////////////////////
@@ -120,6 +127,17 @@ module.exports.createReadStream = createReadStream;
  * @return  {Promise}
  */
 module.exports.createWriteStream = createWriteStream;
+
+/**
+ * Creates a new filesystem watch
+ *
+ * @param   {String}           name          Mountpoint name
+ * @param   {Object}           mount         Mountpoint options (parsed from config)
+ * @param   {Function}         callback      Callback function => fn(name, mount, watch)
+ *
+ * @return  {Promise}
+ */
+module.exports.createWatch = createWatch;
 
 /*
  * The name of your module
