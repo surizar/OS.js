@@ -552,6 +552,26 @@ function destroyServer() {
   }
 }
 
+/*
+ * Gets a WebSocket connection from username
+ */
+function getWebsocketFromUser(username) {
+  const foundSid = null;
+
+  Object.keys(sidMap).forEach(function(sid) {
+    if ( foundSid === null && sidMap[sid] === username ) {
+      foundSid = sid;
+    }
+  });
+
+  if ( websocketMap[foundSid] ) {
+    console.warn('FOUND YOUR USER WEBSOCKET', foundSid);
+    return websocketMap[foundSid];
+  }
+
+  return null;
+}
+
 ///////////////////////////////////////////////////////////////////////////////
 // EXPORTS
 ///////////////////////////////////////////////////////////////////////////////
@@ -581,29 +601,29 @@ module.exports.run = function run(port) {
 };
 
 /**
- * Returns a websocket based on username
+ * Broadcasts a message (only available over WebSocket)
  *
- * @param {String}    username      Username
+ * @param {String}    [username]      If a username is given, only this user recieves the message
+ * @param {String}    action          An action that the client can identify
+ * @param {Object}    message         Message data
  *
- * @function getWebsocketFromUser
+ * @function broadcastMessage
  * @memberof core.http
- * @return {Websocket}
  */
-module.exports.getWebsocketFromUser = function(username) {
-  const foundSid = null;
-
-  Object.keys(sidMap).forEach(function(sid) {
-    if ( foundSid === null && sidMap[sid] === username ) {
-      foundSid = sid;
-    }
+module.exports.broadcastMessage = function(username, action, message) {
+  const data = JSON.stringify({
+    action: action,
+    args: message
   });
 
-  if ( websocketMap[foundSid] ) {
-    console.warn('FOUND YOUR USER WEBSOCKET', foundSid);
-    return websocketMap[foundSid];
+  if ( username ) {
+    const ws = getWebsocketFromUser(username);
+    ws.send(data);
+  } else {
+    websocketServer.clients.forEach(function each(client) {
+      client.send(data);
+    });
   }
-
-  return null;
 };
 
 /**

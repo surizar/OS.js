@@ -39,28 +39,17 @@ const _instance = require('./../../core/instance.js');
  */
 module.exports.register = function(env, config, servers) {
   const wss = servers.websocketServer;
-  const logger = _instance.getLogger();
   if ( !wss ) {
     return;
   }
 
+  const logger = _instance.getLogger();
+
   const list = _vfs.initWatch(function(data) {
     const username = data.watch.args['%USERNAME'];
-    const message = JSON.stringify({
-      action: 'vfs:watch',
-      args: {
-        path: data.watch.path
-      }
+    _http.broadcastMessage(username, 'vfs:watch', {
+      path: data.watch.path
     });
-
-    if ( username ) {
-      const ws = _http.getWebsocketFromUser(username);
-      ws.send(message);
-    } else {
-      wss.clients.forEach(function each(client) {
-        client.send(message);
-      });
-    }
   });
 
   if ( list.length ) {
