@@ -366,6 +366,43 @@ function registerPackages(servers) {
   return new Promise(_load);
 }
 
+/*
+ * Registers Services
+ */
+function registerServices(servers) {
+  return new Promise(function(resolve, reject) {
+    const wss = servers.websocketServer;
+    if ( !wss ) {
+      return;
+    }
+
+    const list = _osjs.vfs.initWatch(function(data) {
+      const username = data.watch.args['%USERNAME'];
+      const message = JSON.stringify({
+        action: 'vfs:watch',
+        args: {
+          path: data.watch.path
+        }
+      });
+
+      if ( username ) {
+        const ws = _osjs.http.getWebsocketFromUser(username);
+        ws.send(message);
+      } else {
+        wss.clients.forEach(function each(client) {
+          client.send(message);
+        });
+      }
+    });
+
+    if ( list.length ) {
+      LOGGER.lognt('INFO', 'VFS Watching:', LOGGER.colored(list.join(', '), 'bold'));
+    }
+
+    resolve(servers);
+  });
+}
+
 ///////////////////////////////////////////////////////////////////////////////
 // EXPORTS
 ///////////////////////////////////////////////////////////////////////////////
@@ -409,6 +446,7 @@ module.exports.init = function init(opts) {
         return _osjs.http.init(ENV);
       })
       .then(registerPackages)
+      .then(registerServices)
       .then(function(servers) {
         resolve(Object.freeze(ENV));
       })

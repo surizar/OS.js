@@ -27,7 +27,9 @@
     "test": "grunt test"
   },
   "dependencies": {
+    "chokidar": "^1.6.1",
     "colors": "^1.1.2",
+    "cookie": "^0.3.1",
     "diskspace": ">=1.0.3",
     "findit": ">=2.0.0",
     "formidable": ">=1.0.17",

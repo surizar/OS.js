@@ -34,6 +34,7 @@ const _fs = require('node-fs-extra');
 const _nfs = require('fs');
 const _path = require('path');
 const _fstream = require('fstream');
+const _chokidar = require('chokidar');
 
 const _utils = require('./../../core/utils.js');
 const _vfs = require('./../../core/vfs.js');
@@ -63,6 +64,50 @@ function createWriteStream(http, path) {
   return new Promise(function(resolve, reject) {
     /*eslint new-cap: "off"*/
     resolve(_fstream.Writer(resolved.real));
+  });
+}
+
+/*
+ * Creates watch
+ */
+function createWatch(name, mount, callback) {
+  const path = mount.destination;
+  const matches = path.match(/%(\w+)%/g);
+  const dir = _vfs.resolvePathArguments(path, {
+    username: '**',
+    uid: '**'
+  });
+
+  const re = new RegExp('^' + dir.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, '\\$&').replace('\\*\\*', '([^/]+)'));
+
+  const watchMap = {
+    add: 'write',
+    change: 'write'
+  };
+
+  function _onChange(evname, wpath) {
+    var args = {};
+    (wpath.match(re) || []).forEach(function(a, idx) {
+      if ( matches[idx] ) {
+        args[matches[idx]] = a;
+      }
+    });
+
+    const relative = wpath.replace(re, '');
+    const virtual = name + '://' + relative.replace(/^\/?/, '/');
+
+    callback(name, mount, {
+      event: watchMap[evname] || evname,
+      real: wpath,
+      path: virtual,
+      args: args
+    });
+  }
+
+  _chokidar.watch(dir, {ignoreInitial: true, persistent: true}).on('all', function(evname, wpath) {
+    if ( ['change', 'error'].indexOf(evname) === -1 ) {
+      _onChange(evname, wpath);
+    }
   });
 }
 
@@ -119,10 +164,16 @@ function createFileIter(query, real, iter, stat) {
   }
 
   const perm = _utils.permissionToString(stat.mode);
+  const filepath = !iter ? query : (function() {
+    const spl = query.split('://');
+    const proto = spl[0];
+    const ppath = (spl[1] || '').replace(/\/?$/, '/');
+    return proto + '://' + _path.join(ppath, iter);
+  })();
 
   return {
     filename: filename,
-    path: iter ? query + iter.replace(/^\/?/, '/') : query,
+    path: filepath,
     size: stat.size || 0,
     mime: mime,
     type: type,
@@ -471,5 +522,6 @@ module.exports.request = function(http, method, args) {
 
 module.exports.createReadStream = createReadStream;
 module.exports.createWriteStream = createWriteStream;
+module.exports.createWatch = createWatch;
 module.exports.name = '__default__';
 

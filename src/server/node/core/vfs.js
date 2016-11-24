@@ -316,7 +316,7 @@ module.exports.resolvePathArguments = function(path, options) {
       return options.username;
     },
     '%USERNAME%': function() {
-      return options.username;
+      return options.uid || options.username;
     },
     '%DROOT%': function() {
       return env.ROOTDIR;
@@ -331,4 +331,51 @@ module.exports.resolvePathArguments = function(path, options) {
   });
 
   return path;
+};
+
+/**
+ * Resolves a path with special arguments
+ *
+ * @param   {String}    path              The query path
+ * @param   {Object}    options           Object that maps the arguments and values
+ *
+ * @return {String}
+ * @function resolvePathArguments
+ * @memberof core.vfs
+ */
+module.exports.initWatch = function(callback) {
+  const config = _instance.getConfig();
+  const mountpoints = config.vfs.mounts || {};
+  const watching = [];
+
+  function _onWatch(name, mount, watch) {
+    callback({
+      name: name,
+      mount: mount,
+      watch: watch
+    });
+  }
+
+  Object.keys(config.vfs.mounts).forEach(function(name) {
+    var mount = mountpoints[name];
+    if ( typeof mount === 'string' ) {
+      mount = {
+        transport: '__default__',
+        destination: mount
+      };
+    }
+
+    const found = _instance.getVFS().find(function(iter) {
+      return iter.name === mount.transport;
+    });
+
+    if ( found ) {
+      if ( typeof found.createWatch === 'function' ) {
+        found.createWatch(name, mount, _onWatch);
+        watching.push(name);
+      }
+    }
+  });
+
+  return watching;
 };

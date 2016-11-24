@@ -83,12 +83,15 @@ const _auth = require('./auth.js');
 const _url = require('url');
 const _fs = require('node-fs-extra');
 const _path = require('path');
+const _cookie = require('cookie');
 const _session = require('simple-session');
 const _formidable = require('formidable');
 
 var httpServer = null;
 var websocketServer = null;
 var proxyServer = null;
+var websocketMap = {};
+var sidMap = {};
 
 ///////////////////////////////////////////////////////////////////////////////
 // APIs
@@ -221,7 +224,18 @@ function handleRequest(http) {
 
   function _apiCall() {
     _checkPermission('api', {method: http.endpoint}, http.data).then(function() {
-      api[http.endpoint](http, http.data).then(_resolveResponse).catch(_rejectResponse);
+      const session_id = http.session.id;
+      api[http.endpoint](http, http.data).then(function(res) {
+        if ( http.endpoint === 'login' ) {
+          const username = res.userData.username;
+          sidMap[session_id] = username;
+        } else if ( http.endpoint === 'logout' ) {
+          if ( typeof sidMap[session_id] !== 'undefined' ) {
+            delete sidMap[session_id];
+          }
+        }
+        _resolveResponse(res);
+      }).catch(_rejectResponse);
     }).catch(_rejectResponse);
   }
 
@@ -488,6 +502,9 @@ function createServer(env, resolve, reject) {
     websocketServer.on('connection', function(ws) {
       logger.log('VERBOSE', logger.colored('WS', 'bold'), 'New connection...');
 
+      const cookie = _cookie.parse(ws.upgradeReq.headers.cookie);
+      const sid = cookie.session;
+
       ws.on('message', function(data) {
         const message = JSON.parse(data);
         const path = message.path;
@@ -496,12 +513,18 @@ function createServer(env, resolve, reject) {
         handleRequest(createHttpObject({
           method: 'POST',
           url: path
-        }, null, path, message.args, respond, message.sid));
+        }, null, path, message.args, respond, sid));
       });
 
       ws.on('close', function() {
         logger.log('VERBOSE', logger.colored('WS', 'bold'), 'Connection closed...');
+
+        if ( typeof websocketMap[sid] !== 'undefined' ) {
+          delete websocketMap[sid];
+        }
       });
+
+      websocketMap[sid] = ws;
     });
   }
 
@@ -555,6 +578,32 @@ module.exports.init = function init(env) {
  */
 module.exports.run = function run(port) {
   httpServer.listen(port);
+};
+
+/**
+ * Returns a websocket based on username
+ *
+ * @param {String}    username      Username
+ *
+ * @function getWebsocketFromUser
+ * @memberof core.http
+ * @return {Websocket}
+ */
+module.exports.getWebsocketFromUser = function(username) {
+  const foundSid = null;
+
+  Object.keys(sidMap).forEach(function(sid) {
+    if ( foundSid === null && sidMap[sid] === username ) {
+      foundSid = sid;
+    }
+  });
+
+  if ( websocketMap[foundSid] ) {
+    console.warn('FOUND YOUR USER WEBSOCKET', foundSid);
+    return websocketMap[foundSid];
+  }
+
+  return null;
 };
 
 /**
