@@ -28,7 +28,7 @@
  * @licence Simplified BSD License
  */
 
-(function(API, Utils, Connection) {
+(function(VFS, API, Utils, Connection) {
   'use strict';
 
   function HttpConnection() {
@@ -38,6 +38,21 @@
   HttpConnection.prototype = Object.create(Connection.prototype);
   HttpConnection.constructor = Connection;
 
+  HttpConnection.prototype.onVFSRequestCompleted = function(module, method, args, error, result, callback, appRef) {
+    if ( !error ) {
+      // Emit a VFS event when a change occures
+      if ( ['write', 'mkdir', 'copy', 'move'].indexOf(method) !== -1 ) {
+        var arg = method === 'move' ? {
+          source: args[0],
+          destination: args[1]
+        } : args[method === 'copy' ? 1 : 0];
+
+        VFS.Helpers.triggerWatch(method, arg, appRef);
+      }
+    }
+    callback();
+  };
+
   /////////////////////////////////////////////////////////////////////////////
   // EXPORTS
   /////////////////////////////////////////////////////////////////////////////
@@ -45,4 +60,4 @@
   OSjs.Connections = OSjs.Connections || {};
   OSjs.Connections.http = HttpConnection;
 
-})(OSjs.API, OSjs.Utils, OSjs.Core.Connection);
+})(OSjs.VFS, OSjs.API, OSjs.Utils, OSjs.Core.Connection);

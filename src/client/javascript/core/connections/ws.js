@@ -28,7 +28,7 @@
  * @licence Simplified BSD License
  */
 
-(function(API, Utils, Connection) {
+(function(API, VFS, Utils, Connection) {
   'use strict';
 
   function WSConnection() {
@@ -70,12 +70,16 @@
       var data = JSON.parse(ev.data);
       var idx = data._index;
 
-      if ( self.wsqueue[idx] ) {
-        delete data._index;
+      if ( typeof idx === 'undefined'  ) {
+        self.message(data);
+      } else {
+        if ( self.wsqueue[idx] ) {
+          delete data._index;
 
-        self.wsqueue[idx](data);
+          self.wsqueue[idx](data);
 
-        delete self.wsqueue[idx];
+          delete self.wsqueue[idx];
+        }
       }
     };
 
@@ -84,7 +88,10 @@
         callback('WebSocket connection error'); // FIXME: Locale
       }
     };
+  };
 
+  WSConnection.prototype.message = function(data) {
+    console.error(data);
   };
 
   WSConnection.prototype.request = function(path, args, options, onsuccess, onerror) {
@@ -120,4 +127,4 @@
   OSjs.Connections = OSjs.Connections || {};
   OSjs.Connections.ws = WSConnection;
 
-})(OSjs.API, OSjs.Utils, OSjs.Core.Connection);
+})(OSjs.API, OSjs.VFS, OSjs.Utils, OSjs.Core.Connection);

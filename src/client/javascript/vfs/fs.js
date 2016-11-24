@@ -47,7 +47,7 @@
   /**
    * Perform VFS request
    */
-  function request(test, method, args, callback, options) {
+  function request(test, method, args, callback, options, appRef) {
     var mm = Core.getMountManager();
     var d = mm.getModuleFromPath(test, false);
 
@@ -85,7 +85,7 @@
             } else {
               callback(err, res);
             }
-          });
+          }, appRef);
         }, options);
       } catch ( e ) {
         var msg = API._('ERR_VFSMODULE_EXCEPTION_FMT', e.toString());
@@ -99,7 +99,7 @@
    * Just a helper function to reduce codesize by wrapping the general
    * request flow into one handy-dandy function.
    */
-  function requestWrapper(args, errstr, callback, onfinished, options) {
+  function requestWrapper(args, errstr, callback, onfinished, options, appRef) {
     function _finished(error, response) {
       if ( error ) {
         error = API._(errstr, error);
@@ -112,9 +112,8 @@
     }
 
     args.push(_finished);
-    if ( typeof options !== 'undefined' ) {
-      args.push(options);
-    }
+    args.push(options || {});
+    args.push(appRef);
 
     try {
       request.apply(null, args);
@@ -136,26 +135,6 @@
     }
 
     return false;
-  }
-
-  /**
-   * See if given item matches up with any VFS modules with aliases
-   * and return given entry.
-   */
-  function findAlias(item) {
-    var mm = OSjs.Core.getMountManager();
-    var found = null;
-
-    mm.getModules().forEach(function(iter) {
-      if ( !found && iter.module.options && iter.module.options.alias ) {
-        var a = iter.module.options.alias;
-        if ( item.path.substr(0, a.length) === a ) {
-          found = iter.module;
-        }
-      }
-    });
-
-    return found;
   }
 
   /**
@@ -237,56 +216,6 @@
   }
 
   /**
-   * Wrapper for broadcasting VFS messages
-   */
-  function broadcastMessage(msg, item, appRef) {
-    function _message(i) {
-      API.message(msg, i, {source: appRef ? appRef.__pid : null});
-
-      checkWatches(msg, item);
-    }
-
-    // Makes sure aliased paths are called for
-    var aliased = (function() {
-      function _transform(i) {
-        if ( i instanceof VFS.File ) {
-          var n = new VFS.File(i);
-          var alias = findAlias(n);
-          if ( alias ) {
-            n.path = n.path.replace(alias.options.alias, alias.root);
-            return n;
-          }
-        }
-
-        return false;
-      }
-
-      if ( item instanceof VFS.File ) {
-        return _transform(item);
-      } else if ( item && item.destination && item.source ) {
-        return {
-          source: _transform(item.source),
-          destination: _transform(item.destination)
-        };
-      }
-
-      return null;
-    })();
-
-    _message(item);
-
-    var tuple = aliased.source || aliased.destination;
-    if ( aliased && (aliased instanceof VFS.File || tuple) ) {
-      if ( tuple ) {
-        aliased.source = aliased.source || item.source;
-        aliased.destination = aliased.destination || item.destination;
-      }
-
-      _message(aliased);
-    }
-  }
-
-  /**
    * Creates the '..' entry for scandir if not detected
    */
   function createBackLink(item, result, alias, oitem) {
@@ -344,6 +273,76 @@
         w.cb(msg, obj);
       }
     });
+  }
+
+  /**
+   * See if given item matches up with any VFS modules with aliases
+   * and return given entry.
+   */
+  function findAlias(item) {
+    var mm = OSjs.Core.getMountManager();
+    var found = null;
+
+    mm.getModules().forEach(function(iter) {
+      if ( !found && iter.module.options && iter.module.options.alias ) {
+        var a = iter.module.options.alias;
+        if ( item.path.substr(0, a.length) === a ) {
+          found = iter.module;
+        }
+      }
+    });
+
+    return found;
+  }
+
+  /**
+   * Wrapper for broadcasting VFS messages
+   */
+  function broadcastMessage(msg, item, appRef) {
+    function _message(i) {
+      API.message(msg, i, {source: appRef ? appRef.__pid : null});
+
+      checkWatches(msg, item);
+    }
+
+    // Makes sure aliased paths are called for
+    var aliased = (function() {
+      function _transform(i) {
+        if ( i instanceof VFS.File ) {
+          var n = new VFS.File(i);
+          var alias = findAlias(n);
+          if ( alias ) {
+            n.path = n.path.replace(alias.options.alias, alias.root);
+            return n;
+          }
+        }
+
+        return false;
+      }
+
+      if ( item instanceof VFS.File ) {
+        return _transform(item);
+      } else if ( item && item.destination && item.source ) {
+        return {
+          source: _transform(item.source),
+          destination: _transform(item.destination)
+        };
+      }
+
+      return null;
+    })();
+
+    _message(item);
+
+    var tuple = aliased.source || aliased.destination;
+    if ( aliased && (aliased instanceof VFS.File || tuple) ) {
+      if ( tuple ) {
+        aliased.source = aliased.source || item.source;
+        aliased.destination = aliased.destination || item.destination;
+      }
+
+      _message(aliased);
+    }
   }
 
   /////////////////////////////////////////////////////////////////////////////
@@ -456,8 +455,6 @@
     function _finished(error, result) {
       if ( error ) {
         error = API._('ERR_VFSMODULE_WRITE_FMT', error);
-      } else {
-        broadcastMessage('vfs:write', item, appRef);
       }
 
       callback(error, result);
@@ -465,7 +462,7 @@
 
     function _write(filedata) {
       try {
-        request(item.path, 'write', [item, filedata], _finished, options);
+        request(item.path, 'write', [item, filedata], _finished, options, appRef);
       } catch ( e ) {
         _finished(e);
       }
@@ -636,9 +633,6 @@
 
     function doRequest() {
       function _finished(error, result) {
-        if ( !error ) {
-          broadcastMessage('vfs:copy', dest, appRef);
-        }
         callback(error, result);
       }
 
@@ -649,7 +643,7 @@
             error = API._('ERR_VFSMODULE_COPY_FMT', error);
           }
           _finished(error, response);
-        }, options);
+        }, options, appRef);
       } else {
         var msrc = mm.getModuleFromPath(src.path);
         var mdst = mm.getModuleFromPath(dest.path);
@@ -731,9 +725,6 @@
 
     function doRequest() {
       function _finished(error, result) {
-        if ( !error ) {
-          broadcastMessage('vfs:move', {source: src, destination: dest}, appRef);
-        }
         callback(error, result);
       }
 
@@ -743,7 +734,7 @@
             error = API._('ERR_VFSMODULE_MOVE_FMT', error);
           }
           _finished(error, error ? null : response, dest);
-        }, options);
+        }, options, appRef);
       } else {
         var msrc = mm.getModuleFromPath(src.path);
         //var mdst = mm.getModuleFromPath(dest.path);
@@ -830,12 +821,10 @@
 
     requestWrapper([item.path, 'unlink', [item]], 'ERR_VFSMODULE_UNLINK_FMT', callback, function(error, response) {
       if ( !error ) {
-        broadcastMessage('vfs:unlink', item, appRef);
-
         _checkPath();
       }
       return response;
-    }, options);
+    }, options, appRef);
   };
 
   /**
@@ -880,11 +869,8 @@
       }
 
       requestWrapper([item.path, 'mkdir', [item]], 'ERR_VFSMODULE_MKDIR_FMT', callback, function(error, response) {
-        if ( !error ) {
-          broadcastMessage('vfs:mkdir', item, appRef);
-        }
         return response;
-      }, options);
+      }, options, appRef);
     });
   };
 
@@ -1041,7 +1027,7 @@
             }
           } else {
             var file = _createFile(f.name, f.type, f.size);
-            broadcastMessage('vfs:upload', file, args.app);
+            //broadcastMessage('vfs:upload', file, args.app, appRef); // FIXME
             callback(false, file, ev);
           }
         }, options);
@@ -1242,8 +1228,6 @@
    * client-side APIs.
    * @summary Watches a file or directory for changes.
    *
-   * @TODO Add support for server-side watches
-   *
    * @function watch
    * @memberof OSjs.VFS
    * @throws {Error} On invalid arguments
@@ -1280,6 +1264,21 @@
     if ( typeof watches[idx] !== 'undefined' ) {
       delete watches[idx];
     }
+  };
+
+  /**
+   * Triggers a VFS watch event
+   *
+   * @function triggerWatch
+   * @memberof OSjs.VFS.Helpers
+   *
+   * @param   {String}              method      VFS method
+   * @param   {Object}              arg         VFS file
+   * @param   {OSjs.Core.Process}   [appRef]    Optional application reference
+   */
+  VFS.Helpers = VFS.Helpers || {};
+  VFS.Helpers.triggerWatch = function(method, arg, appRef) {
+    broadcastMessage('vfs:' + method, arg, appRef);
   };
 
 })(OSjs.Utils, OSjs.API, OSjs.VFS, OSjs.Core);
