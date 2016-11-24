@@ -100,6 +100,21 @@ const ENV = {
 // LOADERS
 ///////////////////////////////////////////////////////////////////////////////
 
+function iterateDirectory(dirname, cb, done, reject) {
+  _fs.readdir(dirname, function(err, list) {
+    if ( err ) {
+      return reject(err);
+    }
+
+    _osjs.utils.iterate(list, function(filename, index, next) {
+      if ( filename.substr(0, 1) !== '.' ) {
+        cb(filename);
+      }
+      next();
+    }, done);
+  });
+}
+
 /*
  * Loads generated configuration file
  */
@@ -155,30 +170,19 @@ function loadConfiguration(opts) {
 function loadAPI(opts) {
   const dirname = _path.join(ENV.MODULEDIR, 'api');
 
-  function _load(resolve, reject) {
-    _fs.readdir(dirname, function(err, list) {
-      if ( err ) {
-        return reject(err);
-      }
+  return new Promise(function(resolve, reject) {
+    iterateDirectory(dirname, function(filename) {
+      const path = _path.join(dirname, filename);
+      LOGGER.lognt('INFO', 'Loading:', LOGGER.colored('API', 'bold'), path.replace(ENV.ROOTDIR, ''));
 
-      _osjs.utils.iterate(list, function(filename, index, next) {
-        if ( filename.substr(0, 1) !== '.' ) {
-          const path = _path.join(dirname, filename);
-          LOGGER.lognt('INFO', 'Loading:', LOGGER.colored('API', 'bold'), path.replace(ENV.ROOTDIR, ''));
-
-          const methods = require(path);
-          Object.keys(methods).forEach(function(k) {
-            MODULES.API[k] = methods[k];
-          });
-        }
-        next();
-      }, function() {
-        resolve(opts);
+      const methods = require(path);
+      Object.keys(methods).forEach(function(k) {
+        MODULES.API[k] = methods[k];
       });
-    });
-  }
-
-  return new Promise(_load);
+    }, function() {
+      resolve(opts);
+    }, reject);
+  });
 }
 
 /*
@@ -370,36 +374,16 @@ function registerPackages(servers) {
  * Registers Services
  */
 function registerServices(servers) {
+  const dirname = _path.join(ENV.MODULEDIR, 'services');
+
   return new Promise(function(resolve, reject) {
-    const wss = servers.websocketServer;
-    if ( !wss ) {
-      return;
-    }
-
-    const list = _osjs.vfs.initWatch(function(data) {
-      const username = data.watch.args['%USERNAME'];
-      const message = JSON.stringify({
-        action: 'vfs:watch',
-        args: {
-          path: data.watch.path
-        }
-      });
-
-      if ( username ) {
-        const ws = _osjs.http.getWebsocketFromUser(username);
-        ws.send(message);
-      } else {
-        wss.clients.forEach(function each(client) {
-          client.send(message);
-        });
-      }
-    });
-
-    if ( list.length ) {
-      LOGGER.lognt('INFO', 'VFS Watching:', LOGGER.colored(list.join(', '), 'bold'));
-    }
-
-    resolve(servers);
+    iterateDirectory(dirname, function(filename) {
+      const path = _path.join(dirname, filename);
+      LOGGER.lognt('INFO', 'Loading:', LOGGER.colored('Service', 'bold'), path.replace(ENV.ROOTDIR, ''));
+      require(path).register(ENV, CONFIG, servers);
+    }, function() {
+      resolve(servers);
+    }, reject);
   });
 }
 
