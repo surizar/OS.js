@@ -219,6 +219,27 @@
       <content>
         <h1 id="commands">Commands</h1>
 <p>You can use these tasks via <code>node osjs &lt;task&gt;</code>.</p>
+<h2 id="misc-tasks">Misc Tasks</h2>
+<p>Available targets: <code>dist</code>, <code>dist-dev</code> (default is <code>dist-dev</code>).</p>
+<table>
+<thead>
+<tr>
+<th>Task</th>
+<th>Arguments</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>run</td>
+<td><code>--target=TARGET (--loglevel=N) (--port=N)</code></td>
+<td>Runs OS.js node server</td>
+</tr>
+</tbody>
+</table>
+<h3 id="examples">Examples</h3>
+<pre class="language-bash"><code class="language-bash">$ node osjs run
+</code></pre>
 <h2 id="build-tasks">Build Tasks</h2>
 <p>Available targets: <code>dist</code>, <code>dist-dev</code> (default is both. Exception is for <code>build:config</code>, which uses targets from configuration section below)</p>
 <table>

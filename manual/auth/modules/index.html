@@ -295,10 +295,7 @@ $ node osjs config:set --name<span class="token operator">=</span>authenticator 
 $ node osjs config:set --name<span class="token operator">=</span>client.ReloadOnShutdown --value<span class="token operator">=</span>true
 
 <span class="token comment" spellcheck="true"># Update configuration and template files</span>
-$ node osjs build:config
-
-<span class="token comment" spellcheck="true"># Rebuild (only required if you use `dist`)</span>
-<span class="token comment" spellcheck="true"># grunt build:core --target=dist</span>
+$ node osjs build:config build:core
 </code></pre>
 <p><strong>NOTE:</strong> On some systems you might have to install <code>authenticate-pam</code> with <code>npm install -g</code> or else you might get a <em>Error in service module</em> upon request.</p>
 <p><strong>NOTE:</strong> Also, on some systems you might have to run OS.js server as an administrator (<code>sudo</code>) depending on the PAM setup.</p>
