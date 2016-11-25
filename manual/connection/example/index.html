@@ -231,7 +231,7 @@
   MyConnection<span class="token punctuation">.</span>constructor <span class="token operator">=</span> _super<span class="token punctuation">;</span>
 
   <span class="token comment" spellcheck="true">// An example method for adding headers to the requests</span>
-  MyConnection<span class="token punctuation">.</span>prototype<span class="token punctuation">.</span>_request <span class="token operator">=</span> <span class="token keyword">function</span><span class="token punctuation">(</span>isVfs<span class="token punctuation">,</span> method<span class="token punctuation">,</span> args<span class="token punctuation">,</span> options<span class="token punctuation">,</span> onsuccess<span class="token punctuation">,</span> onerror<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  MyConnection<span class="token punctuation">.</span>prototype<span class="token punctuation">.</span>request <span class="token operator">=</span> <span class="token keyword">function</span><span class="token punctuation">(</span>method<span class="token punctuation">,</span> args<span class="token punctuation">,</span> onsuccess<span class="token punctuation">,</span> onerror<span class="token punctuation">,</span> options<span class="token punctuation">)</span> <span class="token punctuation">{</span>
     options <span class="token operator">=</span> options <span class="token operator">||</span> <span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token punctuation">;</span>
 
     <span class="token comment" spellcheck="true">// See &apos;Utils.ajax()&apos; for more info</span>
@@ -240,7 +240,7 @@
     <span class="token punctuation">}</span><span class="token punctuation">;</span>
 
     <span class="token comment" spellcheck="true">// Let the base class finish the job</span>
-    <span class="token keyword">return</span> _super<span class="token punctuation">.</span>prototype<span class="token punctuation">.</span>_request<span class="token punctuation">.</span><span class="token function">call</span><span class="token punctuation">(</span>isVfs<span class="token punctuation">,</span> method<span class="token punctuation">,</span> args<span class="token punctuation">,</span> options<span class="token punctuation">,</span> cbSuccess<span class="token punctuation">,</span> cbError<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">return</span> _super<span class="token punctuation">.</span>prototype<span class="token punctuation">.</span>request<span class="token punctuation">.</span><span class="token function">call</span><span class="token punctuation">(</span>method<span class="token punctuation">,</span> args<span class="token punctuation">,</span> options<span class="token punctuation">,</span> onsuccess<span class="token punctuation">,</span> onerror<span class="token punctuation">)</span><span class="token punctuation">;</span>
   <span class="token punctuation">}</span><span class="token punctuation">;</span>
 
 <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">(</span>OSjs<span class="token punctuation">.</span>Connections<span class="token punctuation">.</span>http<span class="token punctuation">)</span><span class="token punctuation">;</span>
