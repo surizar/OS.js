@@ -219,8 +219,8 @@
       <content>
         <h1 id="websocket-connection">WebSocket Connection</h1>
 <p>You can enable WebSocket backend communication by updating the connection value. This will improve performance and allow for full-duplex communication.</p>
-<pre class="language-bash"><code class="language-bash">$ grunt config:set --name<span class="token operator">=</span>connection --value<span class="token operator">=</span>ws
-$ grunt build:config
+<pre class="language-bash"><code class="language-bash">$ node osjs config:set --name<span class="token operator">=</span>connection --value<span class="token operator">=</span>ws
+$ node osjs build:config
 </code></pre>
 <p><em>Note that static resources and file read/write operations are still performed over HTTP.</em></p>
 

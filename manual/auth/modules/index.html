@@ -230,17 +230,17 @@
 $ npm <span class="token function">install</span> mysql bcryptjs
 
 <span class="token comment" spellcheck="true"># Change the configured authenticator and its options</span>
-$ grunt config:set --name<span class="token operator">=</span>authenticator --value<span class="token operator">=</span>mysql
-$ grunt config:set --name<span class="token operator">=</span>server.modules.auth.mysql.host --value<span class="token operator">=</span>localhost
-$ grunt config:set --name<span class="token operator">=</span>server.modules.auth.mysql.user --value<span class="token operator">=</span>osjsuser
-$ grunt config:set --name<span class="token operator">=</span>server.modules.auth.mysql.password --value<span class="token operator">=</span>osjspassword
-$ grunt config:set --name<span class="token operator">=</span>server.modules.auth.mysql.database --value<span class="token operator">=</span>osjs
+$ node osjs config:set --name<span class="token operator">=</span>authenticator --value<span class="token operator">=</span>mysql
+$ node osjs config:set --name<span class="token operator">=</span>server.modules.auth.mysql.host --value<span class="token operator">=</span>localhost
+$ node osjs config:set --name<span class="token operator">=</span>server.modules.auth.mysql.user --value<span class="token operator">=</span>osjsuser
+$ node osjs config:set --name<span class="token operator">=</span>server.modules.auth.mysql.password --value<span class="token operator">=</span>osjspassword
+$ node osjs config:set --name<span class="token operator">=</span>server.modules.auth.mysql.database --value<span class="token operator">=</span>osjs
 
 <span class="token comment" spellcheck="true"># Make OS.js reload after you log out</span>
-$ grunt config:set --name<span class="token operator">=</span>client.ReloadOnShutdown --value<span class="token operator">=</span>true
+$ node osjs config:set --name<span class="token operator">=</span>client.ReloadOnShutdown --value<span class="token operator">=</span>true
 
 <span class="token comment" spellcheck="true"># Rebuild</span>
-$ grunt build:config build:core
+$ node osjs build:config build:core
 
 <span class="token comment" spellcheck="true"># Set up database</span>
 $ mysql -u root -p
@@ -289,13 +289,13 @@ $ edit /etc/osjs/groups.json
 $ edit /etc/osjs/blacklist.json
 
 <span class="token comment" spellcheck="true"># Change the configured authenticator (or use &quot;shadow&quot; here)</span>
-$ grunt config:set --name<span class="token operator">=</span>authenticator --value<span class="token operator">=</span>pam
+$ node osjs config:set --name<span class="token operator">=</span>authenticator --value<span class="token operator">=</span>pam
 
 <span class="token comment" spellcheck="true"># Make OS.js reload after you log out</span>
-$ grunt config:set --name<span class="token operator">=</span>client.ReloadOnShutdown --value<span class="token operator">=</span>true
+$ node osjs config:set --name<span class="token operator">=</span>client.ReloadOnShutdown --value<span class="token operator">=</span>true
 
 <span class="token comment" spellcheck="true"># Update configuration and template files</span>
-$ grunt build:config
+$ node osjs build:config
 
 <span class="token comment" spellcheck="true"># Rebuild (only required if you use `dist`)</span>
 <span class="token comment" spellcheck="true"># grunt build:core --target=dist</span>

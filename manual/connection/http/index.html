@@ -220,25 +220,25 @@
         <h1 id="http-connection">HTTP Connection</h1>
 <p>OS.js runs on HTTP and by default uses XHR requests for communication (aka AJAX).</p>
 <h2 id="http">HTTP</h2>
-<pre class="language-bash"><code class="language-bash">$ grunt config:set --name<span class="token operator">=</span>server.http.mode --value<span class="token operator">=</span>http
-$ grunt build:config
+<pre class="language-bash"><code class="language-bash">$ node osjs config:set --name<span class="token operator">=</span>server.http.mode --value<span class="token operator">=</span>http
+$ node osjs build:config
 </code></pre>
 <hr>
 <h2 id="http2">HTTP2</h2>
 <p>Create your certificates and place them in <code>src/server/</code> (as ex &quot;server.key&quot; and &quot;server.crt&quot;).</p>
 <p><em>If you run behind a proxy you should manage this there instead.</em></p>
 <pre class="language-bash"><code class="language-bash">$ npm <span class="token function">install</span> http2
-$ grunt config:set --name<span class="token operator">=</span>server.http.mode --value<span class="token operator">=</span>http2
-$ grunt config:set --name<span class="token operator">=</span>server.http.cert.name --value<span class="token operator">=</span>server
-$ grunt build:config
+$ node osjs config:set --name<span class="token operator">=</span>server.http.mode --value<span class="token operator">=</span>http2
+$ node osjs config:set --name<span class="token operator">=</span>server.http.cert.name --value<span class="token operator">=</span>server
+$ node osjs build:config
 </code></pre>
 <hr>
 <h2 id="https">HTTPS</h2>
 <p>Create your certificates and place them in <code>src/server/</code> (as ex &quot;server.key&quot; and &quot;server.crt&quot;):</p>
 <p><em>If you run behind a proxy you should manage this there instead.</em></p>
-<pre class="language-bash"><code class="language-bash">$ grunt config:set --name<span class="token operator">=</span>server.http.mode --value<span class="token operator">=</span>https
-$ grunt config:set --name<span class="token operator">=</span>server.http.cert.name --value<span class="token operator">=</span>server
-$ grunt build:config
+<pre class="language-bash"><code class="language-bash">$ node osjs config:set --name<span class="token operator">=</span>server.http.mode --value<span class="token operator">=</span>https
+$ node osjs config:set --name<span class="token operator">=</span>server.http.cert.name --value<span class="token operator">=</span>server
+$ node osjs build:config
 </code></pre>
 
 

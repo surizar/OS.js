@@ -223,7 +223,7 @@
 <h2 id="environment">Environment</h2>
 <p>See the <a href="/manual/build/cli">Build Commands</a> page for more information about environments.</p>
 <pre class="language-bash"><code class="language-bash"><span class="token comment" spellcheck="true"># Set your timezone manually</span>
-$ grunt config:set --name<span class="token operator">=</span>tz --value<span class="token operator">=</span>Europe/Oslo
+$ node osjs config:set --name<span class="token operator">=</span>tz --value<span class="token operator">=</span>Europe/Oslo
 </code></pre>
 <hr>
 <h2 id="settings">Settings</h2>
@@ -231,9 +231,9 @@ $ grunt config:set --name<span class="token operator">=</span>tz --value<span cl
 <hr>
 <h2 id="assets">Assets</h2>
 <h3 id="extending-base-css">Extending base CSS</h3>
-<pre class="language-bash"><code class="language-bash">$ grunt config:set:themes.styleBase:<span class="token string">&quot;custom.less&quot;</span>
+<pre class="language-bash"><code class="language-bash">$ node osjs config:set:themes.styleBase:<span class="token string">&quot;custom.less&quot;</span>
 $ edit src/client/stylesheets/custom.less
-$ grunt build:themes build:config
+$ node osjs build:themes build:config
 </code></pre>
 <h4 id="example-file">Example file</h4>
 <pre class="language-css"><code class="language-css"><span class="token atrule"><span class="token rule">@import</span> <span class="token string">&quot;theme.less&quot;</span><span class="token punctuation">;</span></span>
@@ -246,16 +246,16 @@ $ edit src/templates/dist/default/index.html
 
 <span class="token comment" spellcheck="true"># Alternative 2 (recomended):</span>
 $ <span class="token function">cp</span> -r src/templates/dist/default src/templates/dist/mytemplate
-$ grunt config:set --name<span class="token operator">=</span>build.dist.template --value<span class="token operator">=</span>mytemplate
+$ node osjs config:set --name<span class="token operator">=</span>build.dist.template --value<span class="token operator">=</span>mytemplate
 $ edit src/templates/dist/mytemplate/index.html
 
 <span class="token comment" spellcheck="true"># Rebuild</span>
-$ grunt build:core
+$ node osjs build:core
 </code></pre>
 <h3 id="add-to-build">Add to build</h3>
 <p>See <code>src/conf/500-build.json</code> for example on how to add to build process.</p>
 <h3 id="add-to-boot">Add to boot</h3>
-<pre class="language-bash"><code class="language-bash">$ grunt config:add-preload --name<span class="token operator">=</span>FOO --path<span class="token operator">=</span>PATH
+<pre class="language-bash"><code class="language-bash">$ node osjs config:add-preload --name<span class="token operator">=</span>FOO --path<span class="token operator">=</span>PATH
 </code></pre>
 <h3 id="add-to-package">Add to package</h3>
 <p>Modify your <code>metadata.json</code> file and modify the preload section:</p>
@@ -294,23 +294,23 @@ Utils<span class="token punctuation">.</span><span class="token function">preloa
 <h2 id="packages">Packages</h2>
 <h3 id="adding-a-repository">Adding a repository</h3>
 <pre class="language-bash"><code class="language-bash">$ <span class="token function">git</span> clone --recursive https://github.com/username/package-repository src/packages/package-repository
-$ grunt config:add-repository --name<span class="token operator">=</span>package-repository
-$ grunt build:manifest build:packages
+$ node osjs config:add-repository --name<span class="token operator">=</span>package-repository
+$ node osjs build:manifest build:packages
 </code></pre>
 <h3 id="removing-a-repository">Removing a repository</h3>
-<pre class="language-bash"><code class="language-bash">$ grunt config:remove-repository --name<span class="token operator">=</span>package-repository
-$ grunt build:manifest
+<pre class="language-bash"><code class="language-bash">$ node osjs config:remove-repository --name<span class="token operator">=</span>package-repository
+$ node osjs build:manifest
 </code></pre>
 <h3 id="enable-or-disable-a-spesific-package">Enable or Disable a spesific package</h3>
 <p>Most packages are enabled by default, but in some cases, like with <code>Broadway</code> you have to manually enable it.</p>
 <pre class="language-bash"><code class="language-bash"><span class="token comment" spellcheck="true"># Enable</span>
-grunt config:enable-package --name<span class="token operator">=</span>REPO/PACKAGENAME
+$ node osjs config:enable-package --name<span class="token operator">=</span>REPO/PACKAGENAME
 
 <span class="token comment" spellcheck="true"># Disable</span>
-grunt config:disable-package --name<span class="token operator">=</span>REPO/PACKAGENAME
+$ node osjs config:disable-package --name<span class="token operator">=</span>REPO/PACKAGENAME
 
 <span class="token comment" spellcheck="true"># Update manifest</span>
-grunt build:config build:manifest
+$ node osjs build:config build:manifest
 </code></pre>
 <hr>
 <h2 id="proxies">Proxies</h2>

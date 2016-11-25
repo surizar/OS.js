@@ -221,24 +221,24 @@
 <p>In addition to <a href="/manual/auth">Authenticators</a>, OS.js uses a Storage module for saving user settings and other user data.</p>
 <h2 id="demo">Demo</h2>
 <p>This module only saves the data in the <em>Browser</em> using <code>LocalStorage</code>.</p>
-<pre class="language-bash"><code class="language-bash">$ grunt config:set --name<span class="token operator">=</span>storage --value<span class="token operator">=</span>demo
-$ grunt build:config build:core
+<pre class="language-bash"><code class="language-bash">$ node osjs config:set --name<span class="token operator">=</span>storage --value<span class="token operator">=</span>demo
+$ node osjs build:config build:core
 </code></pre>
 <hr>
 <h2 id="mysql">Mysql</h2>
 <p>Stores the data in a Mysql database. See the <a href="/manual/auth">Authenticators</a> documentation on how to set up the database and its users.</p>
-<pre class="language-bash"><code class="language-bash">$ grunt config:set --name<span class="token operator">=</span>storage --value<span class="token operator">=</span>mysql
-$ grunt config:set --name<span class="token operator">=</span>server.modules.storage.mysql.host --value<span class="token operator">=</span>localhost
-$ grunt config:set --name<span class="token operator">=</span>server.modules.storage.mysql.user --value<span class="token operator">=</span>osjsuser
-$ grunt config:set --name<span class="token operator">=</span>server.modules.storage.mysql.password --value<span class="token operator">=</span>osjspassword
-$ grunt config:set --name<span class="token operator">=</span>server.modules.storage.mysql.database --value<span class="token operator">=</span>osjs
-$ grunt build:config build:core
+<pre class="language-bash"><code class="language-bash">$ node osjs config:set --name<span class="token operator">=</span>storage --value<span class="token operator">=</span>mysql
+$ node osjs config:set --name<span class="token operator">=</span>server.modules.storage.mysql.host --value<span class="token operator">=</span>localhost
+$ node osjs config:set --name<span class="token operator">=</span>server.modules.storage.mysql.user --value<span class="token operator">=</span>osjsuser
+$ node osjs config:set --name<span class="token operator">=</span>server.modules.storage.mysql.password --value<span class="token operator">=</span>osjspassword
+$ node osjs config:set --name<span class="token operator">=</span>server.modules.storage.mysql.database --value<span class="token operator">=</span>osjs
+$ node osjs build:config build:core
 </code></pre>
 <hr>
 <h2 id="system">System</h2>
 <p>Stores the data in the filesystem.</p>
-<pre class="language-bash"><code class="language-bash">$ grunt config:set --name<span class="token operator">=</span>storage --value<span class="token operator">=</span>system
-$ grunt build:config build:core
+<pre class="language-bash"><code class="language-bash">$ node osjs config:set --name<span class="token operator">=</span>storage --value<span class="token operator">=</span>system
+$ node osjs build:config build:core
 </code></pre>
 <h3 id="groups-json">groups.json</h3>
 <p>This is an example file for <code>groups.json</code></p>

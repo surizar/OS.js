@@ -224,24 +224,24 @@
 $ edit src/client/themes/styles/mytheme/metadata.json
 $ edit src/client/themes/styles/mytheme/style.less
 $ edit src/conf/112-themes.json <span class="token comment" spellcheck="true"># Or create your own file</span>
-$ grunt build:config build:theme --style<span class="token operator">=</span>mytheme
+$ node osjs build:config build:theme --style<span class="token operator">=</span>mytheme
 </code></pre>
 <h3 id="icons">Icons</h3>
 <pre class="language-bash"><code class="language-bash">$ <span class="token function">cp</span> -r src/client/themes/icons/default src/client/themes/icons/mytheme
 $ edit src/client/themes/icons/mytheme/metadata.json
 $ edit src/conf/112-themes.json <span class="token comment" spellcheck="true"># Or create your own file</span>
-$ grunt build:config build:themes
+$ node osjs build:config build:themes
 </code></pre>
 <h3 id="sounds">Sounds</h3>
 <pre class="language-bash"><code class="language-bash">$ <span class="token function">cp</span> -r src/client/themes/sounds/default src/client/themes/sound/mytheme
 $ edit src/client/themes/sound/mytheme/metadata.json
 $ edit src/conf/112-themes.json <span class="token comment" spellcheck="true"># Or create your own file</span>
-$ grunt build:config build:theme --static
+$ node osjs build:config build:theme --static
 </code></pre>
 <h3 id="fonts">Fonts</h3>
 <p>See the included font theme for an example on how to set up.</p>
 <pre class="language-bash"><code class="language-bash">$ edit src/conf/112-themes.json <span class="token comment" spellcheck="true"># Or create your own file</span>
-$ grunt build:config buid:theme --fonts
+$ node osjs build:config buid:theme --fonts
 </code></pre>
 <hr>
 <h2 id="panel">Panel</h2>

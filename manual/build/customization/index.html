@@ -224,15 +224,15 @@
 <h2 id="base-template">Base Template</h2>
 <p>The base template contains the index HTML file and any assets it uses. Simply make a copy of the default and make any adjustments you want.</p>
 <pre class="language-bash"><code class="language-bash">$ <span class="token function">cp</span> -r src/templates/dist/default src/templates/dist/mytemplate
-$ grunt config:set --name<span class="token operator">=</span>build.dist.template --value<span class="token operator">=</span>mytemplate
-$ grunt build
+$ node osjs config:set --name<span class="token operator">=</span>build.dist.template --value<span class="token operator">=</span>mytemplate
+$ node osjs build
 </code></pre>
 <h2 id="login-screen">Login Screen</h2>
 <p>To customize the login screen markup, just make a copy of the default and make any adjustments you want.</p>
 <p>The actual interaction code is in the <em>Authenticator</em>.</p>
 <pre class="language-bash"><code class="language-bash">$ <span class="token function">cp</span> -r src/templates/dist/login/default.html src/templates/dist/login/mytemplate.html
-$ grunt config:set --name<span class="token operator">=</span>build.dist.layout --value<span class="token operator">=</span>mytemplate
-$ grunt build
+$ node osjs config:set --name<span class="token operator">=</span>build.dist.layout --value<span class="token operator">=</span>mytemplate
+$ node osjs build
 </code></pre>
 
 

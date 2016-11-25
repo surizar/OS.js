@@ -239,13 +239,13 @@ $ php -S 0.0.0.0:8000 <span class="token punctuation">..</span>\src\server\php\s
 <h2 id="running-behind-a-webserver">Running behind a webserver</h2>
 <p>Make sure the <em>VFS</em> directories in <code>vfs/</code> are given the same permissions as the web-servers running user.</p>
 <h3 id="apache">Apache</h3>
-<p>Run <code>grunt generate:apache-htaccess</code> to generate the required htaccess files for Apache to work properly.</p>
-<p>Run <code>grunt generate:apache-vhost --out=/etc/apache2/sites-enabled/100-osjs.conf</code> to generate config file (or look in doc/configs/ for example) you can use.</p>
+<p>Run <code>node osjs generate:apache-htaccess</code> to generate the required htaccess files for Apache to work properly.</p>
+<p>Run <code>node osjs generate:apache-vhost --out=/etc/apache2/sites-enabled/100-osjs.conf</code> to generate config file (or look in doc/configs/ for example) you can use.</p>
 <p><em>Note</em> You have to enable mod_rewrite for Apache and make sure htaccess is allowed.</p>
 <h3 id="lighttpd">Lighttpd</h3>
-<p>Run <code>grunt generate:lighttpd-config --out=lighttpd.conf</code> to generate config file (or look in doc/configs/ for example)</p>
+<p>Run <code>node osjs generate:lighttpd-config --out=lighttpd.conf</code> to generate config file (or look in doc/configs/ for example)</p>
 <h3 id="nginx">Nginx</h3>
-<p>Run <code>grunt generate:nginx-config --out=/etc/nginx/sites-enabled/100-osjs.conf</code> to generate config file (or look in doc/configs/ for example)</p>
+<p>Run <code>node osjs generate:nginx-config --out=/etc/nginx/sites-enabled/100-osjs.conf</code> to generate config file (or look in doc/configs/ for example)</p>
 <h3 id="wamp">WAMP</h3>
 <p>Works fine. Just look up the Apache section above for configuration.</p>
 <h3 id="webhosts">Webhosts</h3>
