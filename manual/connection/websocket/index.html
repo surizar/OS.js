@@ -94,6 +94,7 @@
               <ul>
                 <li><a href="/manual/auth/modules">Modules</a></li>
                 <li><a href="/manual/auth/permission">Groups and permissions</a></li>
+                <li><a href="/manual/auth/example">Module Examples</a></li>
               </ul>
             </li>
 
@@ -101,6 +102,7 @@
               <a href="/manual/storage">Storage</a>
               <ul>
                 <li><a href="/manual/storage/modules">Modules</a></li>
+                <li><a href="/manual/storage/example">Module Examples</a></li>
               </ul>
             </li>
 
@@ -109,6 +111,7 @@
               <ul>
                 <li><a href="/manual/connection/websocket">WebSocket</a></li>
                 <li><a href="/manual/connection/http">HTTP/HTTP2/HTTPS</a></li>
+                <li><a href="/manual/connection/example">Module Examples</a></li>
               </ul>
             </li>
 
@@ -140,6 +143,7 @@
                     <li><a href="/manual/vfs/transport/#webdav">WebDAV</a></li>
                   </ul>
                 </li>
+                <li><a href="/manual/vfs/example">Module Examples</a></li>
               </ul>
             </li>
 
@@ -214,8 +218,8 @@
 
       <content>
         <h1 id="websocket-connection">WebSocket Connection</h1>
-<p>With websockets you get much better performance when communicating with the APIs.</p>
-<pre class="language-bash"><code class="language-bash">$ grunt config:set --name<span class="token operator">=</span>connection --type<span class="token operator">=</span>ws
+<p>You can enable WebSocket backend communication by updating the connection value. This will improve performance and allow for full-duplex communication.</p>
+<pre class="language-bash"><code class="language-bash">$ grunt config:set --name<span class="token operator">=</span>connection --value<span class="token operator">=</span>ws
 $ grunt build:config
 </code></pre>
 <p><em>Note that static resources and file read/write operations are still performed over HTTP.</em></p>

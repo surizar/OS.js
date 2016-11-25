@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <title>Authentication Modules | OS.js Manual</title>
+    <title>Storage Example | OS.js Manual</title>
     <meta name="description" content="OS.js Manual - OS.js" />
     <meta name="keywords" content="OS.js,Documentation,Client,Server,API,Tutorial,Tutorials,Manual,Manuals" />
 
@@ -26,7 +26,7 @@
       }
     </script>
   </head>
-  <body class="manual_auth_modules">
+  <body class="manual_storage_example">
     <header>
       <div id="Logo"></div>
       <nav>
@@ -217,92 +217,32 @@
       </aside>
 
       <content>
-        <h1 id="authentication-modules">Authentication Modules</h1>
-<p>You can change the login behaviour of OS.js by changing the configuration to a module that is included. You can also, of course; make your own!</p>
-<h2 id="demo">Demo</h2>
-<p>For demonstration purposes. Does not do any actual athentication and has no restrictions.</p>
-<p><em>Please note that this module has no support for user management.</em></p>
-<hr>
-<h2 id="mysql">Mysql</h2>
-<p>This is just a simple database backend that authorizes login attempts via mysql.</p>
-<p><strong>Also set up the <a href="/manual/storage/modules/#mysql">Mysql storage</a> module for this to work as intended.</strong></p>
-<pre class="language-bash"><code class="language-bash"><span class="token comment" spellcheck="true"># Install node dependency</span>
-$ npm <span class="token function">install</span> mysql bcryptjs
+        <h1 id="storage-example">Storage Example</h1>
+<h2 id="server">Server</h2>
+<p>See the <a href="https://github.com/os-js/OS.js/blob/master/src/server/node/modules/storage/example.js">included example</a> for a full template.</p>
+<h2 id="client">Client</h2>
+<p>In this example we change the destination of the user settings:</p>
+<pre class="language-js"><code class="language-js"><span class="token punctuation">(</span><span class="token keyword">function</span><span class="token punctuation">(</span>_super<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token keyword">function</span> <span class="token function">MyStorage</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token function">_super</span><span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">,</span> arguments<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
 
-<span class="token comment" spellcheck="true"># Change the configured authenticator and its options</span>
-$ grunt config:set --name<span class="token operator">=</span>authenticator --value<span class="token operator">=</span>mysql
-$ grunt config:set --name<span class="token operator">=</span>server.modules.auth.mysql.host --value<span class="token operator">=</span>localhost
-$ grunt config:set --name<span class="token operator">=</span>server.modules.auth.mysql.user --value<span class="token operator">=</span>osjsuser
-$ grunt config:set --name<span class="token operator">=</span>server.modules.auth.mysql.password --value<span class="token operator">=</span>osjspassword
-$ grunt config:set --name<span class="token operator">=</span>server.modules.auth.mysql.database --value<span class="token operator">=</span>osjs
+  MyStorage<span class="token punctuation">.</span>prototype <span class="token operator">=</span> Object<span class="token punctuation">.</span><span class="token function">create</span><span class="token punctuation">(</span>_super<span class="token punctuation">.</span>prototype<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  MyStorage<span class="token punctuation">.</span>constructor <span class="token operator">=</span> _super<span class="token punctuation">;</span>
 
-<span class="token comment" spellcheck="true"># Make OS.js reload after you log out</span>
-$ grunt config:set --name<span class="token operator">=</span>client.ReloadOnShutdown --value<span class="token operator">=</span>true
+  MyStorage<span class="token punctuation">.</span>prototype<span class="token punctuation">.</span>saveSettings <span class="token operator">=</span> <span class="token keyword">function</span><span class="token punctuation">(</span>pool<span class="token punctuation">,</span> storage<span class="token punctuation">,</span> callback<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">var</span> username <span class="token operator">=</span> OSjs<span class="token punctuation">.</span>Core<span class="token punctuation">.</span><span class="token function">getAuthenticator</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">getUser</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span>username<span class="token punctuation">;</span>
 
-<span class="token comment" spellcheck="true"># Rebuild</span>
-$ grunt build:config build:core
-
-<span class="token comment" spellcheck="true"># Set up database</span>
-$ mysql -u root -p
-
-mysql<span class="token operator">&gt;</span> CREATE DATABASE osjs<span class="token punctuation">;</span>
-mysql<span class="token operator">&gt;</span> GRANT USAGE ON *.* TO osjsuser@localhost IDENTIFIED BY <span class="token string">&apos;osjspassword&apos;</span><span class="token punctuation">;</span>
-mysql<span class="token operator">&gt;</span> GRANT ALL PRIVILEGES ON osjs.* TO osjsuser@localhost<span class="token punctuation">;</span>
-
-<span class="token comment" spellcheck="true"># Then set up database tables</span>
-mysql<span class="token operator">&gt;</span> CREATE TABLE IF NOT EXISTS <span class="token variable"><span class="token variable">`</span><span class="token function">users</span><span class="token variable">`</span></span> <span class="token punctuation">(</span>
-  <span class="token variable"><span class="token variable">`</span><span class="token function">id</span><span class="token variable">`</span></span> int<span class="token punctuation">(</span>11<span class="token punctuation">)</span> NOT NULL AUTO_INCREMENT,
-  <span class="token variable"><span class="token variable">`</span>username<span class="token variable">`</span></span> varchar<span class="token punctuation">(</span>255<span class="token punctuation">)</span> NOT NULL,
-  <span class="token variable"><span class="token variable">`</span>password<span class="token variable">`</span></span> varchar<span class="token punctuation">(</span>255<span class="token punctuation">)</span> NOT NULL,
-  <span class="token variable"><span class="token variable">`</span>name<span class="token variable">`</span></span> varchar<span class="token punctuation">(</span>255<span class="token punctuation">)</span> NOT NULL,
-  <span class="token variable"><span class="token variable">`</span><span class="token function">groups</span><span class="token variable">`</span></span> text,
-  <span class="token variable"><span class="token variable">`</span>settings<span class="token variable">`</span></span> text,
-  PRIMARY KEY <span class="token punctuation">(</span><span class="token variable"><span class="token variable">`</span><span class="token function">id</span><span class="token variable">`</span></span><span class="token punctuation">)</span>
-<span class="token punctuation">)</span> ENGINE<span class="token operator">=</span>MyISAM  DEFAULT CHARSET<span class="token operator">=</span>latin1 AUTO_INCREMENT<span class="token operator">=</span>1<span class="token punctuation">;</span>
-
-<span class="token comment" spellcheck="true"># And then add yourself a user</span>
-$ node bin/mysql-user.js add anders admin
-$ <span class="token function">mkdir</span> vfs/home/myadminaccount
+    someExternalApi<span class="token punctuation">.</span><span class="token function">save</span><span class="token punctuation">(</span>username<span class="token punctuation">,</span> <span class="token punctuation">{</span>
+      settings<span class="token punctuation">:</span> storage
+    <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">then</span><span class="token punctuation">(</span><span class="token keyword">function</span><span class="token punctuation">(</span>err<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+      <span class="token function">callback</span><span class="token punctuation">(</span>err<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token keyword">catch</span><span class="token punctuation">(</span><span class="token keyword">function</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+      <span class="token function">callback</span><span class="token punctuation">(</span><span class="token keyword">null</span><span class="token punctuation">,</span> <span class="token boolean">true</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">(</span>OSjs<span class="token punctuation">.</span>Core<span class="token punctuation">.</span>Storage<span class="token punctuation">)</span><span class="token punctuation">;</span>
 </code></pre>
-<hr>
-<h2 id="pam-and-shadow">PAM and Shadow</h2>
-<p>Log in via the system (<code>PAM</code> or <code>Shadow</code>) authentication system. <strong>This is only available for Linux and Node</strong>.</p>
-<p><strong>Also set up the <a href="/manual/storage/modules/#system">System storage</a> module for this to work as intended.</strong></p>
-<h3 id="setup-">Setup:</h3>
-<pre class="language-bash"><code class="language-bash"><span class="token comment" spellcheck="true"># You need the PAM developer package to build node gyp module</span>
-$ <span class="token function">sudo</span> <span class="token function">apt-get</span> <span class="token function">install</span> libpam0g-dev
-
-<span class="token comment" spellcheck="true"># PAM dependencies (you need PAM development package on your system)</span>
-$ npm <span class="token function">install</span> nan@1.1.0
-$ npm <span class="token function">install</span> authenticate-pam
-$ npm <span class="token function">install</span> userid
-
-<span class="token comment" spellcheck="true"># Shadow dependencies</span>
-$ npm <span class="token function">install</span> git+https://github.com/andersevenrud/passwd-linux
-$ npm <span class="token function">install</span> userid
-
-<span class="token comment" spellcheck="true"># Set up groups</span>
-$ <span class="token function">mkdir</span> /etc/osjs
-$ edit /etc/osjs/groups.json
-
-<span class="token comment" spellcheck="true"># Set up package blacklist (optional)</span>
-$ edit /etc/osjs/blacklist.json
-
-<span class="token comment" spellcheck="true"># Change the configured authenticator (or use &quot;shadow&quot; here)</span>
-$ grunt config:set --name<span class="token operator">=</span>authenticator --value<span class="token operator">=</span>pam
-
-<span class="token comment" spellcheck="true"># Make OS.js reload after you log out</span>
-$ grunt config:set --name<span class="token operator">=</span>client.ReloadOnShutdown --value<span class="token operator">=</span>true
-
-<span class="token comment" spellcheck="true"># Update configuration and template files</span>
-$ grunt build:config
-
-<span class="token comment" spellcheck="true"># Rebuild (only required if you use `dist`)</span>
-<span class="token comment" spellcheck="true"># grunt build:core --target=dist</span>
-</code></pre>
-<p><strong>NOTE:</strong> On some systems you might have to install <code>authenticate-pam</code> with <code>npm install -g</code> or else you might get a <em>Error in service module</em> upon request.</p>
-<p><strong>NOTE:</strong> Also, on some systems you might have to run OS.js server as an administrator (<code>sudo</code>) depending on the PAM setup.</p>
-<p><strong>NOTE:</strong> This module has no support for user management at the moment. You&apos;ll have to use the system tools.*</p>
 
 
         <footer>
