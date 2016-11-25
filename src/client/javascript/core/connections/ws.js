@@ -97,18 +97,27 @@
     }
   };
 
-  WSConnection.prototype.request = function(path, args, options, onsuccess, onerror) {
+  WSConnection.prototype._request = function(isVfs, method, args, options, onsuccess, onerror) {
     onerror = onerror || function() {
       console.warn('Connection::callWS()', 'error', arguments);
     };
 
+    if ( isVfs ) {
+      if ( method === 'get' ) {
+        return this.callGET(args, options, onsuccess, onerror);
+      } else if ( method === 'upload' ) {
+        return this.callPOST(args, options, onsuccess, onerror);
+      }
+    }
+
     var idx = this.index++;
+    var base = isVfs ? '/FS/' : '/API/';
 
     try {
       this.ws.send(JSON.stringify({
         _index: idx,
         sid: Utils.getCookie('session'),
-        path: '/' + path,
+        path: base + method,
         args: args
       }));
 

@@ -261,8 +261,8 @@
     } else if ( (API.getConfig('Connection.Type') === 'standalone') ) {
       cbError('You are currently running locally and cannot perform this operation!');
     } else {
-      if ( method.match(/^FS/) ) {
-        return this._requestVFS(method, args, options, cbSuccess, cbError);
+      if ( method.match(/^FS:/) ) {
+        return this._requestVFS(method.replace(/^FS:/, ''), args, options, cbSuccess, cbError);
       }
       return this._requestAPI(method, args, options, cbSuccess, cbError);
     }
@@ -305,16 +305,6 @@
    * @return {Boolean}
    */
   Connection.prototype._request = function(isVfs, method, args, options, onsuccess, onerror) {
-    // Some methods can only be handled via HTTP
-    if ( isVfs ) {
-      if ( method === 'FS:get' ) {
-        return this.callGET(args, options, onsuccess, onerror);
-      } else if ( method === 'FS:upload' ) {
-        return this.callPOST(args, options, onsuccess, onerror);
-      }
-    }
-
-    // Use AJAX or WebSocket for everything else
     var url = (function() {
       if ( isVfs ) {
         return API.getConfig('Connection.FSURI') + '/' + method.replace(/^FS\:/, '');
