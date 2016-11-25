@@ -38,11 +38,12 @@
   HttpConnection.prototype = Object.create(Connection.prototype);
   HttpConnection.constructor = Connection;
 
-  HttpConnection.prototype._request = function(isVfs, method, args, options, onsuccess, onerror) {
-    var res = Connection.prototype._request.apply(this, arguments);
+  HttpConnection.prototype.request = function(method, args, onsuccess, onerror, options) {
+    var res = Connection.prototype.request.apply(this, arguments);
+
     if ( res === false ) {
       var url = (function() {
-        if ( isVfs ) {
+        if ( method.match(/^FS:/) ) {
           return API.getConfig('Connection.FSURI') + '/' + method.replace(/^FS\:/, '');
         }
         return API.getConfig('Connection.APIURI') + '/' + method;
@@ -50,6 +51,7 @@
 
       return this._requestXHR(url, args, options, onsuccess, onerror);
     }
+
     return res;
   };
 

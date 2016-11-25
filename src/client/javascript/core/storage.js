@@ -79,13 +79,7 @@
    * @param   {CallbackHandler}      callback        Callback function
    */
   Storage.prototype._settings = function(pool, storage, callback) {
-    var conn = OSjs.Core.getConnection();
-
-    conn.request('settings', {pool: pool, settings: Utils.cloneObject(storage)}, function(response) {
-      callback(false, response.result);
-    }, function(error) {
-      callback(error);
-    });
+    API.call('settings', {pool: pool, settings: Utils.cloneObject(storage)}, callback);
   };
 
   /**

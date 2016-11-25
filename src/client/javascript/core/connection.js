@@ -260,14 +260,13 @@
       cbError('You are currently off-line and cannot perform this operation!');
     } else if ( (API.getConfig('Connection.Type') === 'standalone') ) {
       cbError('You are currently running locally and cannot perform this operation!');
-    } else {
-      if ( method.match(/^FS:/) ) {
-        return this.requestVFS(method.replace(/^FS:/, ''), args, options, cbSuccess, cbError);
-      }
-      return this.requestAPI(method, args, options, cbSuccess, cbError);
     }
 
-    return false;
+    if ( method.match(/^FS:/) ) {
+      return this.requestVFS(method.replace(/^FS:/, ''), args, options, cbSuccess, cbError);
+    }
+
+    return this.requestAPI(method, args, options, cbSuccess, cbError);
   };
 
   /**
@@ -280,7 +279,7 @@
    * @return {Boolean}
    */
   Connection.prototype.requestAPI = function(method, args, options, cbSuccess, cbError) {
-    return this._request(false, method, args, options, cbSuccess, cbError);
+    return false;
   };
 
   /**
@@ -293,24 +292,10 @@
    * @return {Boolean}
    */
   Connection.prototype.requestVFS = function(method, args, options, cbSuccess, cbError) {
-    return this._request(true, method, args, options, cbSuccess, cbError);
-  };
-
-  /**
-   * Wrapper for OS.js API calls
-   *
-   * @function _request
-   * @memberof OSjs.Core.Connection#
-   *
-   * @return {Boolean}
-   */
-  Connection.prototype._request = function(isVfs, method, args, options, onsuccess, onerror) {
-    if ( isVfs ) {
-      if ( method === 'get' ) {
-        return this._requestGET(args, options, onsuccess, onerror);
-      } else if ( method === 'upload' ) {
-        return this._requestPOST(args, options, onsuccess, onerror);
-      }
+    if ( method === 'get' ) {
+      return this._requestGET(args, options, cbSuccess, cbError);
+    } else if ( method === 'upload' ) {
+      return this._requestPOST(args, options, cbSuccess, cbError);
     }
 
     return false;

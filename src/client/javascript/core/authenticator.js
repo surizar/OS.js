@@ -128,17 +128,13 @@
    * @param   {CallbackHandler}      callback        Callback function
    */
   Authenticator.prototype.login = function(data, callback) {
-    var conn = OSjs.Core.getConnection();
-
-    conn.request('login', data, function(response) {
-      if ( response.result ) {
-        callback(false, response.result);
+    API.call('login', data, function(error, result) {
+      if ( result ) {
+        callback(false, result);
       } else {
-        var error = response.error || API._('ERR_LOGIN_INVALID');
+        var error = error || API._('ERR_LOGIN_INVALID');
         callback(API._('ERR_LOGIN_FMT', error), false);
       }
-    }, function(error) {
-      callback(API._('ERR_LOGIN_FMT', error), false);
     });
   };
 
@@ -152,16 +148,13 @@
    */
   Authenticator.prototype.logout = function(callback) {
     var opts = {};
-    var conn = OSjs.Core.getConnection();
 
-    conn.request('logout', opts, function(response) {
-      if ( response.result ) {
+    API.call('logout', opts, function(error, result) {
+      if ( result ) {
         callback(false, true);
       } else {
-        callback('An error occured: ' + (response.error || 'Unknown error'));
+        callback('An error occured: ' + (error || 'Unknown error'));
       }
-    }, function(error) {
-      callback('Logout error: ' + error);
     });
   };
 

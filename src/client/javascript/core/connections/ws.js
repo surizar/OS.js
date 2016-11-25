@@ -97,24 +97,24 @@
     }
   };
 
-  WSConnection.prototype._request = function(isVfs, method, args, options, onsuccess, onerror) {
+  WSConnection.prototype.request = function(method, args, onsuccess, onerror, options) {
     onerror = onerror || function() {
       console.warn('Connection::callWS()', 'error', arguments);
     };
 
-    var res = Connection.prototype._request.apply(this, arguments);
+    var res = Connection.prototype.request.apply(this, arguments);
     if ( res !== false ) {
       return res;
     }
 
     var idx = this.index++;
-    var base = isVfs ? '/FS/' : '/API/';
+    var base = method.match(/^FS:/) ? '/FS/' : '/API/';
 
     try {
       this.ws.send(JSON.stringify({
         _index: idx,
         sid: Utils.getCookie('session'),
-        path: base + method,
+        path: base + method.replace(/^FS:/, ''),
         args: args
       }));
 
