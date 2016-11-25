@@ -59,20 +59,13 @@
       console.warn('NWConnection::request()', 'error', arguments);
     };
 
+    var res = Connection.prototype._request.apply(this, arguments);
+    if ( res !== false ) {
+      return res;
+    }
+
     onerror('Sorry, but this is not working at the moment');
     return false;
-
-    /* TODO
-    try {
-      this.nw.request(method.match(/^FS\:/) !== null, method.replace(/^FS\:/, ''), args, function(err, res) {
-        onsuccess({error: err, result: res});
-      });
-      return true;
-    } catch ( e ) {
-      console.warn('NWConnection::request() Warning', e.stack, e);
-      onerror(e);
-    }
-    */
   };
 
   /////////////////////////////////////////////////////////////////////////////

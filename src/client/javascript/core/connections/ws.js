@@ -102,12 +102,9 @@
       console.warn('Connection::callWS()', 'error', arguments);
     };
 
-    if ( isVfs ) {
-      if ( method === 'get' ) {
-        return this._requestGET(args, options, onsuccess, onerror);
-      } else if ( method === 'upload' ) {
-        return this._requestPOST(args, options, onsuccess, onerror);
-      }
+    var res = Connection.prototype._request.apply(this, arguments);
+    if ( res !== false ) {
+      return res;
     }
 
     var idx = this.index++;

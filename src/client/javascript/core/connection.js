@@ -305,14 +305,15 @@
    * @return {Boolean}
    */
   Connection.prototype._request = function(isVfs, method, args, options, onsuccess, onerror) {
-    var url = (function() {
-      if ( isVfs ) {
-        return API.getConfig('Connection.FSURI') + '/' + method.replace(/^FS\:/, '');
+    if ( isVfs ) {
+      if ( method === 'get' ) {
+        return this._requestGET(args, options, onsuccess, onerror);
+      } else if ( method === 'upload' ) {
+        return this._requestPOST(args, options, onsuccess, onerror);
       }
-      return API.getConfig('Connection.APIURI') + '/' + method;
-    })();
+    }
 
-    return this._requestXHR(url, args, options, onsuccess, onerror);
+    return false;
   };
 
   /**

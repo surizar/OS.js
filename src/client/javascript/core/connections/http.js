@@ -38,6 +38,21 @@
   HttpConnection.prototype = Object.create(Connection.prototype);
   HttpConnection.constructor = Connection;
 
+  HttpConnection.prototype._request = function(isVfs, method, args, options, onsuccess, onerror) {
+    var res = Connection.prototype._request.apply(this, arguments);
+    if ( res === false ) {
+      var url = (function() {
+        if ( isVfs ) {
+          return API.getConfig('Connection.FSURI') + '/' + method.replace(/^FS\:/, '');
+        }
+        return API.getConfig('Connection.APIURI') + '/' + method;
+      })();
+
+      return this._requestXHR(url, args, options, onsuccess, onerror);
+    }
+    return res;
+  };
+
   HttpConnection.prototype.onVFSRequestCompleted = function(module, method, args, error, result, callback, appRef) {
     if ( !error ) {
       // Emit a VFS event when a change occures
