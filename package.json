@@ -34,7 +34,6 @@
     "findit": ">=2.0.0",
     "formidable": ">=1.0.17",
     "fstream": "^1.0.10",
-    "grunt": ">=1.0.1",
     "less": ">=2.7.1",
     "minimist": "^1.2.0",
     "node-fs-extra": ">=0.8.1",
@@ -45,6 +44,7 @@
   "devDependencies": {
     "chai": "^3.5.0",
     "clean-css": ">=3.4.19",
+    "grunt": ">=1.0.1",
     "grunt-contrib-csslint": "2.0.0",
     "grunt-contrib-validate-xml": ">=0.0.1",
     "grunt-contrib-watch": ">=1.0.0",
