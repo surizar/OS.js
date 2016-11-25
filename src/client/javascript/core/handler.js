@@ -61,7 +61,7 @@
         loggedIn: auth.isLoggedIn(),
         offline: conn.isOffline(),
         userData: auth.getUser(),
-        callAPI: conn.callAPI,
+        callAPI: conn.request,
         saveSettings: stor.saveSettings
       };
     })();

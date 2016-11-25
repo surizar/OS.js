@@ -292,7 +292,7 @@
    *
    * @function call
    * @memberof OSjs.API
-   * @see OSjs.Core.Handler#callAPI
+   * @see OSjs.Core.Connection#request
    * @see OSjs.Utils.ajax
    * @throws {Error} On invalid arguments
    *
@@ -322,7 +322,7 @@
     _CALL_INDEX++;
 
     var conn = OSjs.Core.getConnection();
-    return conn.callAPI(m, a, function(response) {
+    return conn.request(m, a, function(response) {
       API.destroyLoading(lname);
       response = response || {};
       cb(response.error || false, response.result);

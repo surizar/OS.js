@@ -247,11 +247,11 @@
    * @param {Function}  cbError     On error
    * @param {Object}    [options]   Options passed on to the connection request method (ex: Utils.ajax)
    *
-   * @function callAPI
+   * @function request
    * @memberof OSjs.Core.Connection#
    * @see OSjs.Core.API.call
    */
-  Connection.prototype.callAPI = function(method, args, cbSuccess, cbError, options) {
+  Connection.prototype.request = function(method, args, cbSuccess, cbError, options) {
     args = args || {};
     cbSuccess = cbSuccess || function() {};
     cbError = cbError || function() {};
@@ -262,9 +262,9 @@
       cbError('You are currently running locally and cannot perform this operation!');
     } else {
       if ( method.match(/^FS:/) ) {
-        return this._requestVFS(method.replace(/^FS:/, ''), args, options, cbSuccess, cbError);
+        return this.requestVFS(method.replace(/^FS:/, ''), args, options, cbSuccess, cbError);
       }
-      return this._requestAPI(method, args, options, cbSuccess, cbError);
+      return this.requestAPI(method, args, options, cbSuccess, cbError);
     }
 
     return false;
@@ -273,26 +273,26 @@
   /**
    * Wrapper for server API XHR calls
    *
-   * @function _requestAPI
+   * @function requestAPI
    * @memberof OSjs.Core.Connection#
-   * @see OSjs.Core.Connection.callAPI
+   * @see OSjs.Core.Connection.request
    *
    * @return {Boolean}
    */
-  Connection.prototype._requestAPI = function(method, args, options, cbSuccess, cbError) {
+  Connection.prototype.requestAPI = function(method, args, options, cbSuccess, cbError) {
     return this._request(false, method, args, options, cbSuccess, cbError);
   };
 
   /**
    * Wrapper for server VFS XHR calls
    *
-   * @function _requestVFS
+   * @function requestVFS
    * @memberof OSjs.Core.Connection#
-   * @see OSjs.Core.Connection.callAPI
+   * @see OSjs.Core.Connection.request
    *
    * @return {Boolean}
    */
-  Connection.prototype._requestVFS = function(method, args, options, cbSuccess, cbError) {
+  Connection.prototype.requestVFS = function(method, args, options, cbSuccess, cbError) {
     return this._request(true, method, args, options, cbSuccess, cbError);
   };
 
@@ -312,20 +312,20 @@
       return API.getConfig('Connection.APIURI') + '/' + method;
     })();
 
-    return this.callXHR(url, args, options, onsuccess, onerror);
+    return this._requestXHR(url, args, options, onsuccess, onerror);
   };
 
   /**
    * Makes a HTTP POST call
    *
-   * @function callPOST
+   * @function _requestPOST
    * @memberof OSjs.Core.Connection#
    *
    * @return {Boolean}
    */
-  Connection.prototype.callPOST = function(form, options, onsuccess, onerror) {
+  Connection.prototype._requestPOST = function(form, options, onsuccess, onerror) {
     onerror = onerror || function() {
-      console.warn('Connection::callPOST()', 'error', arguments);
+      console.warn('Connection::_requestPOST()', 'error', arguments);
     };
 
     Utils.ajax(appendRequestOptions({
@@ -349,14 +349,14 @@
   /**
    * Makes a HTTP GET call
    *
-   * @function callGET
+   * @function _requestGET
    * @memberof OSjs.Core.Connection#
    *
    * @return {Boolean}
    */
-  Connection.prototype.callGET = function(args, options, onsuccess, onerror) {
+  Connection.prototype._requestGET = function(args, options, onsuccess, onerror) {
     onerror = onerror || function() {
-      console.warn('Connection::callGET()', 'error', arguments);
+      console.warn('Connection::_requestGET()', 'error', arguments);
     };
 
     var self = this;
@@ -383,14 +383,14 @@
   /**
    * Makes a HTTP XHR call
    *
-   * @function callXHR
+   * @function _requestXHR
    * @memberof OSjs.Core.Connection#
    *
    * @return {Boolean}
    */
-  Connection.prototype.callXHR = function(url, args, options, onsuccess, onerror) {
+  Connection.prototype._requestXHR = function(url, args, options, onsuccess, onerror) {
     onerror = onerror || function() {
-      console.warn('Connection::callXHR()', 'error', arguments);
+      console.warn('Connection::_requestXHR()', 'error', arguments);
     };
 
     var self = this;

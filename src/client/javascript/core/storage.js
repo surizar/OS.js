@@ -81,7 +81,7 @@
   Storage.prototype._settings = function(pool, storage, callback) {
     var conn = OSjs.Core.getConnection();
 
-    conn.callAPI('settings', {pool: pool, settings: Utils.cloneObject(storage)}, function(response) {
+    conn.request('settings', {pool: pool, settings: Utils.cloneObject(storage)}, function(response) {
       callback(false, response.result);
     }, function(error) {
       callback(error);

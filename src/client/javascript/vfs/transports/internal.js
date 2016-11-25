@@ -108,7 +108,7 @@
 
     VFS.Helpers.addFormFile(fd, 'upload', file);
 
-    OSjs.Core.getConnection().callAPI('FS:upload', fd, callback, null, options);
+    OSjs.Core.getConnection().request('FS:upload', fd, callback, null, options);
   }
 
   /**

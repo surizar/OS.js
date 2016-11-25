@@ -104,9 +104,9 @@
 
     if ( isVfs ) {
       if ( method === 'get' ) {
-        return this.callGET(args, options, onsuccess, onerror);
+        return this._requestGET(args, options, onsuccess, onerror);
       } else if ( method === 'upload' ) {
-        return this.callPOST(args, options, onsuccess, onerror);
+        return this._requestPOST(args, options, onsuccess, onerror);
       }
     }
 

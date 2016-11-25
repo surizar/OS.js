@@ -130,7 +130,7 @@
   Authenticator.prototype.login = function(data, callback) {
     var conn = OSjs.Core.getConnection();
 
-    conn.callAPI('login', data, function(response) {
+    conn.request('login', data, function(response) {
       if ( response.result ) {
         callback(false, response.result);
       } else {
@@ -154,7 +154,7 @@
     var opts = {};
     var conn = OSjs.Core.getConnection();
 
-    conn.callAPI('logout', opts, function(response) {
+    conn.request('logout', opts, function(response) {
       if ( response.result ) {
         callback(false, true);
       } else {
