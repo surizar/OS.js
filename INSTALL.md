@@ -14,5 +14,10 @@ You only need these packages installed:
 
 # Installation
 
-https://os.js.org/manual/installation/
+For full instructions: https://os.js.org/manual/installation/
 
+```
+$ npm install --production
+$ node osjs build
+$ node osjs run --target=dist
+```
