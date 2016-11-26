@@ -4,7 +4,6 @@
     "tmpdir": "/tmp",
     "srcdir": "src",
     "vfs": {
-      "proxy": false,
       "mounts": {
         "home": "%DROOT%/vfs/home/%USERNAME%",
         "osjs": {
@@ -43,7 +42,6 @@
         }
       }
     },
-    "basedir": "",
     "modules": {
       "auth": {
         "pam": {
