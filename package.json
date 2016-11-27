@@ -34,6 +34,7 @@
     "findit": ">=2.0.0",
     "formidable": ">=1.0.17",
     "fstream": "^1.0.10",
+    "glob-promise": "^2.0.0",
     "less": ">=2.7.1",
     "minimist": "^1.2.0",
     "node-fs-extra": ">=0.8.1",

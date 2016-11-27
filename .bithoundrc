@@ -16,7 +16,6 @@
     "src/packages/**",
     "src/locales/**",
     "src/server/php",
-    "src/build/**",
     "src/conf/**",
     "src/x11/**",
     "vendor/*",

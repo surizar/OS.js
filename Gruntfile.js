@@ -74,6 +74,7 @@
         target: [
           'Gruntfile.js',
           'src/*.js',
+          'src/build/*.js',
           'src/server/node/*.js',
           'src/server/node/**/*.js',
           'src/client/javascript/*.js',
