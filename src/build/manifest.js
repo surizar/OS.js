@@ -72,6 +72,26 @@ function parsePreloads(iter) {
 ///////////////////////////////////////////////////////////////////////////////
 
 /*
+ * Checks if package is enabled
+ */
+function checkEnabledState(enabled, disabled, meta) {
+  const name = meta.path;
+  const shortName = meta.path.split('/')[1];
+
+  if ( String(meta.enabled) === 'false' ) {
+    if ( enabled.indexOf(shortName) !== -1 ) {
+      return true;
+    }
+    return enabled.indexOf(name) !== -1;
+  }
+
+  if ( disabled.indexOf(shortName) === -1 ) {
+    return true;
+  }
+  return disabled.indexOf(name) === -1;
+}
+
+/*
  * Get Package Metadata
  */
 function getPackageMetadata(repo, file) {
@@ -171,26 +191,6 @@ function generateClientManifest(target, manifest) {
       err ? reject(err) : resolve();
     });
   });
-}
-
-/*
- * Checks if package is enabled
- */
-function checkEnabledState(enabled, disabled, meta) {
-  const name = meta.path;
-  const shortName = meta.path.split('/')[1];
-
-  if ( String(meta.enabled) === 'false' ) {
-    if ( enabled.indexOf(shortName) !== -1 ) {
-      return true;
-    }
-    return enabled.indexOf(name) !== -1;
-  }
-
-  if ( disabled.indexOf(shortName) === -1 ) {
-    return true;
-  }
-  return disabled.indexOf(name) === -1;
 }
 
 ///////////////////////////////////////////////////////////////////////////////

@@ -140,6 +140,33 @@ function generateServerConfiguration(cli, cfg) {
 }
 
 /*
+ * Get a configuration value by path
+ */
+function getConfigPath(config, path, defaultValue) {
+  if ( typeof path === 'string' ) {
+    var result = null;
+    var ns = config;
+
+    const queue = path.split(/\./);
+    queue.forEach(function(k, i) {
+      if ( i >= queue.length - 1 ) {
+        result = ns[k];
+      } else {
+        ns = ns[k];
+      }
+    });
+
+    if ( typeof result === 'undefined' ) {
+      return defaultValue;
+    }
+
+    return result;
+  }
+
+  return config;
+}
+
+/*
  * Sets a config value
  */
 const setConfigPath = (function() {
@@ -298,33 +325,6 @@ function getConfiguration() {
     }).catch(reject);
 
   });
-}
-
-/*
- * Get a configuration value by path
- */
-function getConfigPath(config, path, defaultValue) {
-  if ( typeof path === 'string' ) {
-    var result = null;
-    var ns = config;
-
-    const queue = path.split(/\./);
-    queue.forEach(function(k, i) {
-      if ( i >= queue.length - 1 ) {
-        result = ns[k];
-      } else {
-        ns = ns[k];
-      }
-    });
-
-    if ( typeof result === 'undefined' ) {
-      return defaultValue;
-    }
-
-    return result;
-  }
-
-  return config;
 }
 
 ///////////////////////////////////////////////////////////////////////////////

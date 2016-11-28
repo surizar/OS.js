@@ -147,105 +147,6 @@
     var newRect = {};
 
     /**
-     * When mouse button is pressed
-     */
-    function onMouseDown(ev, action, win, mousePosition) {
-      OSjs.API.blurMenu();
-      ev.preventDefault();
-
-      if ( win._state.maximized ) {
-        return;
-      }
-
-      current = new BehaviourState(win, action, mousePosition);
-      newRect = {};
-
-      win._focus();
-
-      if ( action === 'move' ) {
-        current.$element.setAttribute('data-hint', 'moving');
-      } else {
-        current.calculateDirection();
-        current.$element.setAttribute('data-hint', 'resizing');
-
-        newRect = current.getRect();
-      }
-
-      win._emit('preop');
-
-      Utils.$bind(document, 'mousemove:movewindow', _onMouseMove, false);
-      Utils.$bind(document, 'mouseup:movewindowstop', _onMouseUp, false);
-
-      function _onMouseMove(ev, pos) {
-        if ( wm._mouselock ) {
-          onMouseMove(ev, action, win, pos);
-        }
-      }
-      function _onMouseUp(ev, pos) {
-        onMouseUp(ev, action, win, pos);
-        Utils.$unbind(document, 'mousemove:movewindow');
-        Utils.$unbind(document, 'mouseup:movewindowstop');
-      }
-    }
-
-    /**
-     * When mouse button is released
-     */
-    function onMouseUp(ev, action, win, mousePosition) {
-      if ( !current ) {
-        return;
-      }
-
-      if ( current.moved ) {
-        if ( action === 'move' ) {
-          win._onChange('move', true);
-          win._emit('moved', [win._position.x, win._position.y]);
-        } else if ( action === 'resize' ) {
-          win._onChange('resize', true);
-          win._emit('resized', [win._dimension.w, win._dimension.h]);
-        }
-      }
-
-      current.$element.setAttribute('data-hint', '');
-
-      win._emit('postop');
-
-      current = null;
-    }
-
-    /**
-     * When mouse is moved
-     */
-    function onMouseMove(ev, action, win, mousePosition) {
-      if ( !_WM.getMouseLocked() || !action || !current ) {
-        return;
-      }
-
-      var result;
-      var dx = mousePosition.x - current.startX;
-      var dy = mousePosition.y - current.startY;
-
-      if ( action === 'move' ) {
-        result = onWindowMove(ev, mousePosition, dx, dy);
-      } else {
-        result = onWindowResize(ev, mousePosition, dx, dy);
-      }
-
-      if ( result ) {
-        if ( result.left !== null && result.top !== null ) {
-          win._move(result.left, result.top);
-          win._emit('move', [result.left, result.top]);
-        }
-        if ( result.width !== null && result.height !== null ) {
-          win._resize(result.width, result.height, true);
-          win._emit('resize', [result.width, result.height]);
-        }
-      }
-
-      current.moved = true;
-    }
-
-    /**
      * Resizing action
      */
     function onWindowResize(ev, mousePosition, dx, dy) {
@@ -369,6 +270,105 @@
       }
 
       return {left: newLeft, top: newTop, width: newWidth, height: newHeight};
+    }
+
+    /**
+     * When mouse button is released
+     */
+    function onMouseUp(ev, action, win, mousePosition) {
+      if ( !current ) {
+        return;
+      }
+
+      if ( current.moved ) {
+        if ( action === 'move' ) {
+          win._onChange('move', true);
+          win._emit('moved', [win._position.x, win._position.y]);
+        } else if ( action === 'resize' ) {
+          win._onChange('resize', true);
+          win._emit('resized', [win._dimension.w, win._dimension.h]);
+        }
+      }
+
+      current.$element.setAttribute('data-hint', '');
+
+      win._emit('postop');
+
+      current = null;
+    }
+
+    /**
+     * When mouse is moved
+     */
+    function onMouseMove(ev, action, win, mousePosition) {
+      if ( !_WM.getMouseLocked() || !action || !current ) {
+        return;
+      }
+
+      var result;
+      var dx = mousePosition.x - current.startX;
+      var dy = mousePosition.y - current.startY;
+
+      if ( action === 'move' ) {
+        result = onWindowMove(ev, mousePosition, dx, dy);
+      } else {
+        result = onWindowResize(ev, mousePosition, dx, dy);
+      }
+
+      if ( result ) {
+        if ( result.left !== null && result.top !== null ) {
+          win._move(result.left, result.top);
+          win._emit('move', [result.left, result.top]);
+        }
+        if ( result.width !== null && result.height !== null ) {
+          win._resize(result.width, result.height, true);
+          win._emit('resize', [result.width, result.height]);
+        }
+      }
+
+      current.moved = true;
+    }
+
+    /**
+     * When mouse button is pressed
+     */
+    function onMouseDown(ev, action, win, mousePosition) {
+      OSjs.API.blurMenu();
+      ev.preventDefault();
+
+      if ( win._state.maximized ) {
+        return;
+      }
+
+      current = new BehaviourState(win, action, mousePosition);
+      newRect = {};
+
+      win._focus();
+
+      if ( action === 'move' ) {
+        current.$element.setAttribute('data-hint', 'moving');
+      } else {
+        current.calculateDirection();
+        current.$element.setAttribute('data-hint', 'resizing');
+
+        newRect = current.getRect();
+      }
+
+      win._emit('preop');
+
+      function _onMouseMove(ev, pos) {
+        if ( wm._mouselock ) {
+          onMouseMove(ev, action, win, pos);
+        }
+      }
+      function _onMouseUp(ev, pos) {
+        onMouseUp(ev, action, win, pos);
+        Utils.$unbind(document, 'mousemove:movewindow');
+        Utils.$unbind(document, 'mouseup:movewindowstop');
+      }
+
+      Utils.$bind(document, 'mousemove:movewindow', _onMouseMove, false);
+      Utils.$bind(document, 'mouseup:movewindowstop', _onMouseUp, false);
     }
 
     /**

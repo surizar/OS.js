@@ -203,7 +203,7 @@ const TASKS = {
     });
 
     if ( (cfg.repositories || []).indexOf(repo) < 0 ) {
-      console.warn('The repository \'' + repo + '\' is not active.'['yellow']);
+      console.warn(String.color('The repository \'' + repo + '\' is not active.', 'yellow'));
     }
 
     return Promise.resolve();
