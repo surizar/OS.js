@@ -109,17 +109,8 @@ function generateServerConfiguration(cli, cfg) {
     _metadata.getPackages(cfg.repositories, function(pkg) {
       return pkg && pkg.type === 'extension';
     }).then(function(extensions) {
-      var loadExtensions = [];
-
       const src = _path.join(ROOT, 'src');
       Object.keys(extensions).forEach(function(e) {
-        (['api.php', 'api.js']).forEach(function(c) {
-          const dir = _path.join(src, 'packages', e, c);
-          if ( _fs.existsSync(dir) ) {
-            const path = '/' + _utils.fixWinPath(dir).replace(_utils.fixWinPath(src), cfg.server.srcdir);
-            loadExtensions.push(path);
-          }
-        });
 
         if ( extensions[e].conf && extensions[e].conf instanceof Array ) {
           extensions[e].conf.forEach(function(c) {
@@ -138,7 +129,6 @@ function generateServerConfiguration(cli, cfg) {
         }
       });
 
-      settings.extensions = loadExtensions;
       settings.mimes = cfg.mime.mapping;
       settings.vfs.maxuploadsize = cfg.client.VFS.MaxUploadSize;
 
