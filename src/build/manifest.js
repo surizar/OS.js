@@ -71,9 +71,18 @@ function parsePreloads(iter) {
  * Checks if package is enabled
  */
 function checkEnabledState(enabled, disabled, meta) {
-  const name = meta.path.split('/')[1];
+  const name = meta.path;
+  const shortName = meta.path.split('/')[1];
+
   if ( String(meta.enabled) === 'false' ) {
+    if ( enabled.indexOf(shortName) !== -1 ) {
+      return true;
+    }
     return enabled.indexOf(name) !== -1;
+  }
+
+  if ( disabled.indexOf(shortName) === -1 ) {
+    return true;
   }
   return disabled.indexOf(name) === -1;
 }
@@ -95,19 +104,10 @@ function getPackageMetadata(repo, file) {
     meta.path = name;
     meta.build = meta.build || {};
     meta.repo = repo;
-    meta.preload = meta.preload ? meta.preload.map(parsePreloads) : [];
+    meta.preload = (meta.preload ? meta.preload : []).map(parsePreloads);
 
-    if ( meta.sources && meta.sources.length ) {
-      meta.sources = meta.sources.map(function(s, i) {
-        if ( !s.src.match(/^(ftp|https?\:)?\/\//) ) {
-          s.src = _path.join('packages', name, s.src);
-        }
-        return s;
-      });
-    }
-
-    if ( meta.type === 'service' ) {
-      meta.singular = true;
+    if ( typeof meta.sources !== 'undefined' ) {
+      meta.preload = meta.preload.concat(meta.sources.map(parsePreloads));
     }
 
     resolve(Object.freeze(meta));
@@ -133,6 +133,7 @@ function getRepositoryPackages(repo, all) {
             return getPackageMetadata(repo, file);
           };
         }), function(meta) {
+          meta = Object.assign({}, meta);
           if ( all || checkEnabledState(forceEnabled, forceDisabled, meta) ) {
             result[meta.path] = meta;
           }
@@ -249,6 +250,15 @@ function mutateClientManifest(packages) {
     if ( packages[p].build ) {
       delete packages[p].build;
     }
+
+    if ( typeof packages[p].enabled !== 'undefined' ) {
+      delete packages[p].enabled;
+    }
+
+    if ( packages[p].type === 'service' ) {
+      packages[p].singular = true;
+    }
+
   });
 
   return packages;
