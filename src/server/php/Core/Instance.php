@@ -77,8 +77,18 @@ class Instance
         require($path . $file);
 
         $className = 'OSjs\\Modules\\API\\' . pathinfo($file, PATHINFO_FILENAME);
-        foreach ( get_class_methods($className) as $methodName ) {
-          self::$API[$methodName] = $className;
+        self::registerAPIMethods($className);
+      }
+    }
+
+    foreach ( self::getPackages() as $p => $pkg ) {
+      if ( $pkg['type'] == 'extension' ) {
+        $path = DIR_ROOT . '/src/packages/' . $p . '/api.php';
+        if ( file_exists($path) ) {
+          $className = require($path);
+          if ( is_string($className) && strlen($className) > 3 ) {
+            self::registerAPIMethods($className);
+          }
         }
       }
     }
@@ -139,6 +149,18 @@ class Instance
    * Shutdown handler
    */
   final public static function shutdown() {
+  }
+
+  /**
+   * Takes all public methods from a class and registeres them in
+   * the API
+   */
+  final public static function registerAPIMethods($className) {
+    foreach ( get_class_methods($className) as $methodName ) {
+      if ( substr($methodName, 0, 1) != '_' ) {
+        self::$API[$methodName] = $className;
+      }
+    }
   }
 
   /**

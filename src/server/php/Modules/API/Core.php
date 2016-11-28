@@ -79,14 +79,23 @@ abstract class Core
     $aa = empty($request->data['args']) ? Array() : $request->data['args'];
 
     $apath = DIR_PACKAGES . '/' . $path . '/api.php';
+
     if ( !file_exists($apath) ) {
       throw new Exception("No such application or API file not available ({$an})!");
     } else {
-      require $apath;
-      if ( !class_exists($an) || !method_exists($an, 'call') ) {
-        $error = 'Application API missing!';
+      $className = require $apath;
+      if ( is_string($className) && strlen($className) > 3 ) {
+        if ( method_exists($className, $am) ) {
+          return $className::$am($request, $aa);
+        } else {
+          throw new Exception('Application API missing!');
+        }
       } else {
-        return $an::call($am, $aa);
+        if ( !class_exists($an) || !method_exists($an, 'call') ) {
+          throw new Exception('Application API missing!');
+        } else {
+          return $an::call($am, $aa);
+        }
       }
     }
 
