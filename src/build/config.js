@@ -485,26 +485,28 @@ function listPackages(config) {
 
       if ( packages ) {
         Object.keys(packages).forEach(function(pn) {
-          var p = packages[pn];
+          const p = packages[pn];
+
           var es = p.enabled !== false;
           var esc = es ? 'green' : 'red';
-          var prn = pn.split('/', 2)[1];
+
           if ( es ) {
-            if ( currentDisabled.indexOf(prn) !== -1 ) {
+            if ( !_metadata.checkEnabledState(currentEnabled, currentDisabled, p) ) {
               es = false;
               esc = 'yellow';
             }
           } else {
-            if ( currentEnabled.indexOf(prn) !== -1 ) {
+            if ( _metadata.checkEnabledState(currentEnabled, currentDisabled, p) ) {
               es = true;
               esc = 'blue';
             }
           }
 
-          var lblenabled = (es ? 'Enabled' : 'Disabled')[esc];
-          var lblname = prn[es ? 'white' : 'grey'];
-          var lblrepo = p.repo[es ? 'white' : 'grey'];
-          var lbltype = p.type[es ? 'white' : 'grey'];
+          const prn = pn.split('/', 2)[1];
+          const lblenabled = (es ? 'Enabled' : 'Disabled')[esc];
+          const lblname = prn[es ? 'white' : 'grey'];
+          const lblrepo = p.repo[es ? 'white' : 'grey'];
+          const lbltype = p.type[es ? 'white' : 'grey'];
 
           console.log(pl(lblenabled, 20), pl(lblrepo, 30), pl(lbltype, 25), lblname);
         });
