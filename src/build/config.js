@@ -88,7 +88,9 @@ function generateClientConfiguration(target, cli, cfg) {
       _metadata.getPackages(cfg.repositories, function(pkg) {
         return pkg && pkg.autostart === true;
       }).then(function(list) {
-        settings.AutoStart = settings.AutoStart.concat(list);
+        settings.AutoStart = settings.AutoStart.concat(Object.keys(list).map(function(k) {
+          return list[k].className;
+        }));
         settings.MIME = cfg.mime;
         settings.Preloads = preloads;
         settings.Connection.Dist = target;
