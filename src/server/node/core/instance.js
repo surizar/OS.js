@@ -347,11 +347,11 @@ function registerPackages(servers) {
         if ( metadata.enabled !== false && _fs.existsSync(check) ) {
           var deprecated = false;
           if ( metadata.type === 'extension' ) {
-            LOGGER.lognt('INFO', 'Loading:', LOGGER.colored('Application', 'bold'), check.replace(ENV.ROOTDIR, ''));
+            LOGGER.lognt('INFO', 'Loading:', LOGGER.colored('Extension', 'bold'), check.replace(ENV.ROOTDIR, ''));
             deprecated = _registerExtension(require(check));
             _launchSpawners(path, module, metadata);
           } else {
-            LOGGER.lognt('INFO', 'Loading:', LOGGER.colored('Extension', 'bold'), check.replace(ENV.ROOTDIR, ''));
+            LOGGER.lognt('INFO', 'Loading:', LOGGER.colored('Application', 'bold'), check.replace(ENV.ROOTDIR, ''));
             deprecated = _registerApplication(packages, require(check));
           }
 
