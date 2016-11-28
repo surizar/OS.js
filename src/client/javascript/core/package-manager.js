@@ -115,10 +115,8 @@
 
         Object.keys(packages).forEach(function(k) {
           var iter = packages[k];
-          if ( iter.type === 'extension' && iter.sources ) {
-            iter.sources.forEach(function(p) {
-              preloads.push(p);
-            });
+          if ( iter.type === 'extension' && iter.preload ) {
+            preloads = preloads.concat(iter.preload);
           }
         });
 
