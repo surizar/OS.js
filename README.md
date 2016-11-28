@@ -22,7 +22,9 @@ Visit the [official demo](https://osjsv2.0o.no) for a preview version. Please no
 
 ## Installation
 
-You can find the quick setup guide in the [INSTALL.md file](https://github.com/os-js/OS.js/blob/master/INSTALL.md). Head over to the [installation manual page](https://os.js.org/manual/installation) for more detailed instructions.
+You can find the quick setup guide in the [INSTALL.md file](https://github.com/os-js/OS.js/blob/master/INSTALL.md).
+
+Head over to the [installation manual page](https://os.js.org/manual/installation) for more detailed instructions.
 
 ## Documentation
 
@@ -32,5 +34,9 @@ You can find the quick setup guide in the [INSTALL.md file](https://github.com/o
 
 ## Links
 
-[Author](http://andersevenrud.github.io/), [Community](http://community.os.js.org/), [YouTube](https://www.youtube.com/playlist?list=PLzC5Z5D-YLyEoYXWrxplUIek5uRyF92iG), [Twitter](https://twitter.com/andersevenrud), [Google+](https://plus.google.com/b/113399210633478618934/113399210633478618934), [Facebook](https://www.facebook.com/os.js.org), [Reddit](http://www.reddit.com/r/osjs), [OpenHub](https://www.openhub.net/p/OS_js), [Google Groups](https://groups.google.com/forum/#!forum/osjsplatform)
+* [Official Chat](https://gitter.im/os-js/OS.js)
+* [Community Forums and Announcements](http://community.os.js.org/)
+* [Homepage](https://os.js.org/)
+* [Google+](https://plus.google.com/b/113399210633478618934/113399210633478618934)
+* [Facebook](https://www.facebook.com/os.js.org)
 
